@@ -30,6 +30,9 @@
         .accent-green-bg { background-color: var(--soft-green); }
         .accent-green-border { border-color: var(--soft-green); }
 
+        .accent-blue { color: var(--tech-blue); }
+        .accent-red { color: var(--creative-red); }
+
         .tag-technical { background-color: var(--tech-blue); color: white; }
         .tag-creative { background-color: var(--creative-red); color: white; }
         .tag-everyday { background-color: var(--everyday-purple); color: white; }
@@ -53,10 +56,25 @@
         }
         .material-card:hover { box-shadow: 0 8px 16px rgba(0,0,0,0.12); transform: translateY(-4px); }
         
+        /* Fixed dimensions for use case cards */
+        #use-cases-grid .material-card {
+            width: 100%; /* Full width on smaller screens, grid handles sizing */
+            max-width: 350px; /* Max width for larger screens */
+            height: 200px; /* Fixed height for the card header area */
+            margin-left: auto;
+            margin-right: auto;
+        }
+         @media (min-width: 768px) {
+            #use-cases-grid .material-card {
+                 /* width: 320px; Keep it responsive with grid, but set a base */
+            }
+        }
+
+
         .card-header {
             padding: 1.5rem; /* p-6 */
             cursor: pointer;
-            display: flex;
+            display: flex; 
             flex-direction: column; 
             justify-content: space-between; 
             min-height: 110px; /* Adjusted min-height for better spacing */
@@ -98,8 +116,12 @@
             display: flex;
             align-items: center;
             font-size: 0.875rem; /* text-sm */
-            color: var(--text-subtle);
+            color: var(--text-subtle); /* Using a defined variable */
             white-space: nowrap;
+            cursor: pointer; /* Make it clear it's clickable */
+        }
+        .details-arrow-container:hover {
+            color: var(--soft-green); /* Highlight on hover */
         }
 
 
@@ -112,18 +134,59 @@
         .chart-container { position: relative; width: 100%; max-width: 550px; margin-left: auto; margin-right: auto; height: 350px; max-height: 450px; }
         @media (min-width: 768px) { .chart-container { height: 400px; } }
         
-        /* Styles for expandable details sections */
-        .details-section { max-height: 0; overflow: hidden; transition: max-height 0.6s ease-in-out; } 
-        .details-section.expanded { max-height: 3500px; }
+        /* Styles for expandable details sections (used in Foundations, Advanced, Comparison) */
+        .details-section { 
+            max-height: 0; 
+            min-height: 0; 
+            overflow: hidden; 
+            visibility: hidden; /* Hidden when collapsed */
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: 0;
+            margin-bottom: 0;
+            border-width: 0;
+            transition: max-height 0.6s ease-in-out, 
+                        min-height 0.6s ease-in-out,
+                        padding-top 0.6s ease-in-out, 
+                        padding-bottom 0.6s ease-in-out,
+                        margin-top 0.6s ease-in-out,
+                        margin-bottom 0.6s ease-in-out,
+                        visibility 0s linear 0.6s; /* Delay visibility change until after transition */
+        } 
+        .details-section.expanded { 
+            max-height: 5500px; 
+            min-height: 0; 
+            visibility: visible; /* Visible when expanded */
+            /* Restore padding/margin for expanded state if needed by the .details-content-wrapper */
+            /* The .details-content-wrapper will handle its own padding. */
+            transition: max-height 0.6s ease-in-out, 
+                        min-height 0.6s ease-in-out,
+                        padding-top 0.6s ease-in-out, 
+                        padding-bottom 0.6s ease-in-out,
+                        margin-top 0.6s ease-in-out,
+                        margin-bottom 0.6s ease-in-out,
+                        visibility 0s linear 0s; /* Make visible immediately */
+        }
+
 
         /* Icon button styles (e.g., copy button) */
         .icon-btn { display: inline-flex; align-items: center; justify-content: center; padding: 8px; border-radius: 50%; transition: background-color 0.2s; }
         .icon-btn:hover { background-color: rgba(0,0,0,0.08); }
         .icon-btn .material-icons-outlined { font-size: 20px; }
 
-        /* Section header styles */
-        .section-header-main .material-icons-outlined { font-size: 40px; margin-right: 0.85rem; color: var(--soft-green); } 
+        /* Section header styles & Icon Colors */
         .section-header-main { display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; }
+        .section-header-main .material-icons-outlined { font-size: 40px; margin-right: 0.85rem; } 
+        
+        #foundations .section-header-main .material-icons-outlined,
+        #foundations #ptcf-explanation-header .material-icons-outlined { color: var(--soft-green); }
+        
+        /* Comparison section specific icon color */
+        #comparison .section-header-main .material-icons-outlined,
+        #comparison #model-comparison-detailed-header .material-icons-outlined { color: var(--tech-blue); }
+
+        #use-cases .section-header-main .material-icons-outlined { color: var(--soft-green); }
+        #advanced .section-header-main .material-icons-outlined { color: var(--creative-red); }
         
         /* PTCF component button styles */
         .ptcf-component { border: 1px solid #dee2e6; transition: border-color 0.3s, transform 0.2s, background-color 0.3s; }
@@ -142,6 +205,18 @@
         .template-block { margin-bottom: 1.5rem; }
         .template-block h5 { margin-bottom: 0.5rem; }
         .details-content-wrapper { padding: 1.5rem; border-top: 1px solid #e5e7eb; }
+        
+        /* Remove top border for the first details-content-wrapper in a card if it's the model comparison one */
+        #model-comparison-detailed-content > .details-content-wrapper {
+            border-top: none;
+            padding-top: 1.5rem; /* Restore padding top for content when expanded */
+        }
+        /* When details-section is collapsed, its direct child .details-content-wrapper should also have no padding */
+        .details-section:not(.expanded) > .details-content-wrapper {
+            padding: 0 !important; 
+            border-top: none !important; /* Ensure border is also gone */
+        }
+
 
         /* CSS Gemini Logo Styles - Refined */
         .gemini-logo-container {
@@ -194,6 +269,87 @@
             vertical-align: middle;
             margin: 0 2px;
         }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); /* Darken background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2); /* Drop shadow */
+            width: 90%;
+            max-width: 700px; /* Max width for the modal */
+            max-height: 85vh; /* Max height */
+            overflow-y: auto; /* Scroll for long content */
+            position: relative;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: #888;
+            cursor: pointer;
+            padding: 0.5rem;
+            line-height: 1;
+        }
+        .modal-close-btn:hover {
+            color: #333;
+        }
+
+        /* Interactive Model Comparison Styles */
+        .model-scenario-btn {
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s, transform 0.2s;
+            border: 1px solid #dee2e6;
+        }
+        .model-scenario-btn:hover {
+            border-color: var(--soft-green);
+            transform: translateY(-2px);
+            background-color: #f8f9fa;
+        }
+        .model-scenario-btn.selected {
+            background-color: var(--soft-green);
+            color: white;
+            border-color: var(--soft-green);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        #model-recommendation {
+            border: 1px solid #e0e0e0;
+            background-color: #f9f9f9;
+            min-height: 100px; /* Ensure it doesn't collapse too much when empty */
+            display: flex; /* For centering placeholder */
+            align-items: center; /* For centering placeholder */
+            justify-content: center; /* For centering placeholder */
+        }
+        #model-comparison-detailed-header {
+            cursor: pointer;
+        }
+
     </style>
 </head>
 <body class="text-main">
@@ -223,32 +379,34 @@
                  <div class="material-card p-6 md:p-10">
                     <div id="ptcf-explanation-header" class="cursor-pointer flex items-center justify-between pb-4 border-b border-gray-200 mb-6">
                         <div class="flex items-center">
-                            <span class="material-icons-outlined accent-green mr-3 text-3xl">foundation</span>
+                            <span class="material-icons-outlined mr-3 text-3xl">foundation</span>
                             <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Prompting Foundations: The PTCF Framework</h2>
                         </div>
                         <p class="text-sm text-subtle ml-4 expand-indicator flex items-center">Learn More <span class="arrow down align-middle material-icons-outlined text-xl ml-1">expand_more</span></p>
                     </div>
                     <div id="ptcf-explanation-details" class="details-section relative">
-                        <div class="pb-6">
-                             <p class="mt-3 mb-6 text-lg text-subtle max-w-2xl mx-auto text-center">This section introduces the PTCF framework, a strategic approach to ensure your instructions are clear, contextual, and get the results you want.</p>
-                            <h3 class="text-xl font-semibold text-center mb-6 text-gray-700">Understanding the PTCF Framework</h3>
-                            <div class="space-y-6 mb-10 text-subtle">
-                                <p>The PTCF (Persona, Task, Context, Format) framework is a powerful mental model for constructing comprehensive and effective prompts. While not every component is mandatory for every prompt, consciously considering each can dramatically improve the quality and relevance of Gemini's responses.</p>
-                                <div>
-                                    <h4 class="text-lg font-semibold accent-green mb-1">P: Persona</h4>
-                                    <p>Defining a persona tells Gemini <strong>who</strong> it should be. This influences its tone, style, vocabulary, and the knowledge base it prioritizes. For example, asking Gemini to respond as an "Expert Astrophysicist" will yield different language and depth than asking it to respond as a "Friendly Children's Science Teacher," even if the underlying topic is the same. A well-defined persona helps align Gemini's output with your expectations and the intended audience.</p>
-                                </div>
-                                <div>
-                                    <h4 class="text-lg font-semibold accent-green mb-1">T: Task</h4>
-                                    <p>This is the core <strong>action</strong> you want Gemini to perform. It should be clear, specific, and actionable. Use strong verbs like "Analyze," "Generate," "Summarize," "Compare," "Rewrite," or "Explain." A vague task leads to a vague response. For instance, instead of "Tell me about AI," a better task would be "Explain the concept of supervised machine learning in three paragraphs suitable for a business executive."</p>
-                                </div>
-                                <div>
-                                    <h4 class="text-lg font-semibold accent-green mb-1">C: Context</h4>
-                                    <p>Context provides the necessary <strong>background, constraints, and specific details</strong> Gemini needs to tailor its response. This can include the subject matter, target audience, specific data points, constraints (e.g., "using only information up to 2023"), or the overall goal of your request. The richer the context, the more nuanced and targeted Gemini's output will be. Lack of context often results in generic or overly broad answers.</p>
-                                </div>
-                                <div>
-                                    <h4 class="text-lg font-semibold accent-green mb-1">F: Format</h4>
-                                    <p>Specifying the format dictates <strong>how</strong> Gemini should structure its output. This ensures the information is presented in a way that is immediately usable for your needs. Examples include "Provide the answer as a bulleted list," "Generate a JSON object with keys 'name' and 'value'," "Write a formal email," or "Create a table with three columns." Without format guidance, Gemini will choose a default structure that may not be optimal.</p>
+                        <div class="details-content-wrapper"> 
+                            <div class="pb-6">
+                                <p class="mt-3 mb-6 text-lg text-subtle max-w-2xl mx-auto text-center">This section introduces the PTCF framework, a strategic approach to ensure your instructions are clear, contextual, and get the results you want.</p>
+                                <h3 class="text-xl font-semibold text-center mb-6 text-gray-700">Understanding the PTCF Framework</h3>
+                                <div class="space-y-6 mb-10 text-subtle">
+                                    <p>The PTCF (Persona, Task, Context, Format) framework is a powerful mental model for constructing comprehensive and effective prompts. While not every component is mandatory for every prompt, consciously considering each can dramatically improve the quality and relevance of Gemini's responses.</p>
+                                    <div>
+                                        <h4 class="text-lg font-semibold accent-green mb-1">P: Persona</h4>
+                                        <p>Defining a persona tells Gemini <strong>who</strong> it should be. This influences its tone, style, vocabulary, and the knowledge base it prioritizes. For example, asking Gemini to respond as an "Expert Astrophysicist" will yield different language and depth than asking it to respond as a "Friendly Children's Science Teacher," even if the underlying topic is the same. A well-defined persona helps align Gemini's output with your expectations and the intended audience.</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-lg font-semibold accent-green mb-1">T: Task</h4>
+                                        <p>This is the core <strong>action</strong> you want Gemini to perform. It should be clear, specific, and actionable. Use strong verbs like "Analyze," "Generate," "Summarize," "Compare," "Rewrite," or "Explain." A vague task leads to a vague response. For instance, instead of "Tell me about AI," a better task would be "Explain the concept of supervised machine learning in three paragraphs suitable for a business executive."</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-lg font-semibold accent-green mb-1">C: Context</h4>
+                                        <p>Context provides the necessary <strong>background, constraints, and specific details</strong> Gemini needs to tailor its response. This can include the subject matter, target audience, specific data points, constraints (e.g., "using only information up to 2023"), or the overall goal of your request. The richer the context, the more nuanced and targeted Gemini's output will be. Lack of context often results in generic or overly broad answers.</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-lg font-semibold accent-green mb-1">F: Format</h4>
+                                        <p>Specifying the format dictates <strong>how</strong> Gemini should structure its output. This ensures the information is presented in a way that is immediately usable for your needs. Examples include "Provide the answer as a bulleted list," "Generate a JSON object with keys 'name' and 'value'," "Write a formal email," or "Create a table with three columns." Without format guidance, Gemini will choose a default structure that may not be optimal.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -285,19 +443,41 @@
             </section>
             
             <section id="comparison" class="py-12 scroll-mt-24">
-                <div class="material-card"> <div id="comparison-header" class="p-6 cursor-pointer flex items-center justify-between">
+                <div class="material-card p-6 md:p-10">
+                    <div class="section-header-main">
+                        <span class="material-icons-outlined mr-3 text-3xl">compare_arrows</span>
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Choose Your Model: Pro vs. Flash</h2>
+                    </div>
+                    <p class="mt-3 text-lg text-subtle max-w-3xl mx-auto mb-8 text-center">Select a scenario to see which Gemini model might be a better fit, or explore the detailed comparison below.</p>
+
+                    <div id="model-selector-interactive-area" class="mb-10">
+                        <div class="flex flex-wrap justify-center gap-3 mb-6">
+                            <button onclick="showModelRecommendation('quick_summary', this)" class="model-scenario-btn px-4 py-2 rounded-lg text-sm font-medium">Quick Summaries</button>
+                            <button onclick="showModelRecommendation('complex_code', this)" class="model-scenario-btn px-4 py-2 rounded-lg text-sm font-medium">Complex Code Gen</button>
+                            <button onclick="showModelRecommendation('creative_writing', this)" class="model-scenario-btn px-4 py-2 rounded-lg text-sm font-medium">Creative Writing</button>
+                            <button onclick="showModelRecommendation('data_analysis', this)" class="model-scenario-btn px-4 py-2 rounded-lg text-sm font-medium">In-depth Analysis</button>
+                            <button onclick="showModelRecommendation('fast_chat', this)" class="model-scenario-btn px-4 py-2 rounded-lg text-sm font-medium">Fast Chat & Q/A</button>
+                        </div>
+                        <div id="model-recommendation" class="p-6 rounded-lg text-center transition-all duration-300">
+                            <p class="text-subtle italic">Select a scenario above for a recommendation.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Collapsible Detailed Comparison -->
+                    <div id="model-comparison-detailed-header" class="cursor-pointer flex items-center justify-between py-4 border-t border-gray-200 mt-8">
                         <div class="flex items-center">
-                            <span class="material-icons-outlined accent-green mr-3 text-3xl">compare_arrows</span>
-                            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Choose Your Model: Pro vs. Flash</h2>
+                            <span class="material-icons-outlined mr-3 text-2xl">visibility</span> 
+                            <h3 class="text-xl font-semibold text-gray-700">View Detailed Comparison</h3>
                         </div>
                         <p class="text-sm text-subtle ml-4 expand-indicator flex items-center">Details <span class="arrow down align-middle material-icons-outlined text-xl ml-1">expand_more</span></p>
                     </div>
-                    <div id="comparison-details" class="details-section relative">
+
+                    <div id="model-comparison-detailed-content" class="details-section relative">
                         <div class="details-content-wrapper"> 
-                            <p class="mt-3 text-lg text-subtle max-w-2xl mx-auto mb-10 text-center">Understand the key differences between Gemini 2.5 Pro and Flash to select the right model for your needs, balancing deep reasoning with speed.</p>
-                            <div class="chart-container mb-8">
+                            <div class="chart-container mb-12">
                                 <canvas id="modelComparisonChart"></canvas>
                             </div>
+
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-subtle">
                                 <div>
                                     <h4 class="text-xl font-semibold accent-green mb-3">Gemini 2.5 Pro: The Deep Thinker</h4>
@@ -346,6 +526,7 @@
                     <button onclick="filterUseCases('everyday', this)" class="filter-btn px-4 py-2 rounded-full text-sm font-medium flex items-center border"><span class="material-icons-outlined text-base mr-1">task_alt</span>Everyday</button>
                 </div>
                 <div id="use-cases-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
+                    <!-- Use case cards will be rendered here by JavaScript -->
                 </div>
             </section>
 
@@ -357,6 +538,7 @@
                     </div>
                 </div>
                 <div id="advanced-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                    <!-- Advanced techniques cards will be rendered here by JavaScript -->
                 </div>
             </section>
         </main>
@@ -365,6 +547,16 @@
             <p class="text-subtle">Made by Gemini & Mattia <span class="material-icons-outlined footer-icon">pets</span> for Gemini.</p>
             <p class="text-sm text-gray-400 mt-2">Designed with Material-inspired aesthetics, Tailwind CSS, and Chart.js</p>
         </footer>
+    </div>
+
+    <!-- Modal Structure (initially hidden) -->
+    <div id="useCaseModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close-btn" onclick="closeUseCaseModal()">&times;</button>
+            <div id="modalBodyContent">
+                <!-- Content will be injected here -->
+            </div>
+        </div>
     </div>
 
     <script>
@@ -384,7 +576,8 @@
                 context: `<span class="font-semibold accent-green">Context:</span> AuraClean products are eco-friendly, non-toxic, safe for pets and children, and packaged in recycled materials. The brand voice is fresh, trustworthy, and slightly premium. Target audience: Health-conscious families and environmentally aware consumers.`,
                 format: `<span class="font-semibold accent-green">Format:</span> A numbered list of slogans. Each slogan should be concise (ideally 5-8 words) and highlight a key benefit or the brand's ethos.`
             },
-            {
+            // ... (Keep all other PTCF examples as they were)
+             {
                 themeName: "Historical Event Analysis",
                 persona: `<span class="font-semibold accent-green">Persona:</span> You are a distinguished historian specializing in 20th-century European history, with a focus on socio-political transformations.`,
                 task: `<span class="font-semibold accent-green">Task:</span> Analyze the primary causes and immediate consequences of the fall of the Berlin Wall in 1989.`,
@@ -539,6 +732,7 @@
                 template: `Persona: You are a highly experienced [Programming Language, e.g., JavaScript] debugger with deep knowledge of [Specific Areas, e.g., asynchronous operations, memory management].\nTask: Analyze the provided [Programming Language] code snippet and the error message "[Exact Error Message]". Identify the root cause of this error and propose a corrected version of the code.\nContext: The code is intended to [Describe code's purpose]. The error occurs when [Describe when/how error happens]. [Provide the code snippet, ideally formatted or clearly demarcated].\nFormat: First, provide a clear, step-by-step explanation of the likely cause(s) of the error. Then, provide the corrected [Programming Language] code snippet, ensuring [Specific requirements for correction, e.g., robust error handling, safe access to properties].`,
                 example: `<strong>Persona:</strong> You are a highly experienced JavaScript debugger with deep knowledge of asynchronous operations, promise handling, and modern ES6+ syntax.<br><br><strong>Task:</strong> Analyze the provided JavaScript code snippet (intended to fetch user data and then related posts) and the error message 'TypeError: Cannot read properties of undefined (reading 'posts')' which occurs on line 15. Identify the root cause of this error. Propose a corrected version of the code that safely handles potential undefined values and ensures proper sequential execution of asynchronous calls.<br><br><strong>Context:</strong> The code first fetches user data from '/api/user/123'. If successful, it then attempts to use the \\\`userId\\\` from the response to fetch posts from \\\`/api/posts?userId=\\\${userData.id}\\\`. The error suggests that \\\`userData\\\` might be undefined or not have the expected structure when \\\`userData.posts\\\` is accessed. <br><code_snippet><br>async function getUserAndPosts() {<br>  try {<br>    const userResponse = await fetch('/api/user/123');<br>    const userData = await userResponse.json(); // Potential issue if not ok<br><br>    // Assume userData.id exists for fetching posts<br>    const postsResponse = await fetch(\\\`/api/posts?userId=\\\${userData.id}\\\`);<br>    const postsData = await postsResponse.json();<br><br>    console.log('User:', userData.name);<br>    console.log('Posts:', postsData.length); // Line 15: Error occurs here if postsData is undefined<br>    return { user: userData, posts: postsData };<br>  } catch (error) {<br>    console.error('Failed to fetch data:', error);<br>  }<br>}<br></code_snippet><br><br><strong>Format:</strong> First, provide a clear, step-by-step explanation of the likely cause(s) of the error, considering asynchronous flow and error handling. Then, provide the corrected JavaScript code snippet, ensuring robust error checking (e.g., for \`response.ok\`) and safe access to properties.`
             },
+             // ... (Keep all other useCasesData items as they were, ensuring category, title, icon, template, and example are present)
             { 
                 category: 'technical', title: 'UX Feature Brainstorming', icon: 'design_services', 
                 template: `Persona: You are a visionary UX design strategist specializing in [Specific Domain, e.g., educational platforms, e-commerce apps] with expertise in [Key UX Principles, e.g., user engagement, accessibility (WCAG 2.1 AA)].\nTask: Brainstorm a list of [Number] innovative and impactful features for a new [Type of Application, e.g., mobile application] designed for [Purpose, e.g., language learning]. These features should aim to [Specific Goals, e.g., significantly increase daily user engagement, improve accessibility for users with cognitive disabilities].\nContext: The target audience is [Describe Target Audience, e.g., adult learners (25-55 years old)]. The app currently offers [Existing Features]. We want features that [Desired Outcome, e.g., create a more compelling and sticky experience, solve specific user pain points].\nFormat: A bulleted list. Each item should contain: \n1. Feature Name (Catchy and descriptive). \n2. Core Concept (1-2 sentences explaining the feature). \n3. Key Benefit/Impact (How it achieves the specified goals). \n4. [Optional: Specific Consideration, e.g., Key Accessibility Consideration].`, 
@@ -666,7 +860,7 @@
             { 
                 category: 'everyday', title: 'Email Tone Adjustment', icon: 'forum', 
                 template: `Persona: You are an expert [Type of Communicator, e.g., corporate communicator, customer service professional] skilled in [Specific Communication Skill, e.g., diplomatic correspondence, de-escalation].\nTask: Rewrite the following email/text draft to sound more [Desired Tone, e.g., polite, collaborative, assertive, empathetic], while still effectively conveying [Key Message/Urgency].\nContext: Original Draft: "[Paste Original Text Here]". The goal is to [Specific Outcome, e.g., de-escalate potential tension, ensure a positive response, clearly state a requirement without causing offense].\nFormat: Provide the revised email/text. [Optional: Include a suggested subject line if it's an email].`,
-                example: `<strong>Persona:</strong> You are an exceptionally skilled corporate communications specialist with expertise in conflict resolution and maintaining positive professional relationships through written communication.<br><br><strong>Task:</strong> Rewrite the following email draft. The goal is to make it sound significantly more polite, collaborative, and understanding, while still clearly communicating the need for the information and the original deadline. The revised email should aim to de-escalate potential tension.<br><br><strong>Context:</strong> Original Draft: "Subject: URGENT: Financial Report OVERDUE!! Look, I've asked for this report three times now and it was due YESTERDAY. I absolutely need that financial report on my desk by 5 PM today, no more excuses. This is completely unacceptable and it's critical for the board meeting tomorrow morning. Any further delays will have serious consequences."<br><br><strong>Format:</strong> Provide the revised email text, including a suggested subject line. Ensure the revised email explains the impact of the delay without being accusatory.`
+                example: `<strong>Persona:</strong> You are an exceptionally skilled corporate communications specialist with expertise in conflict resolution and maintaining positive professional relationships through written communication.<br><br><strong>Task:</strong> Rewrite the following email draft. The goal is to make it sound significantly more polite, collaborative, and understanding, while still clearly communicating the need for the information and the original deadline. The revised email should aim to de-escalate potential tension.<br><br><strong>Context:</strong> Original Draft: "Subject: URGENT: Financial Report OVERDUE!! Look, I'veasked for this report three times now and it was due YESTERDAY. I absolutely need that financial report on my desk by 5 PM today, no more excuses. This is completely unacceptable and it's critical for the board meeting tomorrow morning. Any further delays will have serious consequences."<br><br><strong>Format:</strong> Provide the revised email text, including a suggested subject line. Ensure the revised email explains the impact of the delay without being accusatory.`
             },
             { 
                 category: 'everyday', title: 'Project Plan Outline', icon: 'checklist', 
@@ -793,6 +987,48 @@
 
         let currentFilter = 'all'; 
 
+        // Modal Functionality
+        const modalOverlay = document.getElementById('useCaseModal');
+        const modalBodyContent = document.getElementById('modalBodyContent');
+
+        function openUseCaseModal(useCase) {
+            modalBodyContent.innerHTML = `
+                <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                    ${useCase.icon ? `<span class="material-icons-outlined accent-green mr-3 text-3xl">${useCase.icon}</span>` : ''}
+                    ${useCase.title}
+                </h3>
+                <div class="template-block">
+                    <div class="flex justify-between items-center mb-2">
+                        <h5 class="font-semibold text-gray-700 text-md">Prompt Template:</h5>
+                        <div class="copy-button-container">
+                            <button class="icon-btn text-subtle" title="Copy Template" onclick="copyPromptToClipboard(this, \`${useCase.template.replace(/`/g, '\\`')}\`)">
+                                <span class="material-icons-outlined">content_copy</span>
+                            </button>
+                            <span class="copied-feedback">Template Copied!</span>
+                        </div>
+                    </div>
+                    <pre><code>${useCase.template}</code></pre>
+                </div>
+                <div class="mt-4">
+                    <h5 class="font-semibold text-gray-700 text-md mb-2">Example Usage:</h5>
+                    <div class="prose max-w-none text-subtle">${useCase.example.replace(/<code_snippet>/g, '<pre><code>').replace(/<\/code_snippet>/g, '</code></pre>')}</div>
+                </div>
+            `;
+            modalOverlay.classList.add('active');
+        }
+
+        function closeUseCaseModal() {
+            modalOverlay.classList.remove('active');
+            modalBodyContent.innerHTML = ''; // Clear content
+        }
+        // Close modal if overlay is clicked
+        modalOverlay.addEventListener('click', function(event) {
+            if (event.target === modalOverlay) {
+                closeUseCaseModal();
+            }
+        });
+
+
         function renderUseCases(filter = 'all') {
             currentFilter = filter; 
             const grid = document.getElementById('use-cases-grid');
@@ -808,8 +1044,15 @@
 
                 const headerMainContent = document.createElement('div');
                 headerMainContent.className = 'card-header-main-content';
+                // Determine icon color based on category for use case cards
+                let iconColorClass = 'accent-green'; // Default
+                if (uc.category === 'technical') iconColorClass = 'accent-blue';
+                else if (uc.category === 'creative') iconColorClass = 'accent-red';
+                else if (uc.category === 'everyday') iconColorClass = 'text-purple-500'; // Using a Tailwind class for variety
+
+
                 headerMainContent.innerHTML = `
-                    ${uc.icon ? `<span class="material-icons-outlined accent-green mr-3 text-2xl">${uc.icon}</span>` : ''}
+                    ${uc.icon ? `<span class="material-icons-outlined ${iconColorClass} mr-3 text-2xl">${uc.icon}</span>` : ''}
                     <h4 class="font-bold text-lg text-gray-700">${uc.title}</h4>
                 `;
 
@@ -827,7 +1070,7 @@
 
                 const detailsToggle = document.createElement('p');
                 detailsToggle.className = 'details-arrow-container'; 
-                detailsToggle.innerHTML = `Details <span class="arrow down align-middle material-icons-outlined text-xl ml-1">expand_more</span>`;
+                detailsToggle.innerHTML = `Details <span class="arrow down align-middle material-icons-outlined text-xl ml-1">launch</span>`; // Changed icon to launch
                 headerFooter.appendChild(detailsToggle);
                 
                 header.appendChild(headerMainContent);
@@ -837,76 +1080,19 @@
                     card.classList.add(`card-border-${uc.category}`);
                 }
                 
-                const detailsContainer = document.createElement('div');
-                detailsContainer.className = 'details-section relative'; 
-
-                const detailsContentWrapper = document.createElement('div');
-                detailsContentWrapper.className = 'details-content-wrapper';
-                
-                const templateBlock = document.createElement('div');
-                templateBlock.className = 'template-block';
-                
-                const templateHeaderDiv = document.createElement('div');
-                templateHeaderDiv.className = 'flex justify-between items-center mb-2';
-
-                const templateTitle = document.createElement('h5');
-                templateTitle.className = 'font-semibold text-gray-700 text-md';
-                templateTitle.textContent = 'Prompt Template:';
-                templateHeaderDiv.appendChild(templateTitle);
-
-                const copyButtonContainer = document.createElement('div');
-                copyButtonContainer.className = 'copy-button-container'; 
-                
-                const copyButton = document.createElement('button');
-                copyButton.className = 'icon-btn text-subtle';
-                copyButton.innerHTML = `<span class="material-icons-outlined">content_copy</span>`;
-                copyButton.title = "Copy Template";
-                copyButton.onclick = (event) => {
-                    event.stopPropagation(); 
-                    copyPromptToClipboard(copyButton, uc.template);
-                };
-
-                const copiedFeedback = document.createElement('span');
-                copiedFeedback.className = 'copied-feedback';
-                copiedFeedback.textContent = 'Template Copied!';
-                
-                copyButtonContainer.appendChild(copyButton);
-                copyButtonContainer.appendChild(copiedFeedback);
-                templateHeaderDiv.appendChild(copyButtonContainer); 
-                templateBlock.appendChild(templateHeaderDiv); 
-
-                const templatePre = document.createElement('pre');
-                const templateCode = document.createElement('code');
-                templateCode.textContent = uc.template; 
-                templatePre.appendChild(templateCode);
-                templateBlock.appendChild(templatePre);
-                detailsContentWrapper.appendChild(templateBlock);
-
-                const exampleBlock = document.createElement('div');
-                exampleBlock.innerHTML = `<h5 class="font-semibold text-gray-700 text-md mb-2 mt-4">Example Usage:</h5><div class="prose max-w-none text-subtle">${uc.example.replace(/<code_snippet>/g, '<pre><code>').replace(/<\/code_snippet>/g, '</code></pre>')}</div>`;
-                detailsContentWrapper.appendChild(exampleBlock);
-                
-                detailsContainer.appendChild(detailsContentWrapper); 
-                
+                // Attach click listener to the header (or detailsToggle) to open the modal
                 header.onclick = function() { 
-                    const parentCard = this.closest('.material-card');
-                    if (!parentCard) return;
-
-                    const currentDetailsContainer = parentCard.querySelector('.details-section');
-                    const currentArrow = this.querySelector('.arrow'); 
-
-                    if (currentDetailsContainer && currentArrow) {
-                        currentDetailsContainer.classList.toggle('expanded');
-                        if (currentDetailsContainer.classList.contains('expanded')) {
-                            currentArrow.textContent = 'expand_less';
-                        } else {
-                            currentArrow.textContent = 'expand_more';
-                        }
-                    }
+                    openUseCaseModal(uc);
                 };
+                // Also allow clicking the "Details" text specifically
+                detailsToggle.onclick = function(event) {
+                    event.stopPropagation(); // Prevent card's header click from firing again
+                    openUseCaseModal(uc);
+                };
+
 
                 card.appendChild(header);
-                card.appendChild(detailsContainer);
+                // Details container is no longer needed directly in the card for expansion
                 grid.appendChild(card);
             });
         }
@@ -924,9 +1110,9 @@
                 const headerMainContent = document.createElement('div');
                 headerMainContent.className = 'card-header-main-content';
                 headerMainContent.innerHTML = `
-                    ${ad.icon ? `<span class="material-icons-outlined accent-green mr-3 text-3xl">${ad.icon}</span>` : ''}
+                    ${ad.icon ? `<span class="material-icons-outlined accent-red mr-3 text-3xl">${ad.icon}</span>` : ''} 
                     <h4 class="font-bold text-xl text-gray-700">${ad.title}</h4>
-                `;
+                `; // Using accent-red for advanced section icons
 
                 const headerFooter = document.createElement('div');
                 headerFooter.className = 'card-header-footer';
@@ -949,7 +1135,15 @@
                 const detailsContent = document.createElement('div');
                 detailsContent.className = 'details-content-wrapper';
                 
-                let exampleHtml = ad.example.replace(/<code>/g, '<pre class="bg-gray-800 text-white p-3 rounded-md mt-2 text-sm overflow-x-auto"><code>').replace(/<\/code>/g, '</code></pre>');
+                let exampleHtml = ad.example.replace(/<code>(.*?)<\/code>/gs, (match, p1) => {
+                    // If the content of <code> is multiline or contains HTML, wrap in <pre>
+                    if (p1.includes('\n') || p1.includes('<br>') || p1.includes('<')) {
+                         return `<pre class="bg-gray-800 text-white p-3 rounded-md mt-2 text-sm overflow-x-auto"><code>${p1.replace(/<br\s*\/?>/gi, '\n')}</code></pre>`;
+                    }
+                    // Otherwise, keep it as inline code
+                    return `<code class="bg-gray-200 text-gray-800 px-1 py-0.5 rounded text-sm">${p1}</code>`;
+                });
+
 
                 detailsContent.innerHTML = `
                     <p class="text-subtle text-base mb-4">${ad.content}</p>
@@ -977,11 +1171,17 @@
                     if (!parentCard) return;
 
                     const currentDetailsContainer = parentCard.querySelector('.details-section');
+                    const currentDetailsContentWrapper = currentDetailsContainer.querySelector('.details-content-wrapper');
                     const currentArrow = this.querySelector('.arrow'); 
 
                     if (currentDetailsContainer && currentArrow) {
                         currentDetailsContainer.classList.toggle('expanded');
                         if (currentDetailsContainer.classList.contains('expanded')) {
+                            if(currentDetailsContentWrapper) { // Ensure wrapper exists
+                                currentDetailsContentWrapper.style.paddingTop = '1.5rem'; 
+                                currentDetailsContentWrapper.style.paddingBottom = '1.5rem';
+                                currentDetailsContentWrapper.style.borderTop = '1px solid #e5e7eb';
+                            }
                             currentArrow.textContent = 'expand_less';
                         } else {
                             currentArrow.textContent = 'expand_more';
@@ -1001,6 +1201,64 @@
             renderUseCases(category); 
         }
         
+        // Model Comparison Interactivity
+        const modelRecommendations = {
+            quick_summary: {
+                model: "Flash",
+                reason: "<strong>Gemini Flash</strong> is ideal for quick summaries due to its rapid response times. It efficiently condenses information for fast understanding."
+            },
+            complex_code: {
+                model: "Pro",
+                reason: "<strong>Gemini Pro</strong> excels at complex code generation. Its deeper reasoning capabilities allow it to handle intricate logic and produce more sophisticated code."
+            },
+            creative_writing: {
+                model: "Pro",
+                reason: "For creative writing that requires nuance and depth, <strong>Gemini Pro</strong> is often preferred. It can generate more imaginative and elaborate narratives."
+            },
+            data_analysis: {
+                model: "Pro",
+                reason: "<strong>Gemini Pro</strong> is better suited for in-depth analysis, offering more thorough insights and handling complex data interpretation tasks effectively."
+            },
+            fast_chat: {
+                model: "Flash",
+                reason: "<strong>Gemini Flash</strong> is optimized for speed, making it perfect for fast-paced chat interactions and quick question answering."
+            }
+        };
+        
+        const initialRecommendationHTML = `<p class="text-subtle italic">Select a scenario above for a recommendation.</p>`;
+
+        function showModelRecommendation(scenarioKey, clickedButton) {
+            const recommendationDiv = document.getElementById('model-recommendation');
+            const scenarioButtons = document.querySelectorAll('.model-scenario-btn');
+            const recommendation = modelRecommendations[scenarioKey];
+
+            // Deselect all buttons first
+            scenarioButtons.forEach(btn => btn.classList.remove('selected'));
+            // Select the clicked button
+            if (clickedButton) { // Ensure a button was actually clicked
+                 clickedButton.classList.add('selected');
+            }
+            
+            if (recommendation && clickedButton) { // Check if a button was clicked to show recommendation
+                recommendationDiv.innerHTML = `
+                    <h4 class="text-xl font-semibold mb-2 ${recommendation.model === 'Pro' ? 'accent-green' : 'text-gray-700'}">Recommended: Gemini ${recommendation.model}</h4>
+                    <p class="text-subtle">${recommendation.reason}</p>
+                `;
+            } else { // If no button is selected (e.g., clicked outside)
+                recommendationDiv.innerHTML = initialRecommendationHTML;
+            }
+        }
+
+        // Listener for clicks outside scenario buttons
+        document.addEventListener('click', function(event) {
+            const interactiveArea = document.getElementById('model-selector-interactive-area');
+            if (interactiveArea && !interactiveArea.contains(event.target)) {
+                // Click was outside the interactive area (buttons + recommendation box)
+                showModelRecommendation(null, null); // Pass null to reset
+            }
+        });
+
+
         document.addEventListener('DOMContentLoaded', () => {
             const chartCanvas = document.getElementById('modelComparisonChart');
             if (chartCanvas) { 
@@ -1037,6 +1295,9 @@
                 });
             }
             
+            // Initialize recommendation box to placeholder
+            document.getElementById('model-recommendation').innerHTML = initialRecommendationHTML;
+
             updatePTCFOutput(); 
             renderUseCases(); 
             renderAdvanced(); 
@@ -1046,29 +1307,48 @@
             const ptcfArrow = ptcfExplanationHeader ? ptcfExplanationHeader.querySelector('.arrow') : null;
 
             if (ptcfExplanationHeader && ptcfExplanationDetails && ptcfArrow) {
-                 // Make PTCF explanation initially collapsed
                 ptcfExplanationDetails.classList.remove('expanded');
                 ptcfArrow.textContent = 'expand_more';
-
                 ptcfExplanationHeader.onclick = function() {
+                    const detailsWrapper = ptcfExplanationDetails.querySelector('.details-content-wrapper');
                     ptcfExplanationDetails.classList.toggle('expanded');
-                    ptcfArrow.textContent = ptcfExplanationDetails.classList.contains('expanded') ? 'expand_less' : 'expand_more';
+                    if (ptcfExplanationDetails.classList.contains('expanded')) {
+                        if(detailsWrapper) {
+                            detailsWrapper.style.paddingTop = '1.5rem'; 
+                            detailsWrapper.style.paddingBottom = '1.5rem';
+                            detailsWrapper.style.borderTop = '1px solid #e5e7eb'; // Restore border if it was removed
+                        }
+                        ptcfArrow.textContent = 'expand_less';
+                    } else {
+                         ptcfArrow.textContent = 'expand_more';
+                    }
                 };
             }
 
-            const comparisonHeader = document.getElementById('comparison-header');
-            const comparisonDetails = document.getElementById('comparison-details');
-            const comparisonArrow = comparisonHeader ? comparisonHeader.querySelector('.arrow') : null;
+            // Collapsible detailed comparison section
+            const comparisonDetailedHeader = document.getElementById('model-comparison-detailed-header');
+            const comparisonDetailedContent = document.getElementById('model-comparison-detailed-content');
+            const comparisonDetailedArrow = comparisonDetailedHeader ? comparisonDetailedHeader.querySelector('.arrow') : null;
 
-            if (comparisonHeader && comparisonDetails && comparisonArrow) {
-                comparisonDetails.classList.remove('expanded');
-                comparisonArrow.textContent = 'expand_more';
+            if (comparisonDetailedHeader && comparisonDetailedContent && comparisonDetailedArrow) {
+                comparisonDetailedContent.classList.remove('expanded'); // Start collapsed
+                comparisonDetailedArrow.textContent = 'expand_more';
 
-                comparisonHeader.onclick = function() {
-                    comparisonDetails.classList.toggle('expanded');
-                    comparisonArrow.textContent = comparisonDetails.classList.contains('expanded') ? 'expand_less' : 'expand_more';
+                comparisonDetailedHeader.onclick = function() {
+                    const detailsWrapper = comparisonDetailedContent.querySelector('.details-content-wrapper');
+                    comparisonDetailedContent.classList.toggle('expanded');
+                     if (comparisonDetailedContent.classList.contains('expanded')) {
+                        if(detailsWrapper) { // Ensure wrapper exists
+                            detailsWrapper.style.paddingTop = '1.5rem'; // Restore padding
+                            // No border-top needed for this specific wrapper as per CSS
+                        }
+                        comparisonDetailedArrow.textContent = 'expand_less';
+                    } else {
+                        comparisonDetailedArrow.textContent = 'expand_more';
+                    }
                 };
             }
+
 
             const navLinks = document.querySelectorAll('.nav-link');
             const sections = document.querySelectorAll('main section'); 
@@ -1079,12 +1359,7 @@
                 sections.forEach(section => {
                     const sectionTop = section.offsetTop;
                     let idToMatch = section.id;
-                    // Special handling for sections that are cards themselves (Foundations, Comparison)
-                    if (section.querySelector('.material-card') && (section.id === 'foundations' || section.id === 'comparison')) {
-                         // Use the section's ID directly
-                    }
-
-
+                    
                     if (window.pageYOffset >= sectionTop - navbarHeight - 25) { 
                         currentSectionId = idToMatch; 
                     } 
@@ -1107,11 +1382,6 @@
                     const targetElement = document.querySelector(targetId);
                     if (targetElement) {
                         let elementToScrollTo = targetElement;
-                        // If targeting a section that contains a material-card as its main content block, scroll to that card.
-                        if ((targetId === '#foundations' || targetId === '#comparison')) {
-                            const mainCard = targetElement.querySelector('.material-card');
-                            if (mainCard) elementToScrollTo = mainCard;
-                        }
                         const offsetTop = elementToScrollTo.offsetTop - navbarHeight - 20; 
                         window.scrollTo({ top: offsetTop, behavior: 'smooth' });
                     }
