@@ -1,0 +1,8 @@
+{
+  "name": "geminiguide-site",
+  "version": "1.0.0",
+  "description": "Gemini Prompt Engineering Guide",
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  }
+}
