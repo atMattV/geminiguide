@@ -1070,7 +1070,7 @@
 
         let currentFilter = 'all'; 
         let currentUseCaseForGemini = null; 
-        let currentAdvancedTechniqueForGemini = null; // For advanced techniques
+        let currentAdvancedTechniqueForGemini = null; 
 
         // Modal Functionality
         const modalOverlay = document.getElementById('useCaseModal');
@@ -1210,21 +1210,19 @@
             const customizeBtn = document.getElementById('customizeAndGenerateBtn');
             if(customizeBtn && !customizeBtn.classList.contains('hidden')) customizeBtn.disabled = true;
 
+            const clientPayload = { prompt: finalPrompt };
+            const netlifyFunctionUrl = '/.netlify/functions/gemini-proxy';
 
-            let chatHistory = [{ role: "user", parts: [{ text: finalPrompt }] }];
-            const payload = { contents: chatHistory };
-            const apiKey = ""; 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
             try {
-                const response = await fetch(apiUrl, {
+                const response = await fetch(netlifyFunctionUrl, { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(clientPayload) 
                 });
                  if (!response.ok) {
                     const errorData = await response.json();
-                    throw new Error(`API Error (${response.status}): ${errorData.error?.message || 'Unknown error'}`);
+                    throw new Error(errorData.error || `API Error (${response.status})`);
                 }
                 const result = await response.json();
 
@@ -1234,11 +1232,11 @@
                     const text = result.candidates[0].content.parts[0].text;
                     outputContent.textContent = text;
                 } else {
-                    outputContent.textContent = 'No content received from Gemini, or unexpected response structure.';
-                    console.error("Unexpected Gemini API response structure for use case:", result);
+                    outputContent.textContent = 'No content received, or unexpected response structure from proxy.';
+                    console.error("Unexpected response structure from proxy (use case):", result);
                 }
             } catch (error) {
-                console.error('Error calling Gemini API for use case:', error);
+                console.error('Error calling Netlify function for use case:', error);
                 outputContent.textContent = `Error: ${error.message}`;
             } finally {
                 loadingIndicator.classList.add('hidden');
@@ -1331,7 +1329,7 @@
         function renderAdvanced() {
             const grid = document.getElementById('advanced-grid');
             grid.innerHTML = ''; 
-            advancedData.forEach((ad, index) => { // Added index for unique IDs
+            advancedData.forEach((ad, index) => { 
                 const card = document.createElement('div');
                 card.className = 'material-card flex flex-col'; 
 
@@ -1373,7 +1371,6 @@
                     return `<code class="bg-gray-200 text-gray-800 px-1 py-0.5 rounded text-sm">${p1}</code>`;
                 });
 
-                // Unique IDs for advanced technique Gemini elements
                 const advancedTextAreaId = `advanced-prompt-textarea-${index}`;
                 const advancedGenerateBtnId = `advanced-generate-btn-${index}`;
                 const advancedLoadingId = `advanced-loading-${index}`;
@@ -1453,7 +1450,7 @@
             const promptTextarea = document.getElementById(textareaId);
             const outputContentDiv = document.getElementById(outputContentId);
             const loadingIndicator = document.getElementById(loadingId);
-            const outputContainer = outputContentDiv.parentElement; // The div with ID like advanced-output-container-X
+            const outputContainer = outputContentDiv.parentElement; 
 
             if (!promptTextarea || !outputContentDiv || !loadingIndicator || !outputContainer) {
                 console.error("One or more elements for advanced Gemini generation not found.");
@@ -1472,34 +1469,33 @@
             outputContentDiv.textContent = '';
             buttonElement.disabled = true;
 
-            let chatHistory = [{ role: "user", parts: [{ text: promptText }] }];
-            const payload = { contents: chatHistory };
-            const apiKey = ""; // Intentionally empty for Canvas
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+            const clientPayload = { prompt: promptText };
+            const netlifyFunctionUrl = '/.netlify/functions/gemini-proxy';
+
 
             try {
-                const response = await fetch(apiUrl, {
+                const response = await fetch(netlifyFunctionUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(clientPayload)
                 });
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(`API Error (${response.status}): ${errorData.error?.message || 'Unknown error'}`);
-                }
                 const result = await response.json();
 
+                if (!response.ok) {
+                    throw new Error(result.error || `API Error (${response.status})`);
+                }
+                
                 if (result.candidates && result.candidates.length > 0 &&
                     result.candidates[0].content && result.candidates[0].content.parts &&
                     result.candidates[0].content.parts.length > 0) {
                     const text = result.candidates[0].content.parts[0].text;
                     outputContentDiv.textContent = text;
                 } else {
-                    outputContentDiv.textContent = 'No content received from Gemini, or unexpected response structure.';
-                    console.error("Unexpected Gemini API response structure for advanced technique:", result);
+                    outputContentDiv.textContent = 'No content received, or unexpected response structure from proxy.';
+                    console.error("Unexpected response structure from proxy (advanced):", result);
                 }
             } catch (error) {
-                console.error('Error calling Gemini API for advanced technique:', error);
+                console.error('Error calling Netlify function for advanced technique:', error);
                 outputContentDiv.textContent = `Error: ${error.message}`;
             } finally {
                 loadingIndicator.classList.add('hidden');
@@ -1596,37 +1592,34 @@
             geminiResponseContent.textContent = ''; 
             generateButton.disabled = true;
 
+            const clientPayload = { prompt: promptText };
+            const netlifyFunctionUrl = '/.netlify/functions/gemini-proxy';
 
-            let chatHistory = [{ role: "user", parts: [{ text: promptText }] }];
-            const payload = { contents: chatHistory };
-            const apiKey = ""; 
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
             try {
-                const response = await fetch(apiUrl, {
+                const response = await fetch(netlifyFunctionUrl, { 
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify(clientPayload) 
                 });
 
+                const result = await response.json(); 
+
                 if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(`API Error (${response.status}): ${errorData.error?.message || 'Unknown error'}`);
+                    throw new Error(result.error || `API Error (${response.status})`);
                 }
-
-                const result = await response.json();
-
+                
                 if (result.candidates && result.candidates.length > 0 &&
                     result.candidates[0].content && result.candidates[0].content.parts &&
                     result.candidates[0].content.parts.length > 0) {
                     const text = result.candidates[0].content.parts[0].text;
                     geminiResponseContent.textContent = text;
                 } else {
-                    geminiResponseContent.textContent = 'No content received from Gemini, or unexpected response structure.';
-                     console.error("Unexpected Gemini API response structure:", result);
+                    geminiResponseContent.textContent = 'No content received, or unexpected response structure from proxy.';
+                     console.error("Unexpected response structure from proxy (PTCF):", result);
                 }
             } catch (error) {
-                console.error('Error calling Gemini API:', error);
+                console.error('Error calling Netlify function for PTCF:', error);
                 geminiResponseContent.textContent = `Error: ${error.message}`;
             } finally {
                 loadingIndicator.classList.add('hidden');
