@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Guide to Gemini 2.5 Prompting</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
+        .text-main { color: #212529; }
+        .text-subtle { color: #6c757d; }
+        .accent-green { color: #28a745; }
+        .accent-green-bg { background-color: #28a745; }
+        .accent-green-border { border-color: #28a745; }
+        
+        .nav-link { transition: color 0.3s, border-color 0.3s; }
+        .nav-link.active { color: #28a745; border-bottom-color: #28a745; }
+
+        .material-card { background-color: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); transition: box-shadow 0.3s; }
+        .material-card:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.15); }
+        
+        .filter-btn { transition: background-color 0.3s, color 0.3s; }
+        .filter-btn.active { background-color: #28a745; color: white; }
+        .filter-btn:not(.active):hover { background-color: #e9ecef; }
+
+        .chart-container { position: relative; width: 100%; max-width: 550px; margin-left: auto; margin-right: auto; height: 350px; max-height: 450px; }
+        @media (min-width: 768px) { .chart-container { height: 400px; } }
+        
+        .use-case-details { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
+        .use-case-details.expanded { max-height: 1200px; /* Increased for potentially longer content */ }
+
+        .icon-btn { display: inline-flex; align-items: center; justify-content: center; padding: 8px; border-radius: 50%; transition: background-color 0.2s; }
+        .icon-btn:hover { background-color: rgba(0,0,0,0.05); }
+        .icon-btn .material-icons-outlined { font-size: 20px; }
+
+        .section-header { display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; }
+        .section-header .material-icons-outlined { font-size: 36px; margin-right: 0.75rem; color: #28a745; }
+        
+        .ptcf-component { border: 1px solid #dee2e6; transition: border-color 0.3s, transform 0.2s; }
+        .ptcf-component:hover { border-color: #28a745; transform: translateY(-3px); }
+        .ptcf-component.selected { border-color: #28a745; background-color: #e6f6e9; }
+
+        .copy-button-container { position: absolute; top: 16px; right: 16px; }
+        .copied-feedback { font-size: 0.8rem; color: #28a745; margin-left: 8px; display: none; }
+
+    </style>
+</head>
+<body class="text-main">
+
+    <div id="app" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <header class="text-center py-16">
+            <h1 class="text-4xl md:text-5xl font-bold tracking-tight">Maximizing Gemini 2.5</h1>
+            <p class="mt-4 text-lg md:text-xl text-subtle max-w-3xl mx-auto">An interactive masterclass in prompt engineering for the Gemini web app.</p>
+        </header>
+
+        <nav id="navbar" class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-200 mb-12 shadow-sm">
+            <div class="flex justify-center space-x-4 sm:space-x-8 py-4">
+                <a href="#foundations" class="nav-link text-subtle hover:accent-green font-medium border-b-2 border-transparent pb-1">Foundations</a>
+                <a href="#comparison" class="nav-link text-subtle hover:accent-green font-medium border-b-2 border-transparent pb-1">Model Comparison</a>
+                <a href="#use-cases" class="nav-link text-subtle hover:accent-green font-medium border-b-2 border-transparent pb-1">Use Cases</a>
+                <a href="#advanced" class="nav-link text-subtle hover:accent-green font-medium border-b-2 border-transparent pb-1">Advanced Techniques</a>
+            </div>
+        </nav>
+
+        <main>
+            <section id="foundations" class="py-12 scroll-mt-24">
+                <div class="text-center mb-12">
+                    <div class="section-header">
+                        <span class="material-icons-outlined">foundation</span>
+                        <h2 class="text-3xl font-bold">Prompting Foundations</h2>
+                    </div>
+                    <p class="mt-3 text-lg text-subtle max-w-2xl mx-auto">Master the core principles of effective prompting. This section introduces the PTCF framework, a strategic approach to ensure your instructions are clear, contextual, and get the results you want.</p>
+                </div>
+                <div class="material-card p-6 md:p-8">
+                    <h3 class="text-2xl font-semibold text-center mb-8">The PTCF Framework Builder</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <button onclick="togglePTCF('persona', this)" class="ptcf-component p-4 rounded-lg text-left focus:outline-none">
+                            <h4 class="font-bold text-lg">P: Persona</h4>
+                            <p class="text-sm text-subtle">Define the role Gemini should adopt.</p>
+                        </button>
+                        <button onclick="togglePTCF('task', this)" class="ptcf-component p-4 rounded-lg text-left focus:outline-none">
+                            <h4 class="font-bold text-lg">T: Task</h4>
+                            <p class="text-sm text-subtle">Clearly state the action to perform.</p>
+                        </button>
+                        <button onclick="togglePTCF('context', this)" class="ptcf-component p-4 rounded-lg text-left focus:outline-none">
+                            <h4 class="font-bold text-lg">C: Context</h4>
+                            <p class="text-sm text-subtle">Provide relevant background information.</p>
+                        </button>
+                        <button onclick="togglePTCF('format', this)" class="ptcf-component p-4 rounded-lg text-left focus:outline-none">
+                            <h4 class="font-bold text-lg">F: Format</h4>
+                            <p class="text-sm text-subtle">Specify the desired output structure.</p>
+                        </button>
+                    </div>
+                    <div id="ptcf-output" class="bg-gray-50 p-6 rounded-lg min-h-[180px] transition-all duration-300 border border-gray-200">
+                        <p class="text-subtle italic">Click the components above to build an example prompt.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="comparison" class="py-12 scroll-mt-24">
+                <div class="text-center mb-12">
+                     <div class="section-header">
+                        <span class="material-icons-outlined">compare_arrows</span>
+                        <h2 class="text-3xl font-bold">Choose Your Model: Pro vs. Flash</h2>
+                    </div>
+                    <p class="mt-3 text-lg text-subtle max-w-2xl mx-auto">Understand the key differences between Gemini 2.5 Pro and Flash to select the right model for your needs, balancing deep reasoning with speed.</p>
+                </div>
+                 <div class="material-card p-6 md:p-8">
+                    <div class="chart-container">
+                        <canvas id="modelComparisonChart"></canvas>
+                    </div>
+                 </div>
+            </section>
+
+            <section id="use-cases" class="py-12 scroll-mt-24">
+                <div class="text-center mb-12">
+                     <div class="section-header">
+                        <span class="material-icons-outlined">cases</span>
+                        <h2 class="text-3xl font-bold">Explore the Use Cases</h2>
+                    </div>
+                     <p class="mt-3 text-lg text-subtle max-w-2xl mx-auto">See prompt engineering in action. This collection contains practical, copy-paste-ready examples for a wide range of tasks.</p>
+                </div>
+                <div class="flex justify-center space-x-3 mb-10">
+                    <button onclick="filterUseCases('all', this)" class="filter-btn active px-4 py-2 rounded-full text-sm font-medium flex items-center"><span class="material-icons-outlined text-base mr-1">apps</span>All</button>
+                    <button onclick="filterUseCases('technical', this)" class="filter-btn px-4 py-2 rounded-full text-sm font-medium flex items-center"><span class="material-icons-outlined text-base mr-1">code</span>Technical</button>
+                    <button onclick="filterUseCases('creative', this)" class="filter-btn px-4 py-2 rounded-full text-sm font-medium flex items-center"><span class="material-icons-outlined text-base mr-1">palette</span>Creative</button>
+                    <button onclick="filterUseCases('everyday', this)" class="filter-btn px-4 py-2 rounded-full text-sm font-medium flex items-center"><span class="material-icons-outlined text-base mr-1">task_alt</span>Everyday</button>
+                </div>
+                <div id="use-cases-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    </div>
+            </section>
+
+            <section id="advanced" class="py-12 scroll-mt-24">
+                <div class="text-center mb-12">
+                     <div class="section-header">
+                        <span class="material-icons-outlined">auto_awesome</span>
+                        <h2 class="text-3xl font-bold">Advanced Techniques</h2>
+                    </div>
+                     <p class="mt-3 text-lg text-subtle max-w-2xl mx-auto">Go beyond the basics. These powerful strategies will help you elicit more sophisticated, nuanced, and higher-quality responses.</p>
+                </div>
+                <div id="advanced-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    </div>
+            </section>
+        </main>
+
+        <footer class="text-center py-16 mt-10 border-t border-gray-200">
+            <p class="text-subtle">An interactive experience based on the "Maximizing Gemini 2.5" report.</p>
+            <p class="text-sm text-gray-400 mt-2">Designed with Material-inspired aesthetics, Tailwind CSS, and Chart.js</p>
+        </footer>
+    </div>
+
+    <script>
+        const ptcfData = {
+            persona: `<span class="font-semibold accent-green">Persona:</span> You are a helpful and knowledgeable assistant.`,
+            task: `<span class="font-semibold accent-green">Task:</span> Explain a complex topic in simple terms.`,
+            context: `<span class="font-semibold accent-green">Context:</span> The topic is [Specify Topic Here, e.g., 'Quantum Entanglement']. The explanation is for someone with no prior background in the subject.`,
+            format: `<span class="font-semibold accent-green">Format:</span> Provide the explanation in 2-3 clear paragraphs, using an analogy if helpful.`
+        };
+
+        let selectedPTCFComponents = [];
+
+        function togglePTCF(component, buttonElement) {
+            const index = selectedPTCFComponents.indexOf(component);
+            if (index > -1) {
+                selectedPTCFComponents.splice(index, 1);
+                buttonElement.classList.remove('selected');
+            } else {
+                selectedPTCFComponents.push(component);
+                buttonElement.classList.add('selected');
+            }
+            updatePTCFOutput();
+        }
+
+        function updatePTCFOutput() {
+            const outputDiv = document.getElementById('ptcf-output');
+            if (selectedPTCFComponents.length === 0) {
+                outputDiv.innerHTML = `<p class="text-subtle italic">Click the components above to build an example prompt.</p>`;
+                return;
+            }
+            const orderedSelection = ['persona', 'task', 'context', 'format'].filter(c => selectedPTCFComponents.includes(c));
+            outputDiv.innerHTML = orderedSelection.map(c => `<p class="mb-2">${ptcfData[c]}</p>`).join('');
+        }
+        
+        const useCasesData = [
+            { category: 'technical', title: 'Code Generation', icon: 'terminal', content: `<strong>Persona:</strong> You are an expert Python developer specializing in web scraping and data extraction.<br><br><strong>Task:</strong> Write a Python script that scrapes the titles and publication dates of the first 10 articles from the homepage of 'https://example-news-site.com/'. The script should handle potential HTTP errors gracefully.<br><br><strong>Context:</strong> The script should use the 'requests' library for HTTP requests and 'BeautifulSoup4' for HTML parsing. Ensure the code is well-commented, explaining each major step. The output should be a list of dictionaries, where each dictionary contains 'title' and 'date'.<br><br><strong>Format:</strong> Provide the complete Python script as a single code block.` },
+            { category: 'technical', title: 'Debugging Code', icon: 'bug_report', content: `<strong>Persona:</strong> You are a highly experienced JavaScript debugger with deep knowledge of asynchronous operations and promise handling.<br><br><strong>Task:</strong> Analyze the provided JavaScript code snippet and the error message 'TypeError: Cannot read properties of undefined (reading 'data')'. Identify the root cause of this error and propose a corrected version of the code that safely handles potential undefined values.<br><br><strong>Context:</strong> The code is intended to fetch user data from an API endpoint ('/api/user/123') using 'fetch' and then display the user's name from the response.<br><br><strong>Format:</strong> First, provide a clear explanation of the likely cause(s) of the error. Then, provide the corrected JavaScript code snippet.`},
+            { category: 'technical', title: 'UX Feature Brainstorming', icon: 'design_services', content: `<strong>Persona:</strong> You are a UX design expert with a strong specialization in accessibility (a11y) and inclusive design principles, deeply familiar with WCAG guidelines.<br><br><strong>Task:</strong> Brainstorm a list of 5 innovative and impactful accessibility features for a new mobile application designed for online learning.<br><br><strong>Context:</strong> The target audience for the learning app is diverse, including students with varying abilities. Consider features beyond standard text resizing and screen reader compatibility.<br><br><strong>Format:</strong> A bulleted list. Each item should contain: Feature Name, Targeted Disability/Benefit, and a Brief Explanation.`},
+            { category: 'technical', title: 'Technical Doc Writing', icon: 'article', content: `<strong>Persona:</strong> You are a precise technical writer, skilled in creating clear and concise documentation for software APIs.<br><br><strong>Task:</strong> Write the API documentation for a new endpoint: \`GET /api/v1/products/{id}\`.<br><br><strong>Context:</strong> This endpoint retrieves details for a specific product. It requires an \`id\` path parameter (integer). Successful response (200 OK) returns a JSON object with \`id\`, \`name\`, \`description\`, \`price\`, and \`in_stock\` (boolean). Handle potential errors: 404 Not Found if product ID doesn't exist, 400 Bad Request for invalid ID format.<br><br><strong>Format:</strong> Structure the documentation with sections: Endpoint URL, HTTP Method, Path Parameters, Success Response (with example JSON), Error Responses (with status codes and descriptions).` },
+            { category: 'technical', title: 'PR Description & Review Points', icon: 'rate_review', content: `<strong>Persona:</strong> You are a meticulous senior software engineer preparing a Pull Request (PR) and outlining key points for reviewers.<br><br><strong>Task:</strong> 1. Write a concise PR description for a change that refactors the user authentication module to use JWT instead of session cookies. 2. List 3-4 critical points or specific files/functions that reviewers should focus on.<br><br><strong>Context:</strong> The refactor aims to improve scalability and statelessness. Key changes involve new token generation/validation logic and updates to middleware protecting routes.<br><br><strong>Format:</strong> 1. PR Description (2-3 sentences). 2. Key Review Points (bulleted list).` },
+            { category: 'technical', title: 'Diagram Analysis & Explanation', icon: 'schema', content: `<strong>Persona:</strong> You are a systems analyst adept at interpreting technical diagrams and explaining them clearly.<br><br><strong>Task:</strong> Assume an image of a basic three-tier web application architecture (client, application server, database server) has been uploaded. Explain the role of each tier and how they interact to fulfill a user request.<br><br><strong>Context:</strong> The explanation should be understandable to a non-technical stakeholder. Focus on the flow of data and responsibilities.<br><br><strong>Format:</strong> A short paragraph for each tier, followed by a brief summary of their interaction. (Note: For actual use, you would upload an image to Gemini).` },
+            { category: 'creative', title: 'Marketing Campaign Slogans', icon: 'campaign', content: `<strong>Persona:</strong> You are a witty, trend-aware social media copywriter specializing in campaigns for direct-to-consumer sustainable fashion brands.<br><br><strong>Task:</strong> Generate 5 short, catchy, and shareable slogans for an upcoming Instagram and TikTok campaign promoting our new line of sneakers made from recycled ocean plastics.<br><br><strong>Context:</strong> Target audience: Environmentally conscious millennials and Gen Z. Brand voice: Playful, optimistic, and authentic. Key benefits: Stylish, comfortable, contributes to ocean cleanup.<br><br><strong>Format:</strong> A numbered list of slogans. For each slogan, also suggest 2-3 relevant and trending hashtags.`},
+            { category: 'creative', title: 'Blog Post Ideation', icon: 'lightbulb', content: `<strong>Persona:</strong> You are a highly imaginative content strategist for a luxury travel blog that focuses on unique, off-the-beaten-path experiences.<br><br><strong>Task:</strong> Brainstorm 10 unique and compelling blog post ideas targeting affluent, experienced travelers seeking transformative and culturally immersive journeys.<br><br><strong>Context:</strong> Our readership values authenticity, exclusivity, and sustainable travel practices. Avoid generic listicles.<br><br><strong>Format:</strong> A bulleted list. For each idea, provide a catchy title and a brief (1-2 sentence) description of the proposed angle.`},
+            { category: 'everyday', title: 'Email Tone Adjustment', icon: 'forum', content: `<strong>Persona:</strong> You are an expert corporate communicator skilled in diplomatic and professional correspondence.<br><br><strong>Task:</strong> Rewrite the following email draft to sound more polite, collaborative, and less demanding, while still effectively conveying the urgency.<br><br><strong>Context:</strong> Original Draft: "I need that financial report on my desk by 5 PM today. No excuses. It's absolutely critical for the board meeting tomorrow morning."<br><br><strong>Format:</strong> Provide the revised email text.`},
+            { category: 'everyday', title: 'Project Plan Outline', icon: 'checklist', content: `<strong>Persona:</strong> You are a highly organized project manager adept at breaking down complex initiatives.<br><br><strong>Task:</strong> Create a high-level project plan outline for launching a new company intranet portal.<br><br><strong>Context:</strong> The project is expected to take 3 months. Key phases include Discovery, Design, Development, Content Migration, Testing, and Launch.<br><br><strong>Format:</strong> A bulleted list. Under each main phase, list 2-4 key sub-tasks or deliverables.`},
+            { category: 'everyday', title: 'Explain a Complex Topic', icon: 'psychology_alt', content: `<strong>Persona:</strong> You are a gifted science communicator, celebrated for your ability to explain profoundly complex scientific topics to a general audience.<br><br><strong>Task:</strong> Explain the fundamental concept of black holes to someone with no prior specialized knowledge of astrophysics or general relativity.<br><br><strong>Context:</strong> The explanation should be scientifically accurate at a conceptual level but use simple, accessible language and a relatable analogy.<br><br><strong>Format:</strong> 2-3 concise paragraphs.`},
+        ];
+
+        const advancedData = [
+            { title: 'Meta-Prompting', icon: 'question_answer', content: 'The practice of asking Gemini to help improve your prompts. This creates a valuable feedback loop, enabling you to iteratively enhance your prompting skills.', example: '<strong>Example:</strong><br><code>Make this a power prompt: "Write a story about a cat."</code><br>Gemini will suggest adding details like personality, setting, plot, and tone.' },
+            { title: 'Prompt Chaining', icon: 'link', content: 'Deconstructing a complex objective into a sequence of smaller, interconnected prompts. The output from one prompt serves as input or context for the next, affording greater control.', example: '<strong>Example:</strong><br>1. Generate character concepts.<br>2. Select one character and ask for a plot outline.<br>3. Use the plot to write the first chapter.' },
+            { title: 'Few-Shot Prompting', icon: 'format_list_numbered', content: 'Providing a small number of examples (input/output pairs) directly within the prompt. This guides the model to follow a specific pattern, style, or format.', example: '<strong>Example for sentiment classification:</strong><br><code>Text: "I loved the movie!"<br>Sentiment: Positive<br><br>Text: "The product broke."<br>Sentiment: Negative<br><br>Your turn:<br>Text: "The service was amazing."<br>Sentiment:</code>' }
+        ];
+
+        function stripHtml(html) {
+            let tmp = document.createElement("DIV");
+            tmp.innerHTML = html;
+            return tmp.textContent || tmp.innerText || "";
+        }
+
+        function copyPromptToClipboard(buttonElement, promptContent) {
+            const plainTextPrompt = stripHtml(promptContent);
+            const textarea = document.createElement('textarea');
+            textarea.value = plainTextPrompt;
+            textarea.style.position = 'fixed'; // Prevent scrolling to bottom of page in MS Edge.
+            textarea.style.opacity = '0'; // Hide the textarea.
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                const originalText = buttonElement.innerHTML;
+                const feedbackSpan = buttonElement.nextElementSibling;
+                
+                buttonElement.innerHTML = `<span class="material-icons-outlined accent-green">check_circle</span>`;
+                if(feedbackSpan) feedbackSpan.style.display = 'inline';
+
+                setTimeout(() => {
+                    buttonElement.innerHTML = originalText;
+                     if(feedbackSpan) feedbackSpan.style.display = 'none';
+                }, 2000);
+            } catch (err) {
+                // Could not copy.
+            }
+            document.body.removeChild(textarea);
+        }
+
+
+        function renderUseCases(filter = 'all') {
+            const grid = document.getElementById('use-cases-grid');
+            grid.innerHTML = '';
+            const filtered = filter === 'all' ? useCasesData : useCasesData.filter(uc => uc.category === filter);
+            
+            filtered.forEach((uc) => {
+                const card = document.createElement('div');
+                card.className = 'material-card flex flex-col';
+
+                const header = document.createElement('div');
+                header.className = 'p-6 cursor-pointer flex items-center justify-between'; // For title and icon
+                header.innerHTML = `
+                    <div class="flex items-center">
+                        ${uc.icon ? `<span class="material-icons-outlined accent-green mr-3">${uc.icon}</span>` : ''}
+                        <h4 class="font-bold text-lg">${uc.title}</h4>
+                    </div>
+                    <p class="text-sm text-subtle ml-4 expand-indicator">Details <span class="arrow down align-middle material-icons-outlined text-lg">expand_more</span></p>
+                `;
+                
+                const detailsContainer = document.createElement('div');
+                detailsContainer.className = 'use-case-details relative'; // Added relative for copy button positioning
+
+                const detailsContent = document.createElement('div');
+                detailsContent.className = 'p-6 pt-0 border-t border-gray-200';
+                if (uc && uc.content && typeof uc.content === 'string') {
+                    detailsContent.innerHTML = `<div class="prose max-w-none text-subtle">${uc.content}</div>`;
+                } else {
+                    detailsContent.innerHTML = `<p class="text-red-500">Content not available.</p>`;
+                }
+
+                const copyButtonContainer = document.createElement('div');
+                copyButtonContainer.className = 'copy-button-container';
+                
+                const copyButton = document.createElement('button');
+                copyButton.className = 'icon-btn text-subtle';
+                copyButton.innerHTML = `<span class="material-icons-outlined">content_copy</span>`;
+                copyButton.title = "Copy Prompt";
+                copyButton.onclick = (event) => {
+                    event.stopPropagation(); // Prevent card from toggling when copy button is clicked
+                    copyPromptToClipboard(copyButton, uc.content);
+                };
+
+                const copiedFeedback = document.createElement('span');
+                copiedFeedback.className = 'copied-feedback';
+                copiedFeedback.textContent = 'Copied!';
+
+                copyButtonContainer.appendChild(copyButton);
+                copyButtonContainer.appendChild(copiedFeedback);
+                detailsContainer.appendChild(copyButtonContainer);
+                detailsContainer.appendChild(detailsContent);
+                
+                header.onclick = () => {
+                    detailsContainer.classList.toggle('expanded');
+                    const arrow = header.querySelector('.arrow');
+                    if (detailsContainer.classList.contains('expanded')) {
+                        arrow.textContent = 'expand_less';
+                    } else {
+                        arrow.textContent = 'expand_more';
+                    }
+                };
+
+                card.appendChild(header);
+                card.appendChild(detailsContainer);
+                grid.appendChild(card);
+            });
+        }
+        
+        function renderAdvanced() {
+            const grid = document.getElementById('advanced-grid');
+            grid.innerHTML = '';
+            advancedData.forEach(ad => {
+                const card = document.createElement('div');
+                card.className = 'material-card p-6';
+                card.innerHTML = `
+                    <div class="flex items-center mb-3">
+                        ${ad.icon ? `<span class="material-icons-outlined accent-green mr-2">${ad.icon}</span>` : ''}
+                        <h4 class="font-bold text-xl accent-green">${ad.title}</h4>
+                    </div>
+                    <p class="text-subtle mt-3 text-sm">${ad.content}</p>
+                    <div class="mt-4 p-4 bg-gray-50 rounded-md text-sm border border-gray-200">${ad.example}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterUseCases(category, buttonElement) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            buttonElement.classList.add('active');
+            renderUseCases(category);
+        }
+        
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('modelComparisonChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Reasoning Depth', 'Coding Prowess', 'Response Speed', 'Complex Tasks', 'Everyday Help'],
+                    datasets: [{
+                        label: 'Gemini 2.5 Pro',
+                        data: [9, 9, 6, 9, 7],
+                        backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                        borderColor: 'rgba(40, 167, 69, 1)',
+                        pointBackgroundColor: 'rgba(40, 167, 69, 1)',
+                        borderWidth: 2
+                    }, {
+                        label: 'Gemini 2.5 Flash',
+                        data: [7, 7, 9, 6, 9],
+                        backgroundColor: 'rgba(108, 117, 125, 0.2)',
+                        borderColor: 'rgba(108, 117, 125, 1)',
+                        pointBackgroundColor: 'rgba(108, 117, 125, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#e9ecef' },
+                            grid: { color: '#e9ecef' },
+                            pointLabels: { font: { size: 12, weight: '500' }, color: '#495057' },
+                            ticks: { backdropColor: '#f8f9fa', color: '#6c757d'},
+                            suggestedMin: 0,
+                            suggestedMax: 10
+                        }
+                    },
+                    plugins: { legend: { position: 'top', labels: { font: { size: 14, family: 'Inter' }, color: '#212529'}}}
+                }
+            });
+
+            renderUseCases();
+            renderAdvanced();
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('main section');
+            
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 100) { current = section.getAttribute('id'); }
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) { link.classList.add('active'); }
+                });
+            });
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                         const offsetTop = targetElement.offsetTop - 80; // Adjusted for sticky nav height
+                         window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
