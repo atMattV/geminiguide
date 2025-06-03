@@ -214,17 +214,20 @@
         }
 
         /* Gemini API Response Area */
-        #ptcf-gemini-response-area {
-            margin-top: 1.5rem; /* Tailwind's mt-6 */
-            padding: 1.5rem; /* Tailwind's p-6 */
-            background-color: #e9f5e9; /* Light green background */
+        #ptcf-gemini-response-content, 
+        #use-case-gemini-output-content,
+        .advanced-gemini-output-content { /* Added class for advanced section */
+            margin-top: 1rem; 
+            padding: 1.5rem; 
+            background-color: #e9f5e9; 
             border: 1px solid var(--soft-green);
-            border-radius: 8px; /* Tailwind's rounded-lg */
+            border-radius: 8px; 
             min-height: 100px;
-            white-space: pre-wrap; /* To respect newlines from API */
-            font-family: monospace;
-            font-size: 0.9em;
+            white-space: pre-line; 
+            font-family: 'Roboto', sans-serif; 
+            font-size: 0.95em; 
             color: #333;
+            line-height: 1.6;
         }
         .loading-indicator {
             display: flex;
@@ -232,6 +235,7 @@
             justify-content: center;
             color: var(--soft-green);
             font-style: italic;
+            padding: 1rem 0;
         }
         .loading-spinner {
             border: 4px solid rgba(0, 0, 0, 0.1);
@@ -244,6 +248,33 @@
         }
         @keyframes spin {
             to { transform: rotate(360deg); }
+        }
+        /* Disabled button style */
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        /* Placeholder input styling */
+        .placeholder-input-group { margin-bottom: 0.75rem; }
+        .placeholder-input-group label { display: block; margin-bottom: 0.25rem; font-weight: 500; color: #4A5568; font-size: 0.875rem;}
+        .placeholder-input-group input[type="text"],
+        .advanced-prompt-textarea { /* Style for advanced textarea */
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #CBD5E0;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-family: 'Roboto', sans-serif; /* Ensure Roboto for textarea too */
+            line-height: 1.5;
+        }
+        .placeholder-input-group input[type="text"]:focus,
+        .advanced-prompt-textarea:focus {
+            outline: none;
+            border-color: var(--soft-green);
+            box-shadow: 0 0 0 2px rgba(92, 184, 92, 0.2);
+        }
+        .advanced-prompt-textarea {
+            min-height: 150px; /* Good height for editing prompts */
         }
 
 
@@ -298,6 +329,12 @@
             vertical-align: middle;
             margin: 0 2px;
         }
+         .footer-paw-icon { /* Specific style for Bud's paw */
+            font-size: 1em; 
+            vertical-align: -0.125em; /* Adjust vertical alignment */
+            margin: 0 2px;
+        }
+
 
         /* Modal Styles */
         .modal-overlay {
@@ -466,17 +503,18 @@
                         </button>
                     </div>
                     <div id="ptcf-output" class="bg-gray-100 p-6 rounded-lg min-h-[200px] transition-all duration-300 border border-gray-300 shadow-inner">
-                        <p class="text-subtle italic">Click "New Example Set" then P, T, C, F buttons above to see parts of an example prompt.</p>
+                        <p class="text-subtle italic">Click "New Example Set" then P, T, C, F buttons above to build a prompt and enable generation.</p>
                     </div>
                     <div class="text-center mt-6">
-                        <button id="generateWithGeminiBtn" onclick="generatePTCFWithGemini()" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md transition duration-150 ease-in-out flex items-center mx-auto">
+                        <button id="generateWithGeminiBtn" onclick="generatePTCFWithGemini()" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md transition duration-150 ease-in-out flex items-center mx-auto" disabled>
                             <span class="material-icons-outlined mr-2">auto_awesome</span>
                             ✨ Generate Example with Gemini
                         </button>
+                         <p class="text-xs text-gray-500 mt-2"><em>Live examples are generated using Gemini 2.0 Flash to demonstrate prompt principles.</em></p>
                     </div>
-                    <div id="ptcf-gemini-response-area" class="hidden mt-6">
+                    <div id="ptcf-gemini-response-container" class="hidden mt-6"> 
                         <h4 class="text-lg font-semibold text-gray-700 mb-2">Gemini's Response:</h4>
-                        <div id="ptcf-gemini-response-content" class="bg-gray-100 p-4 rounded-lg border border-gray-300 min-h-[100px] whitespace-pre-wrap font-mono text-sm"></div>
+                        <div id="ptcf-gemini-response-content" class="p-4 rounded-lg border min-h-[100px]"></div> 
                     </div>
                      <div id="ptcf-gemini-loading" class="loading-indicator hidden mt-4">
                         <div class="loading-spinner"></div>
@@ -588,6 +626,7 @@
 
         <footer class="text-center py-16 mt-10 border-t border-gray-200">
             <p class="text-subtle">Made by Gemini & Mattia <span class="material-icons-outlined footer-icon">pets</span> for Gemini.</p>
+            <p class="text-sm text-gray-500 mt-1">(With the barking support of Bud the Beagle <span class="material-icons-outlined footer-paw-icon">pets</span>)</p>
             <p class="text-sm text-gray-400 mt-2">Designed with Material-inspired aesthetics, Tailwind CSS, and Chart.js</p>
         </footer>
     </div>
@@ -741,25 +780,28 @@
 
         function updatePTCFOutput() {
             const outputDiv = document.getElementById('ptcf-output');
+            const generateButton = document.getElementById('generateWithGeminiBtn');
+
             if (!currentPTCFExampleSet) {
-                outputDiv.innerHTML = `<p class="text-subtle italic">Click "New Example Set" then P, T, C, F buttons above to see parts of an example prompt.</p>`;
+                outputDiv.innerHTML = `<p class="text-subtle italic">Click "New Example Set" then P, T, C, F buttons above to build a prompt and enable generation.</p>`;
+                generateButton.disabled = true;
                 return;
             }
 
             if (selectedPTCFComponents.length === 0) {
-                outputDiv.innerHTML = `<p class="text-subtle italic">Current Theme: <strong>${currentPTCFExampleSet.themeName}</strong>. Click P, T, C, F buttons above to see parts of this example.</p>`;
-                return;
+                outputDiv.innerHTML = `<p class="text-subtle italic">Current Theme: <strong>${currentPTCFExampleSet.themeName}</strong>. Select P, T, C, or F components to build your prompt and enable generation.</p>`;
+                generateButton.disabled = true;
+            } else {
+                let htmlOutput = `<p class="text-sm text-gray-600 mb-3">Showing parts for theme: <strong>${currentPTCFExampleSet.themeName}</strong></p>`;
+                const orderedSelection = ['persona', 'task', 'context', 'format'].filter(key => selectedPTCFComponents.includes(key));
+
+                htmlOutput += orderedSelection.map(key => {
+                    const content = currentPTCFExampleSet[key];
+                    return `<div class="mb-3 p-3 bg-white border border-gray-200 rounded-md shadow-sm">${content}</div>`;
+                }).join('');
+                outputDiv.innerHTML = htmlOutput;
+                generateButton.disabled = false; // Enable button when components are selected
             }
-
-            let htmlOutput = `<p class="text-sm text-gray-600 mb-3">Showing parts for theme: <strong>${currentPTCFExampleSet.themeName}</strong></p>`;
-            const orderedSelection = ['persona', 'task', 'context', 'format'].filter(key => selectedPTCFComponents.includes(key));
-
-            htmlOutput += orderedSelection.map(key => {
-                const content = currentPTCFExampleSet[key];
-                return `<div class="mb-3 p-3 bg-white border border-gray-200 rounded-md shadow-sm">${content}</div>`;
-            }).join('');
-
-            outputDiv.innerHTML = htmlOutput;
         }
         
         const useCasesData = [
@@ -817,7 +859,7 @@
             { 
                 category: 'technical', title: 'Database Schema Suggestion', icon: 'database', 
                 template: `Persona: You are a database architect designing a schema for a new application.\nTask: Suggest a basic database schema (tables, key columns, relationships) for storing information about [Core Entities, e.g., Users, Products, and Orders].\nContext: The application is a [Type of Application, e.g., simple e-commerce site]. Key information for Users includes [e.g., name, email, password_hash]. For Products: [e.g., name, description, price, stock_quantity]. For Orders: [e.g., user_id, order_date, total_amount, status, and line items linking to products].\nFormat: For each suggested table: <br>- Table Name. <br>- Key Columns (with data types and constraints like PRIMARY KEY, FOREIGN KEY, NOT NULL). <br>- Brief description of relationships between tables (e.g., one-to-many, many-to-many with a join table).`,
-                example: `<strong>Persona:</strong> You are a database architect designing a schema for a simple blog application.\n<strong>Task:</strong> Suggest a basic database schema for storing Users, Posts, and Comments.\n<strong>Context:</strong> Users can write multiple Posts. Posts can have multiple Comments. Users also make Comments. Key info for Users: id, username, email, password_hash. Posts: id, user_id (author), title, content, created_at. Comments: id, post_id, user_id (commenter), content, created_at.\n<strong>Format:</strong> For each table (Users, Posts, Comments): <ul class="list-disc list-inside pl-5"><li>Table Name.</li><li>Columns (name, type, constraints like PK, FK, NOT NULL).</li><li>Description of relationships.</li></ul>` // Example of using ul for descriptive format
+                example: `<strong>Persona:</strong> You are a database architect designing a schema for a simple blog application.\n<strong>Task:</strong> Suggest a basic database schema for storing Users, Posts, and Comments.\n<strong>Context:</strong> Users can write multiple Posts. Posts can have multiple Comments. Users also make Comments. Key info for Users: id, username, email, password_hash. Posts: id, user_id (author), title, content, created_at. Comments: id, post_id, user_id (commenter), content, created_at.\n<strong>Format:</strong> For each table (Users, Posts, Comments): <ul class="list-disc list-inside pl-5"><li>Table Name.</li><li>Columns (name, type, constraints like PK, FK, NOT NULL).</li><li>Description of relationships.</li></ul>`
             },
             { 
                 category: 'technical', title: 'Algorithm Explanation (Conceptual)', icon: 'functions', 
@@ -994,14 +1036,14 @@
         // Utility function to strip HTML tags from a string (for copying plain text)
         function stripHtml(html) {
             let tmp = document.createElement("DIV");
-            tmp.innerHTML = html; // If html has <br>, they become <br> elements
-            tmp.querySelectorAll('br, BR').forEach(br => br.parentNode.replaceChild(document.createTextNode('\n'), br)); // <br> elements become \n text nodes
+            tmp.innerHTML = html; 
+            tmp.querySelectorAll('br, BR').forEach(br => br.parentNode.replaceChild(document.createTextNode('\n'), br)); 
             return tmp.textContent || tmp.innerText || "";
         }
 
         // Function to copy prompt content (template or example) to clipboard
         function copyPromptToClipboard(buttonElement, promptContent) {
-            const plainTextPrompt = stripHtml(promptContent); // This will have \n for line breaks
+            const plainTextPrompt = stripHtml(promptContent); 
             const textarea = document.createElement('textarea');
             textarea.value = plainTextPrompt.trim(); 
             textarea.style.position = 'fixed'; 
@@ -1027,13 +1069,15 @@
         }
 
         let currentFilter = 'all'; 
+        let currentUseCaseForGemini = null; 
+        let currentAdvancedTechniqueForGemini = null; // For advanced techniques
 
         // Modal Functionality
         const modalOverlay = document.getElementById('useCaseModal');
         const modalBodyContent = document.getElementById('modalBodyContent');
 
         function openUseCaseModal(useCase) {
-            // For display in the modal: convert \n to <br> so HTML renders line breaks
+            currentUseCaseForGemini = useCase; 
             const formattedTemplateForDisplay = useCase.template.replace(/\n/g, '<br>');
 
             modalBodyContent.innerHTML = `
@@ -1057,15 +1101,162 @@
                     <h5 class="font-semibold text-gray-700 text-md mb-2">Example Usage:</h5>
                     <div class="prose max-w-none text-subtle">${useCase.example.replace(/<code_snippet>/g, '<pre><code>').replace(/<\/code_snippet>/g, '</code></pre>')}</div>
                 </div>
+                <hr class="my-6">
+                <div>
+                    <button id="customizeAndGenerateBtn" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-150 ease-in-out flex items-center w-full justify-center" onclick="prepareUseCaseGeminiInputs()">
+                        <span class="material-icons-outlined mr-2">auto_awesome</span>
+                        ✨ Customize & Generate with Gemini
+                    </button>
+                    <div id="use-case-gemini-inputs-container" class="mt-4 hidden">
+                        <!-- Dynamic inputs will be injected here -->
+                    </div>
+                    <p class="text-xs text-gray-500 mt-3 mb-2 text-center hidden" id="use-case-gemini-disclosure"><em>Live examples are generated using Gemini 2.0 Flash to demonstrate prompt principles.</em></p>
+                    <div id="use-case-gemini-loading" class="loading-indicator hidden mt-4">
+                        <div class="loading-spinner"></div>
+                        Generating response...
+                    </div>
+                    <div id="use-case-gemini-output-container" class="hidden mt-4">
+                        <h5 class="font-semibold text-gray-700 text-md mb-2">Gemini's Response:</h5>
+                        <div id="use-case-gemini-output-content" class="p-4 rounded-lg border min-h-[100px]"></div>
+                    </div>
+                </div>
             `;
             modalOverlay.classList.add('active');
         }
+        
+        function prepareUseCaseGeminiInputs() {
+            const inputsContainer = document.getElementById('use-case-gemini-inputs-container');
+            const customizeBtn = document.getElementById('customizeAndGenerateBtn');
+            const disclosureText = document.getElementById('use-case-gemini-disclosure');
+            
+            if (!currentUseCaseForGemini || !inputsContainer) return;
+
+            inputsContainer.innerHTML = ''; 
+            
+            const placeholderRegex = /\[([^,\]]+)(?:,\s*e\.g\.,\s*([^\]]+))?\]/g;
+            let match;
+            let hasPlaceholders = false;
+            const template = currentUseCaseForGemini.template;
+
+            while ((match = placeholderRegex.exec(template)) !== null) {
+                hasPlaceholders = true;
+                const fullPlaceholder = match[0]; 
+                const placeholderName = match[1].trim(); 
+                const exampleValue = match[2] ? match[2].trim() : ''; 
+
+                const inputGroup = document.createElement('div');
+                inputGroup.className = 'placeholder-input-group';
+
+                const label = document.createElement('label');
+                label.htmlFor = `input-${placeholderName.replace(/\s+/g, '-')}`;
+                label.textContent = `${placeholderName}:`;
+                
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.id = `input-${placeholderName.replace(/\s+/g, '-')}`;
+                input.name = fullPlaceholder; 
+                input.placeholder = exampleValue || `Enter ${placeholderName}`;
+                input.className = 'mt-1';
+
+                inputGroup.appendChild(label);
+                inputGroup.appendChild(input);
+                inputsContainer.appendChild(inputGroup);
+            }
+
+            if (disclosureText) disclosureText.classList.remove('hidden');
+
+
+            if (hasPlaceholders) {
+                inputsContainer.classList.remove('hidden');
+                const generateActualBtn = document.createElement('button');
+                generateActualBtn.textContent = '🚀 Generate Response from Custom Prompt';
+                generateActualBtn.className = 'bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-150 ease-in-out flex items-center w-full justify-center mt-4';
+                generateActualBtn.onclick = generateUseCaseWithGemini;
+                inputsContainer.appendChild(generateActualBtn);
+                customizeBtn.classList.add('hidden'); 
+            } else {
+                inputsContainer.classList.add('hidden');
+                customizeBtn.textContent = '🚀 Generate with Original Template'; 
+                customizeBtn.onclick = generateUseCaseWithGemini; 
+                generateUseCaseWithGemini(); 
+            }
+        }
+
+        async function generateUseCaseWithGemini() {
+            const inputsContainer = document.getElementById('use-case-gemini-inputs-container');
+            const outputContainer = document.getElementById('use-case-gemini-output-container');
+            const outputContent = document.getElementById('use-case-gemini-output-content');
+            const loadingIndicator = document.getElementById('use-case-gemini-loading');
+            
+            if (!currentUseCaseForGemini) return;
+
+            let finalPrompt = currentUseCaseForGemini.template;
+
+            if (inputsContainer && !inputsContainer.classList.contains('hidden')) {
+                const inputElements = inputsContainer.querySelectorAll('input[type="text"]');
+                inputElements.forEach(input => {
+                    const placeholderToReplace = input.name; 
+                    const userValue = input.value.trim() || input.placeholder; 
+                    finalPrompt = finalPrompt.replace(new RegExp(escapeRegExp(placeholderToReplace), 'g'), userValue);
+                });
+            }
+            
+            outputContainer.classList.remove('hidden');
+            outputContent.textContent = '';
+            loadingIndicator.classList.remove('hidden');
+            
+            const generateActualBtn = inputsContainer ? inputsContainer.querySelector('button') : null;
+            if(generateActualBtn) generateActualBtn.disabled = true;
+            const customizeBtn = document.getElementById('customizeAndGenerateBtn');
+            if(customizeBtn && !customizeBtn.classList.contains('hidden')) customizeBtn.disabled = true;
+
+
+            let chatHistory = [{ role: "user", parts: [{ text: finalPrompt }] }];
+            const payload = { contents: chatHistory };
+            const apiKey = ""; 
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                 if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API Error (${response.status}): ${errorData.error?.message || 'Unknown error'}`);
+                }
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    outputContent.textContent = text;
+                } else {
+                    outputContent.textContent = 'No content received from Gemini, or unexpected response structure.';
+                    console.error("Unexpected Gemini API response structure for use case:", result);
+                }
+            } catch (error) {
+                console.error('Error calling Gemini API for use case:', error);
+                outputContent.textContent = `Error: ${error.message}`;
+            } finally {
+                loadingIndicator.classList.add('hidden');
+                if(generateActualBtn) generateActualBtn.disabled = false;
+                if(customizeBtn && !customizeBtn.classList.contains('hidden')) customizeBtn.disabled = false;
+            }
+        }
+        
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); 
+        }
+
 
         function closeUseCaseModal() {
             modalOverlay.classList.remove('active');
-            modalBodyContent.innerHTML = ''; // Clear content
+            modalBodyContent.innerHTML = ''; 
+            currentUseCaseForGemini = null; 
         }
-        // Close modal if overlay is clicked
         modalOverlay.addEventListener('click', function(event) {
             if (event.target === modalOverlay) {
                 closeUseCaseModal();
@@ -1088,11 +1279,10 @@
 
                 const headerMainContent = document.createElement('div');
                 headerMainContent.className = 'card-header-main-content';
-                // Determine icon color based on category for use case cards
-                let iconColorClass = 'accent-green'; // Default
+                let iconColorClass = 'accent-green'; 
                 if (uc.category === 'technical') iconColorClass = 'accent-blue';
                 else if (uc.category === 'creative') iconColorClass = 'accent-red';
-                else if (uc.category === 'everyday') iconColorClass = 'text-purple-500'; // Using a Tailwind class for variety
+                else if (uc.category === 'everyday') iconColorClass = 'text-purple-500'; 
 
 
                 headerMainContent.innerHTML = `
@@ -1114,7 +1304,7 @@
 
                 const detailsToggle = document.createElement('p');
                 detailsToggle.className = 'details-arrow-container'; 
-                detailsToggle.innerHTML = `Details <span class="arrow down align-middle material-icons-outlined text-xl ml-1">launch</span>`; // Changed icon to launch
+                detailsToggle.innerHTML = `Details <span class="arrow down align-middle material-icons-outlined text-xl ml-1">launch</span>`; 
                 headerFooter.appendChild(detailsToggle);
                 
                 header.appendChild(headerMainContent);
@@ -1124,19 +1314,16 @@
                     card.classList.add(`card-border-${uc.category}`);
                 }
                 
-                // Attach click listener to the header (or detailsToggle) to open the modal
                 header.onclick = function() { 
                     openUseCaseModal(uc);
                 };
-                // Also allow clicking the "Details" text specifically
                 detailsToggle.onclick = function(event) {
-                    event.stopPropagation(); // Prevent card's header click from firing again
+                    event.stopPropagation(); 
                     openUseCaseModal(uc);
                 };
 
 
                 card.appendChild(header);
-                // Details container is no longer needed directly in the card for expansion
                 grid.appendChild(card);
             });
         }
@@ -1144,7 +1331,7 @@
         function renderAdvanced() {
             const grid = document.getElementById('advanced-grid');
             grid.innerHTML = ''; 
-            advancedData.forEach(ad => {
+            advancedData.forEach((ad, index) => { // Added index for unique IDs
                 const card = document.createElement('div');
                 card.className = 'material-card flex flex-col'; 
 
@@ -1156,7 +1343,7 @@
                 headerMainContent.innerHTML = `
                     ${ad.icon ? `<span class="material-icons-outlined accent-red mr-3 text-3xl">${ad.icon}</span>` : ''} 
                     <h4 class="font-bold text-xl text-gray-700">${ad.title}</h4>
-                `; // Using accent-red for advanced section icons
+                `; 
 
                 const headerFooter = document.createElement('div');
                 headerFooter.className = 'card-header-footer';
@@ -1176,27 +1363,32 @@
                 const detailsContainer = document.createElement('div');
                 detailsContainer.className = 'details-section relative'; 
 
-                const detailsContent = document.createElement('div');
-                detailsContent.className = 'details-content-wrapper';
+                const detailsContentWrapper = document.createElement('div');
+                detailsContentWrapper.className = 'details-content-wrapper';
                 
                 let exampleHtml = ad.example.replace(/<code>(.*?)<\/code>/gs, (match, p1) => {
-                    // If the content of <code> is multiline or contains HTML, wrap in <pre>
                     if (p1.includes('\n') || p1.includes('<br>') || p1.includes('<')) {
                          return `<pre class="bg-gray-800 text-white p-3 rounded-md mt-2 text-sm overflow-x-auto"><code>${p1.replace(/<br\s*\/?>/gi, '\n')}</code></pre>`;
                     }
-                    // Otherwise, keep it as inline code
                     return `<code class="bg-gray-200 text-gray-800 px-1 py-0.5 rounded text-sm">${p1}</code>`;
                 });
 
+                // Unique IDs for advanced technique Gemini elements
+                const advancedTextAreaId = `advanced-prompt-textarea-${index}`;
+                const advancedGenerateBtnId = `advanced-generate-btn-${index}`;
+                const advancedLoadingId = `advanced-loading-${index}`;
+                const advancedOutputContainerId = `advanced-output-container-${index}`;
+                const advancedOutputContentId = `advanced-output-content-${index}`;
 
-                detailsContent.innerHTML = `
+
+                detailsContentWrapper.innerHTML = `
                     <p class="text-subtle text-base mb-4">${ad.content}</p>
                     <div class="mt-3">
                         <h5 class="font-semibold text-gray-700 mb-1 text-md">When to Use:</h5>
                         <p class="text-subtle text-sm mb-4">${ad.use_cases}</p>
                     </div>
                     <div class="mt-3">
-                        <h5 class="font-semibold text-gray-700 mb-1 text-md">Example:</h5>
+                        <h5 class="font-semibold text-gray-700 mb-1 text-md">Example Prompt:</h5>
                         <div class="prose prose-sm max-w-none text-subtle mt-1 p-4 bg-gray-50 rounded-md border border-gray-200">${exampleHtml}</div>
                     </div>
                     <div class="mt-4">
@@ -1207,8 +1399,26 @@
                         <h5 class="font-semibold text-gray-700 mb-1 text-md">Considerations:</h5>
                         <p class="text-subtle text-sm">${ad.considerations}</p>
                     </div>
+                    <hr class="my-6">
+                    <div>
+                        <h5 class="font-semibold text-gray-700 text-md mb-2">Try this Technique with Gemini:</h5>
+                        <textarea id="${advancedTextAreaId}" class="advanced-prompt-textarea" rows="6">${stripHtml(ad.example)}</textarea>
+                        <button id="${advancedGenerateBtnId}" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-150 ease-in-out flex items-center w-full justify-center mt-3" onclick="generateAdvancedWithGemini('${advancedTextAreaId}', '${advancedOutputContentId}', '${advancedLoadingId}', this)">
+                            <span class="material-icons-outlined mr-2">auto_awesome</span>
+                            🚀 Generate with Gemini
+                        </button>
+                        <p class="text-xs text-gray-500 mt-2 text-center"><em>Live examples are generated using Gemini 2.0 Flash.</em></p>
+                        <div id="${advancedLoadingId}" class="loading-indicator hidden mt-4">
+                            <div class="loading-spinner"></div>
+                            Generating response...
+                        </div>
+                        <div id="${advancedOutputContainerId}" class="hidden mt-4">
+                             <h5 class="font-semibold text-gray-700 text-md mb-2">Gemini's Response:</h5>
+                            <div id="${advancedOutputContentId}" class="advanced-gemini-output-content"></div>
+                        </div>
+                    </div>
                 `;
-                detailsContainer.appendChild(detailsContent);
+                detailsContainer.appendChild(detailsContentWrapper);
                 
                 header.onclick = function() { 
                     const parentCard = this.closest('.material-card');
@@ -1221,7 +1431,7 @@
                     if (currentDetailsContainer && currentArrow) {
                         currentDetailsContainer.classList.toggle('expanded');
                         if (currentDetailsContainer.classList.contains('expanded')) {
-                            if(currentDetailsContentWrapper) { // Ensure wrapper exists
+                            if(currentDetailsContentWrapper) { 
                                 currentDetailsContentWrapper.style.paddingTop = '1.5rem'; 
                                 currentDetailsContentWrapper.style.paddingBottom = '1.5rem';
                                 currentDetailsContentWrapper.style.borderTop = '1px solid #e5e7eb';
@@ -1238,6 +1448,65 @@
                 grid.appendChild(card);
             });
         }
+
+        async function generateAdvancedWithGemini(textareaId, outputContentId, loadingId, buttonElement) {
+            const promptTextarea = document.getElementById(textareaId);
+            const outputContentDiv = document.getElementById(outputContentId);
+            const loadingIndicator = document.getElementById(loadingId);
+            const outputContainer = outputContentDiv.parentElement; // The div with ID like advanced-output-container-X
+
+            if (!promptTextarea || !outputContentDiv || !loadingIndicator || !outputContainer) {
+                console.error("One or more elements for advanced Gemini generation not found.");
+                return;
+            }
+
+            const promptText = promptTextarea.value.trim();
+            if (!promptText) {
+                outputContainer.classList.remove('hidden');
+                outputContentDiv.textContent = 'Please enter a prompt in the textarea.';
+                return;
+            }
+
+            loadingIndicator.classList.remove('hidden');
+            outputContainer.classList.remove('hidden');
+            outputContentDiv.textContent = '';
+            buttonElement.disabled = true;
+
+            let chatHistory = [{ role: "user", parts: [{ text: promptText }] }];
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // Intentionally empty for Canvas
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API Error (${response.status}): ${errorData.error?.message || 'Unknown error'}`);
+                }
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    outputContentDiv.textContent = text;
+                } else {
+                    outputContentDiv.textContent = 'No content received from Gemini, or unexpected response structure.';
+                    console.error("Unexpected Gemini API response structure for advanced technique:", result);
+                }
+            } catch (error) {
+                console.error('Error calling Gemini API for advanced technique:', error);
+                outputContentDiv.textContent = `Error: ${error.message}`;
+            } finally {
+                loadingIndicator.classList.add('hidden');
+                buttonElement.disabled = false;
+            }
+        }
+
 
         function filterUseCases(category, buttonElement) {
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
@@ -1301,48 +1570,36 @@
         // Gemini API Call for PTCF
         async function generatePTCFWithGemini() {
             const ptcfOutputDiv = document.getElementById('ptcf-output');
-            const geminiResponseArea = document.getElementById('ptcf-gemini-response-area');
+            const geminiResponseContainer = document.getElementById('ptcf-gemini-response-container'); 
             const geminiResponseContent = document.getElementById('ptcf-gemini-response-content');
             const loadingIndicator = document.getElementById('ptcf-gemini-loading');
             const generateButton = document.getElementById('generateWithGeminiBtn');
 
-            // Construct the prompt from the PTCF output
             let promptText = "";
             if (currentPTCFExampleSet && selectedPTCFComponents.length > 0) {
                 const orderedSelection = ['persona', 'task', 'context', 'format'].filter(key => selectedPTCFComponents.includes(key));
                 promptText = orderedSelection.map(key => {
-                    // Strip HTML from individual components for the API prompt
                     const tempDiv = document.createElement('div');
                     tempDiv.innerHTML = currentPTCFExampleSet[key];
                     return tempDiv.textContent || tempDiv.innerText || "";
-                }).join('\n\n'); // Join components with double newlines for clarity
-            } else {
-                 // If no components are selected, or no example set, use the placeholder or an alert
-                if (ptcfOutputDiv.textContent.includes('Click "New Example Set"')) {
-                    geminiResponseArea.classList.remove('hidden');
-                    geminiResponseContent.textContent = 'Please select PTCF components first by clicking "New Example Set" and then the P, T, C, F buttons.';
-                    return;
-                }
-                // Fallback to visible text if needed, though the above condition should catch most cases
-                promptText = stripHtml(ptcfOutputDiv.innerHTML);
+                }).join('\n\n');
             }
 
-
-            if (!promptText || promptText.includes('Click P, T, C, F buttons above')) {
-                geminiResponseArea.classList.remove('hidden');
-                geminiResponseContent.textContent = 'Please construct a prompt using the PTCF builder first.';
+            if (!promptText) { 
+                geminiResponseContainer.classList.remove('hidden');
+                geminiResponseContent.textContent = 'Please build a prompt by selecting PTCF components first.';
                 return;
             }
 
             loadingIndicator.classList.remove('hidden');
-            geminiResponseArea.classList.remove('hidden'); 
-            geminiResponseContent.textContent = ''; // Clear previous response
+            geminiResponseContainer.classList.remove('hidden'); 
+            geminiResponseContent.textContent = ''; 
             generateButton.disabled = true;
 
 
             let chatHistory = [{ role: "user", parts: [{ text: promptText }] }];
             const payload = { contents: chatHistory };
-            const apiKey = ""; // Intentionally empty, Canvas will handle it
+            const apiKey = ""; 
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
             try {
@@ -1373,7 +1630,7 @@
                 geminiResponseContent.textContent = `Error: ${error.message}`;
             } finally {
                 loadingIndicator.classList.add('hidden');
-                generateButton.disabled = false;
+                generateButton.disabled = false; 
             }
         }
 
