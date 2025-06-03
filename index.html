@@ -15,21 +15,97 @@
         body { font-family: 'Roboto', sans-serif; background-color: #f8f9fa; }
         .text-main { color: #212529; }
         .text-subtle { color: #6c757d; }
-        .accent-green { color: #28a745; }
-        .accent-green-bg { background-color: #28a745; }
-        .accent-green-border { border-color: #28a745; }
+        
+        /* Color Palette */
+        :root {
+            --soft-green: #5cb85c;
+            --tech-blue: #5DADE2; 
+            --creative-red: #EC7063; 
+            --everyday-purple: #A569BD; 
+            --gemini-blue-dark: #1A73E8; 
+            --gemini-blue-light: #669DF6; /* Lighter shade for Gemini logo */
+        }
+
+        .accent-green { color: var(--soft-green); }
+        .accent-green-bg { background-color: var(--soft-green); }
+        .accent-green-border { border-color: var(--soft-green); }
+
+        .tag-technical { background-color: var(--tech-blue); color: white; }
+        .tag-creative { background-color: var(--creative-red); color: white; }
+        .tag-everyday { background-color: var(--everyday-purple); color: white; }
+
+        .card-border-technical { border-left: 4px solid var(--tech-blue); }
+        .card-border-creative { border-left: 4px solid var(--creative-red); }
+        .card-border-everyday { border-left: 4px solid var(--everyday-purple); }
         
         /* Navigation link styles */
         .nav-link { transition: color 0.3s, border-color 0.3s; }
-        .nav-link.active { color: #28a745; border-bottom-color: #28a745; }
+        .nav-link.active { color: var(--soft-green); border-bottom-color: var(--soft-green); }
 
         /* Card style for content sections */
-        .material-card { background-color: white; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.08); transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out; }
+        .material-card { 
+            background-color: white; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08); 
+            transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out; 
+            display: flex; 
+            flex-direction: column;
+        }
         .material-card:hover { box-shadow: 0 8px 16px rgba(0,0,0,0.12); transform: translateY(-4px); }
         
+        .card-header {
+            padding: 1.5rem; /* p-6 */
+            cursor: pointer;
+            display: flex;
+            flex-direction: column; 
+            justify-content: space-between; 
+            min-height: 110px; /* Adjusted min-height for better spacing */
+            flex-grow: 1; 
+        }
+        .card-header-main-content { 
+            display: flex;
+            align-items: flex-start; /* Align items to the start of the cross axis */
+            margin-bottom: 0.75rem; 
+            width: 100%;
+        }
+        .card-header-main-content .material-icons-outlined { /* Icon */
+            margin-right: 0.75rem; /* Tailwind mr-3 */
+            flex-shrink: 0; /* Prevent icon from shrinking */
+            margin-top: 0.125rem; /* Slight top margin to align better with first line of text */
+        }
+         .card-header-main-content h4 { /* Title */
+            word-break: break-word; 
+            flex-grow: 1; 
+            min-width: 0; /* Allows text to wrap correctly in a flex container */
+            line-height: 1.4; /* Improve readability of wrapped title */
+        }
+        .card-header-footer { 
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-top: auto; 
+        }
+
+        .category-tag {
+            font-size: 0.7rem; 
+            padding: 0.2rem 0.6rem; 
+            border-radius: 9999px; 
+            font-weight: 500; 
+            white-space: nowrap;
+        }
+        .details-arrow-container {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem; /* text-sm */
+            color: var(--text-subtle);
+            white-space: nowrap;
+        }
+
+
         /* Filter button styles for use cases */
         .filter-btn { transition: background-color 0.3s, color 0.3s; border: 1px solid transparent; }
-        .filter-btn.active { background-color: #28a745; color: white; border-color: #28a745;}
+        .filter-btn.active { background-color: var(--soft-green); color: white; border-color: var(--soft-green);}
         .filter-btn:not(.active):hover { background-color: #e9ecef; border-color: #ced4da;}
 
         /* Chart container styles */
@@ -38,7 +114,7 @@
         
         /* Styles for expandable details sections */
         .details-section { max-height: 0; overflow: hidden; transition: max-height 0.6s ease-in-out; } 
-        .details-section.expanded { max-height: 2500px; /* Increased to accommodate potentially long template + example content */ }
+        .details-section.expanded { max-height: 3500px; }
 
         /* Icon button styles (e.g., copy button) */
         .icon-btn { display: inline-flex; align-items: center; justify-content: center; padding: 8px; border-radius: 50%; transition: background-color 0.2s; }
@@ -46,139 +122,72 @@
         .icon-btn .material-icons-outlined { font-size: 20px; }
 
         /* Section header styles */
-        .section-header { display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; }
-        .section-header .material-icons-outlined { font-size: 40px; margin-right: 0.85rem; color: #28a745; }
+        .section-header-main .material-icons-outlined { font-size: 40px; margin-right: 0.85rem; color: var(--soft-green); } 
+        .section-header-main { display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; }
         
         /* PTCF component button styles */
         .ptcf-component { border: 1px solid #dee2e6; transition: border-color 0.3s, transform 0.2s, background-color 0.3s; }
-        .ptcf-component:hover { border-color: #28a745; transform: translateY(-3px); }
-        .ptcf-component.selected { border-color: #28a745; background-color: #e6f6e9; box-shadow: 0 0 0 2px #28a745 inset; }
+        .ptcf-component:hover { border-color: var(--soft-green); transform: translateY(-3px); } 
+        .ptcf-component.selected { border-color: var(--soft-green); background-color: #eaf6ea; box-shadow: 0 0 0 2px var(--soft-green) inset; } 
 
         /* Copy button container and feedback styles */
         .copy-button-container { display: flex; align-items: center; margin-bottom: 8px; }
-        .copied-feedback { font-size: 0.75rem; color: #28a745; margin-left: 8px; display: none; font-weight: 500; }
+        .copied-feedback { font-size: 0.75rem; color: var(--soft-green); margin-left: 8px; display: none; font-weight: 500; } 
         
         /* Prose styles for formatted text content (like in examples) */
         .prose strong { color: #2c5282; } 
-        .prose code { background-color: #f1f1f1; padding: 0.2em 0.4em; margin: 0; font-size: 85%; border-radius: 3px; }
-        .prose pre, .template-block pre { background-color: #2d3748; color: #e2e8f0; padding: 1em; border-radius: 6px; overflow-x: auto; font-size: 0.9em; line-height: 1.4; }
-        .prose pre code, .template-block pre code { background-color: transparent; padding: 0; margin: 0; font-size: inherit; border-radius: 0; }
+        .prose code { background-color: #f1f1f1; padding: 0.2em 0.4em; margin: 0; font-size: 85%; border-radius: 3px; white-space: pre-wrap; word-break: break-all; }
+        .prose pre, .template-block pre { background-color: #2d3748; color: #e2e8f0; padding: 1em; border-radius: 6px; overflow-x: auto; font-size: 0.9em; line-height: 1.4; white-space: pre-wrap; word-break: break-word; }
+        .prose pre code, .template-block pre code { background-color: transparent; padding: 0; margin: 0; font-size: inherit; border-radius: 0; white-space: pre-wrap; word-break: break-word;}
         .template-block { margin-bottom: 1.5rem; }
         .template-block h5 { margin-bottom: 0.5rem; }
+        .details-content-wrapper { padding: 1.5rem; border-top: 1px solid #e5e7eb; }
 
-        /* CSS Racoon Styles - Simplified */
-        .racoon-container {
-            width: 120px; 
-            height: 120px;
+        /* CSS Gemini Logo Styles - Refined */
+        .gemini-logo-container {
+            width: 70px; 
+            height: 70px;
             position: relative;
+            margin-top: 2rem; /* Increased margin */
+            margin-bottom: 1rem; /* Added bottom margin */
         }
-        .racoon-body {
-            width: 70px;
-            height: 50px;
-            background-color: #718096; /* Tailwind gray-600 */
-            border-radius: 40% 40% 30% 30%;
+        .gemini-logo-star {
             position: absolute;
-            bottom: 10px; 
+            width: 100%;
+            height: 100%;
+        }
+        .gemini-logo-star::before,
+        .gemini-logo-star::after {
+            content: '';
+            position: absolute;
             left: 50%;
-            transform: translateX(-50%);
-            z-index: 1;
+            top: 50%;
+            width: 20%;  /* Thinner arms */
+            height: 90%; /* Adjusted height */
+            border-radius: 3px; /* Sharper ends */
+            transform-origin: center center;
         }
-        .racoon-head {
-            width: 65px;
-            height: 55px;
-            background-color: #A0AEC0; /* Tailwind gray-500 */
-            border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
-            position: absolute;
-            bottom: 50px; 
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 5;
-            border: 2px solid #4A5568; /* Tailwind gray-700 */
+        .gemini-logo-star.base::before {
+            background-color: var(--gemini-blue-dark);
+            transform: translate(-50%, -50%) rotate(0deg);
         }
-        .racoon-ear {
-            width: 24px;
-            height: 26px;
-            background-color: #4A5568; 
-            border-radius: 50% 50% 0 0;
-            position: absolute;
-            top: -8px;
+        .gemini-logo-star.base::after {
+            background-color: var(--gemini-blue-dark);
+            transform: translate(-50%, -50%) rotate(90deg);
         }
-        .racoon-ear.left {
-            left: -4px;
-            transform: rotate(-25deg);
+        .gemini-logo-star.offset::before {
+            background-color: var(--gemini-blue-light);
+            transform: translate(-50%, -50%) rotate(45deg);
+            width: 19%; /* Slightly different for layering effect */
+            height: 88%;
         }
-        .racoon-ear.right {
-            right: -4px;
-            transform: rotate(25deg);
+        .gemini-logo-star.offset::after {
+            background-color: var(--gemini-blue-light);
+            transform: translate(-50%, -50%) rotate(-45deg);
+            width: 19%;
+            height: 88%;
         }
-        .inner-ear {
-            width: 15px;
-            height: 17px;
-            background-color: #FBB6CE; /* Tailwind pink-300 */
-            border-radius: 50% 50% 0 0;
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-        .racoon-mask {
-            position: absolute;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            height: 24px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-        }
-        .eye-patch {
-            width: 26px;
-            height: 24px;
-            background-color: #2D3748; /* Tailwind gray-800 */
-            border-radius: 40% 60% 35% 55% / 50% 50% 45% 45%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .eye-patch.left { transform: rotate(-10deg); }
-        .eye-patch.right { transform: rotate(10deg); }
-        .racoon-eye {
-            width: 7px;
-            height: 7px;
-            background-color: white;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .pupil {
-            width: 3px;
-            height: 3px;
-            background-color: black;
-            border-radius: 50%;
-        }
-        .racoon-muzzle {
-            width: 28px;
-            height: 18px;
-            background-color: #E2E8F0; /* Tailwind gray-200 */
-            border-radius: 40% 40% 50% 50% / 60% 60% 40% 40%;
-            position: absolute;
-            bottom: 1px;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 1px solid #CBD5E0; /* Tailwind gray-300 */
-        }
-        .racoon-nose {
-            width: 9px;
-            height: 6px;
-            background-color: #1A202C; /* Tailwind gray-900 */
-            border-radius: 40% 40% 50% 50%;
-            position: absolute;
-            top: 2px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
+
         /* Footer icon style */
         .footer-icon {
             font-size: 1.1em; 
@@ -194,27 +203,9 @@
         <header class="text-center py-16">
             <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-gray-800">Maximizing Gemini 2.5</h1>
             <p class="mt-4 text-lg md:text-xl text-subtle max-w-3xl mx-auto">An interactive guide to prompt Engineering for Gemini</p>
-            <div class="racoon-container mx-auto mt-8">
-                <div class="racoon-body"></div>
-                <div class="racoon-head">
-                    <div class="racoon-ear left">
-                        <div class="inner-ear"></div>
-                    </div>
-                    <div class="racoon-ear right">
-                        <div class="inner-ear"></div>
-                    </div>
-                    <div class="racoon-mask">
-                        <div class="eye-patch left">
-                            <div class="racoon-eye"><div class="pupil"></div></div>
-                        </div>
-                        <div class="eye-patch right">
-                            <div class="racoon-eye"><div class="pupil"></div></div>
-                        </div>
-                    </div>
-                    <div class="racoon-muzzle">
-                        <div class="racoon-nose"></div>
-                    </div>
-                </div>
+            <div class="gemini-logo-container mx-auto">
+                <div class="gemini-logo-star base"></div>
+                <div class="gemini-logo-star offset"></div>
             </div>
         </header>
 
@@ -229,37 +220,42 @@
 
         <main>
             <section id="foundations" class="py-12 scroll-mt-24">
-                <div class="text-center mb-12">
-                    <div class="section-header">
-                        <span class="material-icons-outlined">foundation</span>
-                        <h2 class="text-3xl font-bold text-gray-800">Prompting Foundations</h2>
+                 <div class="material-card p-6 md:p-10">
+                    <div id="ptcf-explanation-header" class="cursor-pointer flex items-center justify-between pb-4 border-b border-gray-200 mb-6">
+                        <div class="flex items-center">
+                            <span class="material-icons-outlined accent-green mr-3 text-3xl">foundation</span>
+                            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Prompting Foundations: The PTCF Framework</h2>
+                        </div>
+                        <p class="text-sm text-subtle ml-4 expand-indicator flex items-center">Learn More <span class="arrow down align-middle material-icons-outlined text-xl ml-1">expand_more</span></p>
                     </div>
-                    <p class="mt-3 text-lg text-subtle max-w-2xl mx-auto">Master the core principles of effective prompting. This section introduces the PTCF framework, a strategic approach to ensure your instructions are clear, contextual, and get the results you want.</p>
-                </div>
-                <div class="material-card p-6 md:p-10">
-                    <h3 class="text-2xl font-semibold text-center mb-6 text-gray-700">Understanding the PTCF Framework</h3>
-                    <div class="space-y-6 mb-10 text-subtle">
-                        <p>The PTCF (Persona, Task, Context, Format) framework is a powerful mental model for constructing comprehensive and effective prompts. While not every component is mandatory for every prompt, consciously considering each can dramatically improve the quality and relevance of Gemini's responses.</p>
-                        <div>
-                            <h4 class="text-xl font-semibold accent-green mb-2">P: Persona</h4>
-                            <p>Defining a persona tells Gemini *who* it should be. This influences its tone, style, vocabulary, and the knowledge base it prioritizes. For example, asking Gemini to respond as an "Expert Astrophysicist" will yield different language and depth than asking it to respond as a "Friendly Children's Science Teacher," even if the underlying topic is the same. A well-defined persona helps align Gemini's output with your expectations and the intended audience.</p>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-semibold accent-green mb-2">T: Task</h4>
-                            <p>This is the core action you want Gemini to perform. It should be clear, specific, and actionable. Use strong verbs like "Analyze," "Generate," "Summarize," "Compare," "Rewrite," or "Explain." A vague task leads to a vague response. For instance, instead of "Tell me about AI," a better task would be "Explain the concept of supervised machine learning in three paragraphs suitable for a business executive."</p>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-semibold accent-green mb-2">C: Context</h4>
-                            <p>Context provides the necessary background, constraints, and specific details Gemini needs to tailor its response. This can include the subject matter, target audience, specific data points, constraints (e.g., "using only information up to 2023"), or the overall goal of your request. The richer the context, the more nuanced and targeted Gemini's output will be. Lack of context often results in generic or overly broad answers.</p>
-                        </div>
-                        <div>
-                            <h4 class="text-xl font-semibold accent-green mb-2">F: Format</h4>
-                            <p>Specifying the format dictates how Gemini should structure its output. This ensures the information is presented in a way that is immediately usable for your needs. Examples include "Provide the answer as a bulleted list," "Generate a JSON object with keys 'name' and 'value'," "Write a formal email," or "Create a table with three columns." Without format guidance, Gemini will choose a default structure that may not be optimal.</p>
+                    <div id="ptcf-explanation-details" class="details-section relative">
+                        <div class="pb-6">
+                             <p class="mt-3 mb-6 text-lg text-subtle max-w-2xl mx-auto text-center">This section introduces the PTCF framework, a strategic approach to ensure your instructions are clear, contextual, and get the results you want.</p>
+                            <h3 class="text-xl font-semibold text-center mb-6 text-gray-700">Understanding the PTCF Framework</h3>
+                            <div class="space-y-6 mb-10 text-subtle">
+                                <p>The PTCF (Persona, Task, Context, Format) framework is a powerful mental model for constructing comprehensive and effective prompts. While not every component is mandatory for every prompt, consciously considering each can dramatically improve the quality and relevance of Gemini's responses.</p>
+                                <div>
+                                    <h4 class="text-lg font-semibold accent-green mb-1">P: Persona</h4>
+                                    <p>Defining a persona tells Gemini <strong>who</strong> it should be. This influences its tone, style, vocabulary, and the knowledge base it prioritizes. For example, asking Gemini to respond as an "Expert Astrophysicist" will yield different language and depth than asking it to respond as a "Friendly Children's Science Teacher," even if the underlying topic is the same. A well-defined persona helps align Gemini's output with your expectations and the intended audience.</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold accent-green mb-1">T: Task</h4>
+                                    <p>This is the core <strong>action</strong> you want Gemini to perform. It should be clear, specific, and actionable. Use strong verbs like "Analyze," "Generate," "Summarize," "Compare," "Rewrite," or "Explain." A vague task leads to a vague response. For instance, instead of "Tell me about AI," a better task would be "Explain the concept of supervised machine learning in three paragraphs suitable for a business executive."</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold accent-green mb-1">C: Context</h4>
+                                    <p>Context provides the necessary <strong>background, constraints, and specific details</strong> Gemini needs to tailor its response. This can include the subject matter, target audience, specific data points, constraints (e.g., "using only information up to 2023"), or the overall goal of your request. The richer the context, the more nuanced and targeted Gemini's output will be. Lack of context often results in generic or overly broad answers.</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold accent-green mb-1">F: Format</h4>
+                                    <p>Specifying the format dictates <strong>how</strong> Gemini should structure its output. This ensures the information is presented in a way that is immediately usable for your needs. Examples include "Provide the answer as a bulleted list," "Generate a JSON object with keys 'name' and 'value'," "Write a formal email," or "Create a table with three columns." Without format guidance, Gemini will choose a default structure that may not be optimal.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <h3 class="text-2xl font-semibold text-center mb-8 text-gray-700">The PTCF Framework Builder</h3>
+                    <h3 class="text-2xl font-semibold text-center mb-8 text-gray-700 mt-6">The PTCF Framework Builder</h3>
                     <div class="text-center mb-6">
-                        <button onclick="handleNewPTCFExampleSetClick()" class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md transition duration-150 ease-in-out flex items-center mx-auto">
+                        <button onclick="handleNewPTCFExampleSetClick()" class="accent-green-bg hover:bg-green-700 text-white font-semibold py-2 px-5 rounded-lg shadow-md transition duration-150 ease-in-out flex items-center mx-auto">
                             <span class="material-icons-outlined mr-2">refresh</span>
                             New Example Set
                         </button>
@@ -289,44 +285,48 @@
             </section>
             
             <section id="comparison" class="py-12 scroll-mt-24">
-                <div class="text-center mb-12">
-                    <div class="section-header">
-                        <span class="material-icons-outlined">compare_arrows</span>
-                        <h2 class="text-3xl font-bold text-gray-800">Choose Your Model: Pro vs. Flash</h2>
-                    </div>
-                    <p class="mt-3 text-lg text-subtle max-w-2xl mx-auto">Understand the key differences between Gemini 2.5 Pro and Flash to select the right model for your needs, balancing deep reasoning with speed.</p>
-                </div>
-                <div class="material-card p-6 md:p-10">
-                    <div class="chart-container mb-8">
-                        <canvas id="modelComparisonChart"></canvas>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-subtle">
-                        <div>
-                            <h4 class="text-xl font-semibold accent-green mb-3">Gemini 2.5 Pro: The Deep Thinker</h4>
-                            <p class="mb-2"><strong>Best for:</strong> Highly complex tasks requiring nuanced understanding, multi-step reasoning, and creative generation of novel solutions. If your task involves intricate problem-solving, detailed analysis of large amounts of information, or generating sophisticated, high-quality content (like in-depth technical papers or complex code for new algorithms), Pro is generally the preferred choice.</p>
-                            <ul class="list-disc list-inside space-y-1 text-sm mb-2">
-                                <li>In-depth technical documentation drafting</li>
-                                <li>Complex code generation and review (e.g., novel algorithms)</li>
-                                <li>Detailed analytical reports and research synthesis</li>
-                                <li>Creative writing requiring significant world-building or intricate plots</li>
-                                <li>Tasks where accuracy and thoroughness are paramount over speed</li>
-                            </ul>
-                            <p class="mb-2"><strong>Strengths:</strong> Superior reasoning depth, excellent for complex coding, excels at synthesizing information, often provides more thorough and well-explained outputs.</p>
-                            <p><strong>Considerations:</strong> May have slightly longer response times. Capabilities are still evolving as it's marked "experimental."</p>
+                <div class="material-card"> <div id="comparison-header" class="p-6 cursor-pointer flex items-center justify-between">
+                        <div class="flex items-center">
+                            <span class="material-icons-outlined accent-green mr-3 text-3xl">compare_arrows</span>
+                            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Choose Your Model: Pro vs. Flash</h2>
                         </div>
-                        <div>
-                            <h4 class="text-xl font-semibold accent-green mb-3">Gemini 2.5 Flash: The Swift Assistant</h4>
-                            <p class="mb-2"><strong>Best for:</strong> Everyday tasks, quick information retrieval, generating boilerplate code, summarizing text, and situations where rapid iteration and fast responses are prioritized. If you need quick answers, first drafts, or assistance with less complex coding or writing tasks, Flash offers a great balance of capability and speed.</p>
-                            <ul class="list-disc list-inside space-y-1 text-sm mb-2">
-                                <li>Quick content summarization (articles, emails)</li>
-                                <li>Drafting emails or social media posts</li>
-                                <li>Generating boilerplate code or simple scripts</li>
-                                <li>Everyday Q&A and information lookup</li>
-                                <li>Initial brainstorming and idea generation</li>
-                                <li>Tasks where speed and rapid iteration are key</li>
-                            </ul>
-                            <p class="mb-2"><strong>Strengths:</strong> Optimized for speed and efficiency, handles a wide range of common tasks effectively, good for straightforward coding and debugging, provides quick turnarounds.</p>
-                            <p><strong>Considerations:</strong> May not delve as deeply into highly complex nuances as Pro. For tasks demanding utmost precision or exhaustive analysis, Pro might be more suitable. Also "experimental."</p>
+                        <p class="text-sm text-subtle ml-4 expand-indicator flex items-center">Details <span class="arrow down align-middle material-icons-outlined text-xl ml-1">expand_more</span></p>
+                    </div>
+                    <div id="comparison-details" class="details-section relative">
+                        <div class="details-content-wrapper"> 
+                            <p class="mt-3 text-lg text-subtle max-w-2xl mx-auto mb-10 text-center">Understand the key differences between Gemini 2.5 Pro and Flash to select the right model for your needs, balancing deep reasoning with speed.</p>
+                            <div class="chart-container mb-8">
+                                <canvas id="modelComparisonChart"></canvas>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-subtle">
+                                <div>
+                                    <h4 class="text-xl font-semibold accent-green mb-3">Gemini 2.5 Pro: The Deep Thinker</h4>
+                                    <p class="mb-2"><strong>Best for:</strong> Highly complex tasks requiring nuanced understanding, multi-step reasoning, and creative generation of novel solutions. If your task involves intricate problem-solving, detailed analysis of large amounts of information, or generating sophisticated, high-quality content (like in-depth technical papers or complex code for new algorithms), Pro is generally the preferred choice.</p>
+                                    <ul class="list-disc list-inside space-y-1 text-sm mb-2">
+                                        <li>In-depth technical documentation drafting</li>
+                                        <li>Complex code generation and review (e.g., novel algorithms)</li>
+                                        <li>Detailed analytical reports and research synthesis</li>
+                                        <li>Creative writing requiring significant world-building or intricate plots</li>
+                                        <li>Tasks where <strong>accuracy and thoroughness</strong> are paramount over speed</li>
+                                    </ul>
+                                    <p class="mb-2"><strong>Strengths:</strong> Superior reasoning depth, excellent for complex coding, excels at synthesizing information, often provides more thorough and well-explained outputs.</p>
+                                    <p><strong>Considerations:</strong> May have slightly longer response times. Capabilities are still evolving as it's marked "experimental."</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-xl font-semibold accent-green mb-3">Gemini 2.5 Flash: The Swift Assistant</h4>
+                                    <p class="mb-2"><strong>Best for:</strong> Everyday tasks, quick information retrieval, generating boilerplate code, summarizing text, and situations where rapid iteration and fast responses are prioritized. If you need quick answers, first drafts, or assistance with less complex coding or writing tasks, Flash offers a great balance of capability and speed.</p>
+                                    <ul class="list-disc list-inside space-y-1 text-sm mb-2">
+                                        <li>Quick content summarization (articles, emails)</li>
+                                        <li>Drafting emails or social media posts</li>
+                                        <li>Generating boilerplate code or simple scripts</li>
+                                        <li>Everyday Q&A and information lookup</li>
+                                        <li>Initial brainstorming and idea generation</li>
+                                        <li>Tasks where <strong>speed and rapid iteration</strong> are key</li>
+                                    </ul>
+                                    <p class="mb-2"><strong>Strengths:</strong> Optimized for speed and efficiency, handles a wide range of common tasks effectively, good for straightforward coding and debugging, provides quick turnarounds.</p>
+                                    <p><strong>Considerations:</strong> May not delve as deeply into highly complex nuances as Pro. For tasks demanding utmost precision or exhaustive analysis, Pro might be more suitable. Also "experimental."</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -334,11 +334,10 @@
 
             <section id="use-cases" class="py-12 scroll-mt-24">
                 <div class="text-center mb-12">
-                    <div class="section-header">
+                    <div class="section-header-main">
                         <span class="material-icons-outlined">cases</span>
                         <h2 class="text-3xl font-bold text-gray-800">Explore the Use Cases</h2>
                     </div>
-                    <p class="mt-3 text-lg text-subtle max-w-2xl mx-auto">See prompt engineering in action. This collection contains practical, copy-paste-ready examples for a wide range of tasks.</p>
                 </div>
                 <div class="flex justify-center space-x-3 mb-10">
                     <button onclick="filterUseCases('all', this)" class="filter-btn active px-4 py-2 rounded-full text-sm font-medium flex items-center border"><span class="material-icons-outlined text-base mr-1">apps</span>All</button>
@@ -347,19 +346,18 @@
                     <button onclick="filterUseCases('everyday', this)" class="filter-btn px-4 py-2 rounded-full text-sm font-medium flex items-center border"><span class="material-icons-outlined text-base mr-1">task_alt</span>Everyday</button>
                 </div>
                 <div id="use-cases-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
-                    </div>
+                </div>
             </section>
 
             <section id="advanced" class="py-12 scroll-mt-24">
                 <div class="text-center mb-12">
-                    <div class="section-header">
+                    <div class="section-header-main">
                         <span class="material-icons-outlined">auto_awesome</span>
                         <h2 class="text-3xl font-bold text-gray-800">Advanced Prompting Techniques</h2>
                     </div>
-                    <p class="mt-3 text-lg text-subtle max-w-2xl mx-auto">Go beyond the basics. These powerful strategies will help you elicit more sophisticated, nuanced, and higher-quality responses from Gemini, pushing the boundaries of what you can achieve.</p>
                 </div>
                 <div id="advanced-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-                    </div>
+                </div>
             </section>
         </main>
 
@@ -420,13 +418,68 @@
                 task: `<span class="font-semibold accent-green">Task:</span> Explain the concept of Quantum Entanglement and its potential implications.`,
                 context: `<span class="font-semibold accent-green">Context:</span> The explanation should be accurate yet avoid deep mathematical formalism. Use a clear analogy to illustrate the "spooky action at a distance." The audience has a high school level understanding of science but no specific physics background.`,
                 format: `<span class="font-semibold accent-green">Format:</span> Approximately 3-4 paragraphs. <br>Paragraph 1: What is Quantum Entanglement (simplified). <br>Paragraph 2: Analogy to explain its core idea. <br>Paragraph 3: Potential implications or applications (e.g., quantum computing, communication).`
+            },
+            {
+                themeName: "Legal Document Summarization",
+                persona: `<span class="font-semibold accent-green">Persona:</span> You are a meticulous paralegal with expertise in summarizing complex legal documents for quick review by attorneys.`,
+                task: `<span class="font-semibold accent-green">Task:</span> Summarize the provided 10-page lease agreement, highlighting key clauses related to payment terms, termination conditions, and maintenance responsibilities.`,
+                context: `<span class="font-semibold accent-green">Context:</span> The summary should be no more than 1 page long. Focus on clarity and conciseness, using bullet points for easy readability. The original document is attached (assume it's provided).`,
+                format: `<span class="font-semibold accent-green">Format:</span> A structured summary with sections for: <br>1. Key Payment Terms. <br>2. Termination Clauses. <br>3. Maintenance Responsibilities. <br>4. Other Notable Clauses. Each section should use bullet points.`
+            },
+            {
+                themeName: "Educational Quiz Generation",
+                persona: `<span class="font-semibold accent-green">Persona:</span> You are an experienced middle school history teacher creating engaging review materials for your students.`,
+                task: `<span class="font-semibold accent-green">Task:</span> Generate 10 multiple-choice quiz questions about the American Civil War, suitable for 8th-grade students.`,
+                context: `<span class="font-semibold accent-green">Context:</span> Questions should cover major events, key figures, and significant causes/effects of the war. Each question should have four answer choices (A, B, C, D), with one clearly correct answer.`,
+                format: `<span class="font-semibold accent-green">Format:</span> A numbered list of questions. For each question: <br>- The question text. <br>- Four answer choices labeled A, B, C, D. <br>- Indication of the correct answer (e.g., "Correct: C").`
+            },
+            {
+                themeName: "Fictional Character Profile",
+                persona: `<span class="font-semibold accent-green">Persona:</span> You are a creative novelist developing characters for a new fantasy series.`,
+                task: `<span class="font-semibold accent-green">Task:</span> Create a detailed character profile for a young, apprentice sorcerer named Elara.`,
+                context: `<span class="font-semibold accent-green">Context:</span> Elara is from a small village, possesses raw but uncontrolled magical talent, is curious, slightly reckless, and dreams of attending the grand magic academy. The profile should include physical appearance, personality traits, background, motivations, and key relationships.`,
+                format: `<span class="font-semibold accent-green">Format:</span> A character profile structured with headings: <br>- Name <br>- Age <br>- Appearance <br>- Personality <br>- Background Story <br>- Motivations/Goals <br>- Strengths <br>- Weaknesses <br>- Key Relationships.`
+            },
+            {
+                themeName: "Data Analysis Interpretation",
+                persona: `<span class="font-semibold accent-green">Persona:</span> You are a data analyst presenting findings from a recent customer satisfaction survey to a non-technical marketing team.`,
+                task: `<span class="font-semibold accent-green">Task:</span> Interpret the provided survey data (assume a CSV or table is given) and summarize the top 3 positive feedback themes and top 3 areas for improvement.`,
+                context: `<span class="font-semibold accent-green">Context:</span> The survey asked customers to rate satisfaction on a scale of 1-5 across various product features and customer service interactions. Focus on actionable insights. Avoid overly technical jargon.`,
+                format: `<span class="font-semibold accent-green">Format:</span> A brief report (approx. 300-400 words) with: <br>1. Overall Satisfaction Score (if available/calculable). <br>2. Top 3 Positive Themes (with brief explanations/examples). <br>3. Top 3 Areas for Improvement (with brief explanations/examples). <br>4. Key Recommendations (1-2 actionable points).`
+            },
+            {
+                themeName: "Business Plan Outline Generation",
+                persona: `<span class="font-semibold accent-green">Persona:</span> You are a seasoned business consultant guiding a startup entrepreneur.`,
+                task: `<span class="font-semibold accent-green">Task:</span> Generate a comprehensive outline for a business plan for a new eco-friendly subscription box service.`,
+                context: `<span class="font-semibold accent-green">Context:</span> The service will feature sustainable and ethically sourced products. The outline should cover all standard business plan sections.`,
+                format: `<span class="font-semibold accent-green">Format:</span> A hierarchical bulleted list representing the business plan structure (e.g., 1. Executive Summary, 1.1 Mission, 1.2 Objectives; 2. Company Description; 3. Products and Services; 4. Market Analysis, etc.). Include key sub-points for each major section.`
+            },
+            {
+                themeName: "Personalized Workout Plan",
+                persona: `<span class="font-semibold accent-green">Persona:</span> You are a certified personal trainer designing a beginner-level, at-home workout plan.`,
+                task: `<span class="font-semibold accent-green">Task:</span> Create a 3-day per week full-body workout plan for a beginner with no gym equipment.`,
+                context: `<span class="font-semibold accent-green">Context:</span> The goal is general fitness and strength building. Each workout should be around 30-45 minutes. Include warm-up and cool-down suggestions. Focus on bodyweight exercises.`,
+                format: `<span class="font-semibold accent-green">Format:</span> For each of the 3 workout days: <br>- Warm-up (list of exercises, duration/reps). <br>- Main Workout (list of exercises, sets, reps, rest times). <br>- Cool-down (list of stretches, duration). Provide brief descriptions or links to examples for less common exercises.`
+            },
+            {
+                themeName: "Polite Customer Complaint Response",
+                persona: `<span class="font-semibold accent-green">Persona:</span> You are a customer service manager for an online retail company, known for your empathetic and solution-oriented responses.`,
+                task: `<span class="font-semibold accent-green">Task:</span> Draft a polite and helpful response to a customer complaint about a delayed shipment and damaged item.`,
+                context: `<span class="font-semibold accent-green">Context:</span> Customer email: "My order #12345 is a week late, and when it finally arrived, the main item was broken! This is unacceptable. I want a refund and compensation for this terrible service." The company policy allows for replacement or refund for damaged items and offers a discount voucher for significant delays.`,
+                format: `<span class="font-semibold accent-green">Format:</span> A professional email response: <br>- Subject Line suggestion. <br>- Empathetic opening. <br>- Acknowledge both issues (delay and damage). <br>- Apologize sincerely. <br>- Explain the proposed resolution (e.g., refund/replacement options, discount voucher for the inconvenience). <br>- Reassure the customer of quality standards. <br>- Professional closing.`
+            },
+            {
+                themeName: "E-commerce Product Description",
+                persona: `<span class="font-semibold accent-green">Persona:</span> You are a persuasive e-commerce copywriter specializing in lifestyle and tech products.`,
+                task: `<span class="font-semibold accent-green">Task:</span> Write a compelling product description (approx. 150-200 words) for a new smart water bottle that tracks hydration and glows to remind users to drink.`,
+                context: `<span class="font-semibold accent-green">Context:</span> Key features: Stainless steel, 500ml capacity, Bluetooth connectivity, companion app, customizable glow reminders, 7-day battery life. Target audience: Health-conscious individuals, busy professionals, fitness enthusiasts.`,
+                format: `<span class="font-semibold accent-green">Format:</span> <br>- Catchy Headline. <br>- Engaging introductory paragraph highlighting the main benefit. <br>- Bulleted list of 3-5 key features and their benefits. <br>- Call to action.`
             }
         ];
 
         let currentPTCFExampleSet = null; 
         let selectedPTCFComponents = [];
 
-        // Function to load a new random PTCF example set
         function handleNewPTCFExampleSetClick() {
             const randomIndex = Math.floor(Math.random() * ptcfExampleSets.length);
             currentPTCFExampleSet = ptcfExampleSets[randomIndex];
@@ -435,24 +488,22 @@
             updatePTCFOutput(); 
         }
 
-        // Function to toggle selection of a PTCF component (Persona, Task, Context, Format)
         function togglePTCF(componentKey, buttonElement) {
             if (!currentPTCFExampleSet) { 
-                handleNewPTCFExampleSetClick(); // Load a new set if none is active
+                handleNewPTCFExampleSetClick(); 
             }
             
             const index = selectedPTCFComponents.indexOf(componentKey);
-            if (index > -1) { // If already selected, deselect it
+            if (index > -1) { 
                 selectedPTCFComponents.splice(index, 1);
                 buttonElement.classList.remove('selected');
-            } else { // Otherwise, select it
+            } else { 
                 selectedPTCFComponents.push(componentKey);
                 buttonElement.classList.add('selected');
             }
-            updatePTCFOutput(); // Update the displayed prompt
+            updatePTCFOutput(); 
         }
 
-        // Function to update the PTCF output area based on selected components
         function updatePTCFOutput() {
             const outputDiv = document.getElementById('ptcf-output');
             if (!currentPTCFExampleSet) {
@@ -466,7 +517,6 @@
             }
 
             let htmlOutput = `<p class="text-sm text-gray-600 mb-3">Showing parts for theme: <strong>${currentPTCFExampleSet.themeName}</strong></p>`;
-            // Ensure components are displayed in the P-T-C-F order
             const orderedSelection = ['persona', 'task', 'context', 'format'].filter(key => selectedPTCFComponents.includes(key));
 
             htmlOutput += orderedSelection.map(key => {
@@ -477,103 +527,203 @@
             outputDiv.innerHTML = htmlOutput;
         }
         
-        // Data for various use case examples
         const useCasesData = [
+            // --- TECHNICAL ---
             { 
-                category: 'technical', 
-                title: 'Code Generation', 
-                icon: 'terminal', 
-                description: 'Generate code snippets or entire scripts in various programming languages.',
+                category: 'technical', title: 'Code Generation', icon: 'terminal', 
                 template: `Persona: You are an expert [Programming Language, e.g., Python] developer specializing in [Specific Domain, e.g., web scraping, data analysis].\nTask: Write a [Type of Script/Function, e.g., Python script, JavaScript function] that [Specific Action, e.g., scrapes data from a website, sorts an array, calculates a value].\nContext: [Provide necessary context, e.g., Libraries to use (requests, BeautifulSoup4), specific algorithms, input data format, error handling requirements, performance considerations].\nFormat: Provide the complete [Script/Function] as a single, well-commented code block. [Specify output details, e.g., Return type, print format, data structure of output].`,
                 example: `<strong>Persona:</strong> You are an expert Python developer specializing in web scraping and data extraction, with a focus on robust error handling and efficient data structures.<br><br><strong>Task:</strong> Write a Python script that scrapes the titles, publication dates, and author names of the first 10 articles from the homepage of 'https://example-news-site.com/'. The script must handle potential HTTP errors (e.g., 404, 503) gracefully by logging the error and skipping the problematic article. It should also manage cases where date or author information might be missing for an article.<br><br><strong>Context:</strong> The script should use the 'requests' library for HTTP requests and 'BeautifulSoup4' for HTML parsing. Ensure the code is well-commented, explaining each major step and the logic for handling missing data. The output should be a list of dictionaries, where each dictionary contains 'title', 'date' (or None if missing), and 'author' (or None if missing). Implement a 5-second timeout for requests.<br><br><strong>Format:</strong> Provide the complete Python script as a single, well-commented code block. Include necessary import statements.` 
             },
             { 
-                category: 'technical', 
-                title: 'Debugging Code', 
-                icon: 'bug_report', 
-                description: 'Analyze code snippets, identify bugs, and suggest corrections.',
+                category: 'technical', title: 'Debugging Code', icon: 'bug_report', 
                 template: `Persona: You are a highly experienced [Programming Language, e.g., JavaScript] debugger with deep knowledge of [Specific Areas, e.g., asynchronous operations, memory management].\nTask: Analyze the provided [Programming Language] code snippet and the error message "[Exact Error Message]". Identify the root cause of this error and propose a corrected version of the code.\nContext: The code is intended to [Describe code's purpose]. The error occurs when [Describe when/how error happens]. [Provide the code snippet, ideally formatted or clearly demarcated].\nFormat: First, provide a clear, step-by-step explanation of the likely cause(s) of the error. Then, provide the corrected [Programming Language] code snippet, ensuring [Specific requirements for correction, e.g., robust error handling, safe access to properties].`,
                 example: `<strong>Persona:</strong> You are a highly experienced JavaScript debugger with deep knowledge of asynchronous operations, promise handling, and modern ES6+ syntax.<br><br><strong>Task:</strong> Analyze the provided JavaScript code snippet (intended to fetch user data and then related posts) and the error message 'TypeError: Cannot read properties of undefined (reading 'posts')' which occurs on line 15. Identify the root cause of this error. Propose a corrected version of the code that safely handles potential undefined values and ensures proper sequential execution of asynchronous calls.<br><br><strong>Context:</strong> The code first fetches user data from '/api/user/123'. If successful, it then attempts to use the \\\`userId\\\` from the response to fetch posts from \\\`/api/posts?userId=\\\${userData.id}\\\`. The error suggests that \\\`userData\\\` might be undefined or not have the expected structure when \\\`userData.posts\\\` is accessed. <br><code_snippet><br>async function getUserAndPosts() {<br>  try {<br>    const userResponse = await fetch('/api/user/123');<br>    const userData = await userResponse.json(); // Potential issue if not ok<br><br>    // Assume userData.id exists for fetching posts<br>    const postsResponse = await fetch(\\\`/api/posts?userId=\\\${userData.id}\\\`);<br>    const postsData = await postsResponse.json();<br><br>    console.log('User:', userData.name);<br>    console.log('Posts:', postsData.length); // Line 15: Error occurs here if postsData is undefined<br>    return { user: userData, posts: postsData };<br>  } catch (error) {<br>    console.error('Failed to fetch data:', error);<br>  }<br>}<br></code_snippet><br><br><strong>Format:</strong> First, provide a clear, step-by-step explanation of the likely cause(s) of the error, considering asynchronous flow and error handling. Then, provide the corrected JavaScript code snippet, ensuring robust error checking (e.g., for \`response.ok\`) and safe access to properties.`
             },
             { 
-                category: 'technical', 
-                title: 'UX Feature Brainstorming', 
-                icon: 'design_services', 
-                description: 'Generate innovative feature ideas for applications, focusing on user experience and specific goals like engagement or accessibility.', 
+                category: 'technical', title: 'UX Feature Brainstorming', icon: 'design_services', 
                 template: `Persona: You are a visionary UX design strategist specializing in [Specific Domain, e.g., educational platforms, e-commerce apps] with expertise in [Key UX Principles, e.g., user engagement, accessibility (WCAG 2.1 AA)].\nTask: Brainstorm a list of [Number] innovative and impactful features for a new [Type of Application, e.g., mobile application] designed for [Purpose, e.g., language learning]. These features should aim to [Specific Goals, e.g., significantly increase daily user engagement, improve accessibility for users with cognitive disabilities].\nContext: The target audience is [Describe Target Audience, e.g., adult learners (25-55 years old)]. The app currently offers [Existing Features]. We want features that [Desired Outcome, e.g., create a more compelling and sticky experience, solve specific user pain points].\nFormat: A bulleted list. Each item should contain: \n1. Feature Name (Catchy and descriptive). \n2. Core Concept (1-2 sentences explaining the feature). \n3. Key Benefit/Impact (How it achieves the specified goals). \n4. [Optional: Specific Consideration, e.g., Key Accessibility Consideration].`, 
                 example: `<strong>Persona:</strong> You are a visionary UX design strategist with a strong specialization in user engagement for educational platforms and a deep understanding of gamification principles and accessibility (WCAG 2.1 AA).<br><br><strong>Task:</strong> Brainstorm a list of 5 innovative and impactful features for a new mobile application designed for language learning. These features should aim to significantly increase daily user engagement and long-term retention, while also being inclusive.<br><br><strong>Context:</strong> The target audience is adult learners (25-55 years old) who are self-motivated but often struggle with maintaining consistency. The app currently offers standard lessons and vocabulary drills. We want features that create a more compelling and sticky experience.<br><br><strong>Format:</strong> A bulleted list. Each item should contain: <br>1. Feature Name (Catchy and descriptive). <br>2. Core Concept (1-2 sentences explaining the feature). <br>3. Engagement Driver (How it boosts engagement/retention, e.g., social connection, progress tracking, variable rewards). <br>4. Key Accessibility Consideration (One specific way to make this feature inclusive).`
             },
             { 
-                category: 'technical', 
-                title: 'Technical Doc Writing', 
-                icon: 'article', 
-                description: 'Draft clear and concise technical documentation for APIs, software, or systems.', 
+                category: 'technical', title: 'Technical Doc Writing', icon: 'article', 
                 template: `Persona: You are a precise and experienced technical writer, skilled in creating clear, concise, and developer-friendly documentation for [Type of System, e.g., RESTful APIs, software libraries], following [Relevant Standards, e.g., OpenAPI specification principles, DITA standards].\nTask: Write the [Type of Documentation, e.g., API documentation, user guide section] for [Specific Component/Feature, e.g., a new endpoint: POST /api/v1/items, the user authentication module].\nContext: [Provide all necessary technical details: e.g., For APIs: request body, response codes, parameters, authentication methods. For software: functionality, user interactions, system requirements, error messages].\nFormat: Structure the documentation with clear sections, such as: [List expected sections, e.g., Overview, Endpoint URL, HTTP Method, Parameters, Request Body Example, Success Response, Error Responses]. Use tables, code blocks, and examples where appropriate.`, 
                 example: `<strong>Persona:</strong> You are a precise and experienced technical writer, skilled in creating clear, concise, and developer-friendly documentation for RESTful APIs, following OpenAPI specification principles.<br><br><strong>Task:</strong> Write the API documentation for a new endpoint: \\\`POST /api/v1/widgets\\\`. This endpoint is used to create a new widget.<br><br><strong>Context:</strong> The request body must be JSON and include \\\`name\\\` (string, required, max 100 chars), \\\`description\\\` (string, optional, max 500 chars), and \\\`quantity\\\` (integer, required, min 1). A successful creation (201 Created) returns the newly created widget object, including its server-generated \\\`id\\\` (UUID) and \\\`createdAt\\\` (ISO 8601 timestamp). Error responses include: 400 Bad Request (for validation errors, with a list of specific errors), 401 Unauthorized (if auth token is missing/invalid), 500 Internal Server Error.<br><br><strong>Format:</strong> Structure the documentation with the following sections: <br>1. Endpoint Title & Summary. <br>2. HTTP Method & URL. <br>3. Request Body (description, content type, and a table for parameters: Name, Type, Required, Description/Constraints). <br>4. Example Request Body (JSON). <br>5. Success Response (status code, description, example JSON response). <br>6. Error Responses (table: Status Code, Description, Possible Reason/Details).` 
             },
             { 
-                category: 'technical', 
-                title: 'PR Description & Review Points', 
-                icon: 'rate_review', 
-                description: 'Generate comprehensive Pull Request descriptions and highlight key areas for code reviewers.', 
+                category: 'technical', title: 'PR Description & Review Points', icon: 'rate_review', 
                 template: `Persona: You are a meticulous and communicative [Your Role, e.g., senior software engineer] preparing a Pull Request (PR), aiming to provide maximum clarity for reviewers.\nTask: 1. Write a [Concise/Comprehensive] PR description for a change that [Briefly describe the change, e.g., refactors the user authentication module, implements a new feature]. 2. List [Number] critical points or specific files/functions that reviewers should focus on, including [Optional: potential trade-offs made, specific concerns].\nContext: [Explain the problem this PR solves or the feature it implements. Mention key technologies, modules, or architectural components involved. E.g., The current system experiences performance degradation... Key changes involve modifications to X, Y, Z files...].\nFormat: \n1. **PR Title Suggestion:** (e.g., "Feat: [Brief Summary of Change]") \n2. **PR Description:** (Structured with sections like: Problem Statement, Proposed Solution, Key Changes Implemented, How to Test/Verify). \n3. **Key Review Points:** (Bulleted list, highlighting specific areas for attention).`, 
                 example: `<strong>Persona:</strong> You are a meticulous and communicative senior software engineer preparing a Pull Request (PR) for a critical feature enhancement, aiming to provide maximum clarity for reviewers.<br><br><strong>Task:</strong> 1. Write a comprehensive yet concise PR description for a change that introduces a new caching layer (using Redis) for frequently accessed user profile data to reduce database load. 2. List 4-5 critical points or specific files/functions that reviewers should focus on, including potential trade-offs made.<br><br><strong>Context:</strong> The current system experiences performance degradation during peak hours due to excessive DB queries for user profiles. The new caching layer aims to store profile data for 15 minutes. Key changes involve modifications to the \`UserService.js\`, introduction of a new \`CacheService.js\`, and updates to environment configuration for Redis connection.<br><br><strong>Format:</strong> <br>1. **PR Title Suggestion:** (e.g., "Feat: Implement Redis caching for user profiles") <br>2. **PR Description:** (Structured with: Problem Statement, Proposed Solution, Key Changes, How to Test). <br>3. **Key Review Points:** (Bulleted list, highlighting specific areas like cache invalidation logic, error handling for Redis connection, configuration settings, and performance impact assessment).` 
             },
             { 
-                category: 'technical', 
-                title: 'Diagram Analysis & Explanation', 
-                icon: 'schema', 
-                description: 'Interpret and explain technical diagrams like flowcharts or system architectures.', 
+                category: 'technical', title: 'Diagram Analysis & Explanation', icon: 'schema', 
                 template: `Persona: You are a [Your Role, e.g., systems analyst, solutions architect] adept at interpreting [Type of Diagram, e.g., technical diagrams, flowcharts, architecture diagrams] and explaining them clearly to [Target Audience, e.g., technical and semi-technical audiences].\nTask: Assume an image of a [Specific Diagram Type, e.g., basic three-tier web application architecture] has been uploaded. Explain [What to explain, e.g., the role of each tier and how they interact, the process flow depicted]. [Optional: Identify specific aspects like potential bottlenecks, benefits, or points of failure].\nContext: [Provide context about the system or process shown in the diagram. E.g., The system is a high-traffic e-commerce platform. The process is for customer order fulfillment.] (Note: For actual use, you would upload an image to Gemini).\nFormat: [Specify desired output structure, e.g., A short paragraph for each component/step, followed by a summary. Bulleted list for pros/cons.].`, 
                 example: `<strong>Persona:</strong> You are a systems architect and technical communicator, adept at interpreting complex infrastructure diagrams and explaining them to both technical and semi-technical audiences.<br><br><strong>Task:</strong> Assume an image of a cloud-native application architecture diagram has been uploaded. The diagram depicts a load balancer, multiple instances of a web application (in containers), a managed Kubernetes cluster, a relational database service, an object storage service, and a CDN. Explain the role of each major component and the typical flow of a user request through this system. Also, identify two potential scalability benefits and one potential single point of failure in this architecture (if any).<br><br><strong>Context:</strong> The application is a high-traffic e-commerce platform. The explanation should be clear and concise. (For actual use, you would upload the diagram image to Gemini).<br><br><strong>Format:</strong> <br>1. **Overall System Purpose:** (1-2 sentences). <br>2. **Component Breakdown:** (Bulleted list: Component Name - Role & Key Interactions). <br>3. **User Request Flow:** (Numbered steps describing data flow). <br>4. **Scalability Benefits:** (Bulleted list). <br>5. **Potential Single Point of Failure (or lack thereof):** (Brief explanation).` 
             },
             { 
-                category: 'creative', 
-                title: 'Marketing Campaign Slogans', 
-                icon: 'campaign', 
-                description: 'Generate catchy and effective slogans for marketing campaigns.',
+                category: 'technical', title: 'User Story Generation (PM/PO)', icon: 'person_pin', 
+                template: `Persona: You are a Product Owner proficient in Agile methodologies.\nTask: Write [Number] user stories for the [Feature Name] feature of our [Product Type] application.\nContext: The feature allows users to [Briefly describe feature functionality]. The target user is [Describe target user]. Key acceptance criteria to consider include [List 2-3 high-level acceptance criteria points].\nFormat: Standard user story format: "As a [type of user], I want [an action] so that [a benefit/value]." Include 2-3 specific acceptance criteria for each user story.`,
+                example: `<strong>Persona:</strong> You are a Product Owner for a mobile banking application, proficient in Agile methodologies and writing clear user stories.<br><br><strong>Task:</strong> Write 3 user stories for the new "Scheduled Payments" feature of our mobile banking app.<br><br><strong>Context:</strong> This feature allows users to set up recurring payments for bills or transfers. The target user is any bank customer who wants to automate their regular payments. Key considerations: users should be able to set frequency, amount, start/end dates, and receive notifications.<br><br><strong>Format:</strong> Standard user story format: "As a [type of user], I want [an action] so that [a benefit/value]." Include 2-3 specific acceptance criteria for each user story.`
+            },
+            { 
+                category: 'technical', title: 'Acceptance Criteria (PM/PO)', icon: 'checklist_rtl', 
+                template: `Persona: You are a detail-oriented QA Engineer or Product Owner.\nTask: Define comprehensive acceptance criteria for the user story: "[Paste User Story Here]".\nContext: The feature involves [Briefly describe feature context and any specific technical considerations or dependencies]. The goal is to ensure all success and edge cases are covered.\nFormat: A bulleted list of clear, testable acceptance criteria. Use "Given-When-Then" format if appropriate for some criteria.`,
+                example: `<strong>Persona:</strong> You are a detail-oriented Product Owner working on an e-commerce platform.<br><br><strong>Task:</strong> Define comprehensive acceptance criteria for the user story: "As a customer, I want to be able to filter products by color so that I can easily find items in my preferred shade."<br><br><strong>Context:</strong> The product filtering system already supports filtering by size and price. Color filtering should allow selecting multiple colors. Product data includes a 'color' attribute which can be a string or an array of strings for multi-color items.\nFormat: A bulleted list of clear, testable acceptance criteria. Use "Given-When-Then" format for clarity on specific scenarios.`
+            },
+            { 
+                category: 'technical', title: 'PRD Drafting (PM)', icon: 'edit_document', 
+                template: `Persona: You are a Product Manager drafting a Product Requirements Document (PRD).\nTask: Draft the "[Specific PRD Section, e.g., Goals, Target Audience, Success Metrics, Assumptions, Risks]" section for a new feature: [Feature Name].\nContext: The feature is [Brief description of the feature]. The overall product is [Product Name/Type] and its primary users are [Brief user description]. The main business objective for this feature is [Business Objective].\nFormat: A well-structured text for the specified PRD section, including relevant sub-headings and bullet points where appropriate. Ensure the content is clear, concise, and actionable for engineering and design teams.`,
+                example: `<strong>Persona:</strong> You are a Product Manager drafting a PRD for a new "Collaborative Playlists" feature in a music streaming app.\n<strong>Task:</strong> Draft the "Success Metrics" section for this feature.\n<strong>Context:</strong> The "Collaborative Playlists" feature allows multiple users to add, remove, and reorder songs in a shared playlist. The main business objective is to increase user engagement and social interaction within the app.\n<strong>Format:</strong> A well-structured "Success Metrics" section with clear, measurable, achievable, relevant, and time-bound (SMART) metrics. Include primary and secondary metrics.`
+            },
+            { 
+                category: 'technical', title: 'API Endpoint Design Explanation', icon: 'api', 
+                template: `Persona: You are a backend developer explaining an API endpoint design to a frontend developer or technical writer.\nTask: Explain the design and functionality of the \`[HTTP Method] /[endpoint_path]\` API endpoint.\nContext: This endpoint is used for [Purpose of the endpoint]. Key request parameters/body fields include [List key parameters/fields and their types/purpose]. Successful responses return [Describe success response structure and key fields]. Potential error responses include [List 1-2 common error codes and their meaning, e.g., 400 for bad request, 404 for not found].\nFormat: A clear explanation covering: 1. Purpose. 2. Request (Method, Path, Parameters/Body). 3. Success Response (Status Code, Body Structure). 4. Error Responses (Common Status Codes, Meanings). Use code blocks for example request/response snippets if helpful.`,
+                example: `<strong>Persona:</strong> You are a backend developer explaining an API endpoint design for a new user profile update feature.\n<strong>Task:</strong> Explain the design and functionality of the \`PUT /users/{userId}/profile\` API endpoint.\n<strong>Context:</strong> This endpoint is used for updating a user's profile information (e.g., display name, bio, location). The request body expects a JSON object with fields like \`displayName\` (string), \`bio\` (string, optional), \`location\` (string, optional). A successful update returns a 200 OK with the updated user profile object. Potential errors include 400 (invalid input), 401 (unauthorized), 403 (forbidden), 404 (user not found).\n<strong>Format:</strong> A clear explanation covering: 1. Purpose. 2. Request (Method, Path, Example Body). 3. Success Response (Status Code, Example Body). 4. Key Error Responses.`
+            },
+            { 
+                category: 'technical', title: 'Database Schema Suggestion', icon: 'database', 
+                template: `Persona: You are a database architect designing a schema for a new application.\nTask: Suggest a basic database schema (tables, key columns, relationships) for storing information about [Core Entities, e.g., Users, Products, and Orders].\nContext: The application is a [Type of Application, e.g., simple e-commerce site]. Key information for Users includes [e.g., name, email, password_hash]. For Products: [e.g., name, description, price, stock_quantity]. For Orders: [e.g., user_id, order_date, total_amount, status, and line items linking to products].\nFormat: For each suggested table: <br>- Table Name. <br>- Key Columns (with data types and constraints like PRIMARY KEY, FOREIGN KEY, NOT NULL). <br>- Brief description of relationships between tables (e.g., one-to-many, many-to-many with a join table).`,
+                example: `<strong>Persona:</strong> You are a database architect designing a schema for a simple blog application.\n<strong>Task:</strong> Suggest a basic database schema for storing Users, Posts, and Comments.\n<strong>Context:</strong> Users can write multiple Posts. Posts can have multiple Comments. Users also make Comments. Key info for Users: id, username, email, password_hash. Posts: id, user_id (author), title, content, created_at. Comments: id, post_id, user_id (commenter), content, created_at.\n<strong>Format:</strong> For each table (Users, Posts, Comments): <br>- Table Name. <br>- Columns (name, type, constraints like PK, FK, NOT NULL). <br>- Description of relationships.`
+            },
+            { 
+                category: 'technical', title: 'Algorithm Explanation (Conceptual)', icon: 'functions', 
+                template: `Persona: You are a software engineer explaining a common algorithm to a junior developer or a non-technical stakeholder.\nTask: Explain the concept and basic steps of the [Algorithm Name, e.g., Bubble Sort, Binary Search, Depth-First Search] algorithm.\nContext: The explanation should focus on the high-level logic and purpose, rather than deep code implementation. Use a simple analogy or a small, clear example if possible. Mention its typical use case(s) and perhaps one key advantage or disadvantage.\nFormat: A concise explanation (2-3 paragraphs) covering: <br>1. What the algorithm does (its goal). <br>2. How it generally works (key steps/logic, simplified). <br>3. A simple example or analogy. <br>4. Common use cases and a brief note on its efficiency or trade-offs.`,
+                example: `<strong>Persona:</strong> You are a software engineer explaining algorithms.\n<strong>Task:</strong> Explain the concept and basic steps of the Binary Search algorithm.\n<strong>Context:</strong> The audience is a junior developer who understands basic programming concepts but may not be familiar with this specific search algorithm. The goal is to convey the core idea and efficiency.\n<strong>Format:</strong> A concise explanation covering: <br>1. Purpose of Binary Search. <br>2. Core logic (halving the search space on a sorted list). <br>3. Simple example (e.g., guessing a number in a range). <br>4. Key advantage (efficiency for sorted data) and requirement (data must be sorted).`
+            },
+            { 
+                category: 'technical', title: 'Code Refactoring Ideas', icon: 'code_off', 
+                template: `Persona: You are a senior software developer reviewing a piece of code for potential improvements.\nTask: Analyze the provided [Programming Language] code snippet and suggest [Number, e.g., 2-3] specific refactoring ideas to improve its [Aspects to Improve, e.g., readability, maintainability, performance, adherence to SOLID principles].\nContext: [Provide the code snippet here. Briefly explain its current purpose or any known issues/smells].\nFormat: For each refactoring idea: <br>1. Briefly describe the proposed change. <br>2. Explain the benefit of this change (e.g., "This would improve readability by...", "This could enhance performance by..."). <br>[Optional: Show a small "before" and "after" pseudo-code or snippet if it clarifies the idea significantly].`,
+                example: `<strong>Persona:</strong> You are a senior Python developer reviewing a function that processes user data.\n<strong>Task:</strong> Analyze the provided Python code snippet and suggest 2-3 specific refactoring ideas to improve its readability and maintainability.\n<strong>Context:</strong> \n<code_snippet>\ndef process_user_data(user_list):\n  new_list = []\n  for i in range(len(user_list)):\n    if user_list[i]['active'] == True and user_list[i]['age'] > 18:\n      # complex processing logic here involving multiple nested ifs\n      # ... (imagine more complex, hard-to-read logic)\n      processed_name = user_list[i]['name'].upper() + "_" + str(user_list[i]['id'])\n      new_list.append({'proc_name': processed_name, 'email': user_list[i]['email']})\n  return new_list\n</code_snippet>\nThe function filters active adult users and processes their names.\n<strong>Format:</strong> For each refactoring idea: <br>1. Proposed Change. <br>2. Benefit.`
+            },
+            { 
+                category: 'technical', title: 'Unit Test Case Generation', icon: 'checklist', 
+                template: `Persona: You are a software developer focused on Test-Driven Development (TDD) or ensuring code quality.\nTask: Generate a list of [Number, e.g., 3-5] key unit test cases for the following [Programming Language] function/method: [Provide the function signature and a brief description of its purpose and expected inputs/outputs].\nContext: Consider edge cases, typical valid inputs, and potential invalid inputs that should be handled gracefully. Specify the expected outcome for each test case.\nFormat: A bulleted list. Each item should describe: <br>1. Test Case Name/Description (e.g., "Test with empty input list", "Test with valid positive numbers", "Test with negative numbers"). <br>2. Input(s) for the test. <br>3. Expected Output or Behavior.`,
+                example: `<strong>Persona:</strong> You are a Python developer writing unit tests.\n<strong>Task:</strong> Generate 4 key unit test cases for the Python function: \`def calculate_average(numbers: list) -> float:\` which calculates the average of a list of numbers. It should raise a ValueError for an empty list.\n<strong>Context:</strong> Consider positive numbers, negative numbers, zeros, and the empty list scenario.\n<strong>Format:</strong> A bulleted list: <br>1. Test Case Name. <br>2. Input. <br>3. Expected Output/Exception.`
+            },
+            { 
+                category: 'technical', title: 'Explaining a Design Pattern', icon: 'developer_mode', 
+                template: `Persona: You are a software architect or senior developer explaining a design pattern.\nTask: Explain the [Design Pattern Name, e.g., Singleton, Factory, Observer, Decorator] design pattern.\nContext: The explanation should be for a developer who might be new to this specific pattern. Include its purpose/intent, a brief description of its structure or key components, a common real-world analogy or simple use case, and one primary benefit and one potential drawback.\nFormat: A structured explanation: <br>1. **Intent:** What problem does it solve? <br>2. **Structure/Components:** How is it generally built (key classes/objects)? <br>3. **Analogy/Use Case:** A simple example. <br>4. **Benefit(s):** <br>5. **Drawback(s)/Considerations:**`,
+                example: `<strong>Persona:</strong> You are a senior Java developer explaining design patterns to your team.\n<strong>Task:</strong> Explain the Singleton design pattern.\n<strong>Context:</strong> The team needs to understand when and how to use the Singleton pattern appropriately, especially for managing shared resources like a database connection pool or a configuration manager.\n<strong>Format:</strong> A structured explanation: <br>1. Intent. <br>2. Structure. <br>3. Analogy/Use Case (e.g., a country's president). <br>4. Benefits. <br>5. Drawbacks.`
+            },
+            { 
+                category: 'technical', title: 'Generating CLI Command Examples', icon: 'integration_instructions', 
+                template: `Persona: You are a DevOps engineer or system administrator creating documentation for a command-line tool.\nTask: Provide [Number, e.g., 3-5] example usages of the \`[command_name]\` CLI tool, demonstrating different common options or scenarios.\nContext: The \`[command_name]\` tool is used for [Briefly describe tool's purpose, e.g., managing files, interacting with a service]. Key options include: \`--option1 [value]\` (description), \`--flagA\` (description), \`subcommand_X\` (description).\nFormat: A list of command-line examples. For each example: <br>- A brief description of what the command achieves. <br>- The command itself, formatted as a code block.`,
+                example: `<strong>Persona:</strong> You are a DevOps engineer documenting a custom CLI tool called \`deployctl\`.\n<strong>Task:</strong> Provide 3 example usages of \`deployctl\`.\n<strong>Context:</strong> \`deployctl\` is used for deploying applications to different environments. Key options: \`--env [staging|production]\`, \`--app [appName]\`, \`--version [tag]\`. Subcommands: \`status\`, \`rollback\`.\n<strong>Format:</strong> For each example: <br>- Description. <br>- Command (in a code block).`
+            },
+
+            // --- CREATIVE ---
+            { 
+                category: 'creative', title: 'Marketing Campaign Slogans', icon: 'campaign', 
                 template: `Persona: You are a witty, trend-aware [Type of Copywriter, e.g., social media copywriter, B2B marketing specialist] specializing in campaigns for [Industry/Product Type, e.g., sustainable fashion brands, tech gadgets].\nTask: Generate [Number] short, catchy, and shareable slogans for an upcoming [Platform, e.g., Instagram and TikTok] campaign promoting [Product/Service Name/Description, e.g., our new line of sneakers made from recycled ocean plastics].\nContext: Target audience: [Describe Target Audience, e.g., Environmentally conscious millennials and Gen Z]. Brand voice: [Describe Brand Voice, e.g., Playful, optimistic, authentic]. Key benefits/features to highlight: [List 2-3 key benefits/features]. [Optional: Campaign theme or hashtag].\nFormat: A numbered list of slogans. [Optional: For each slogan, also suggest relevant hashtags or a brief rationale].`,
                 example: `<strong>Persona:</strong> You are a highly creative and strategic marketing copywriter specializing in launching tech gadgets to a millennial and Gen Z audience. You are known for your edgy, memorable, and shareable copy.<br><br><strong>Task:</strong> Generate 7 distinct slogans for an upcoming social media campaign promoting "NovaBuds," a new line of wireless earbuds featuring AI-powered noise cancellation and a 30-hour battery life. The slogans should be short (max 10 words), impactful, and highlight at least one key feature.<br><br><strong>Context:</strong> Target audience: Tech-savvy individuals aged 18-35, value high-quality audio, long battery life, and cutting-edge technology. Brand voice: Innovative, bold, slightly futuristic, and confident. Campaign Hashtag: #NovaSound.<br><br><strong>Format:</strong> A numbered list of slogans. For each slogan, briefly note which key feature it emphasizes (AI Noise Cancellation or Battery Life).`
             },
             { 
-                category: 'creative', 
-                title: 'Blog Post Ideation', 
-                icon: 'lightbulb', 
-                description: 'Brainstorm unique and compelling ideas for blog posts or articles.',
+                category: 'creative', title: 'Blog Post Ideation', icon: 'lightbulb', 
                 template: `Persona: You are a highly imaginative content strategist for a [Type of Publication, e.g., luxury travel blog, tech news site] that focuses on [Specific Niche/Themes, e.g., unique off-the-beaten-path experiences, emerging AI technologies].\nTask: Brainstorm [Number] unique and compelling blog post ideas targeting [Target Audience, e.g., affluent travelers, software developers]. The ideas should [Specific Criteria, e.g., move beyond typical topics, offer fresh perspectives, be actionable].\nContext: Our readership values [Key Reader Values, e.g., authenticity, in-depth analysis, practical advice]. Avoid [Types of Content to Avoid, e.g., generic listicles]. Focus on [Desired Angles/Content Types, e.g., narrative-driven content, expert interviews, case studies].\nFormat: A bulleted list. For each idea, provide: \n1. A catchy, intriguing title. \n2. A brief (1-2 sentence) description of the proposed angle or story. \n[Optional: Suggested keywords or target audience segment].`,
                 example: `<strong>Persona:</strong> You are an insightful and forward-thinking content strategist for a leading online publication focused on the future of work and remote collaboration technologies.<br><br><strong>Task:</strong> Brainstorm 8 unique and compelling blog post ideas that explore emerging trends, challenges, or innovative solutions related to remote/hybrid work models. The ideas should be thought-provoking and offer actionable insights for both employees and employers.<br><br><strong>Context:</strong> Our readership consists of HR professionals, team leads, remote workers, and business executives interested in optimizing distributed teams and fostering a positive remote work culture. Avoid overly generic topics. Focus on specific angles like AI's role in remote productivity, mental well-being for distributed teams, or the evolution of virtual collaboration tools.<br><br><strong>Format:</strong> A bulleted list. For each idea: <br>1. Catchy Title. <br>2. Target Audience Segment (e.g., HR Managers, Remote Employees). <br>3. Core Question/Angle (1-2 sentences).`
             },
             { 
-                category: 'everyday', 
-                title: 'Email Tone Adjustment', 
-                icon: 'forum', 
-                description: 'Rewrite text to adjust its tone, for example, to be more polite or professional.',
+                category: 'creative', title: 'Imagen - Image Prompt Crafting', icon: 'image', 
+                template: `Persona: You are an AI assistant helping a user craft a detailed prompt for an image generation model like Imagen.\nTask: Refine and expand the user's basic idea into a rich, descriptive prompt suitable for generating a high-quality image.\nContext: User's basic idea: "[User's simple idea, e.g., 'a cat in space']". Key elements to consider adding: [Subject details, setting/environment, action/pose, artistic style (e.g., photorealistic, watercolor, pixel art, impressionistic), lighting, color palette, mood/atmosphere, composition (e.g., close-up, wide shot), negative prompts (what to avoid)].\nFormat: A detailed image generation prompt. Start with the core subject and progressively add descriptive layers for style, environment, lighting, and mood. Optionally, include a section for "Negative Prompts:".`,
+                example: `<strong>Persona:</strong> You are an AI assistant helping a user craft a detailed prompt for an image generation model like Imagen.<br><br><strong>Task:</strong> Refine and expand the user's basic idea: "A futuristic city" into a rich, descriptive prompt.\n<strong>Context:</strong> The user wants something visually stunning and detailed. Consider elements like architecture style (e.g., sleek, organic, brutalist), time of day, weather, presence of flying vehicles, overall mood (e.g., utopian, dystopian, bustling, serene), and artistic influence (e.g., cyberpunk, art deco).\n<strong>Format:</strong> A detailed image generation prompt. Include suggestions for artistic style, lighting, and composition.`
+            },
+            { 
+                category: 'creative', title: 'Veo - Video Scene Prompt Crafting', icon: 'videocam', 
+                template: `Persona: You are an AI assistant helping a user craft a detailed prompt for a video generation model like Veo.\nTask: Develop a descriptive prompt for a short video scene based on the user's concept.\nContext: User's concept: "[User's basic scene idea, e.g., 'a dragon flying over mountains']". Key elements to consider: [Detailed description of subject(s) and action, camera angle/movement (e.g., drone shot, panning, close-up), environment details, lighting, mood, video style (e.g., cinematic, time-lapse, animated), desired duration (e.g., 5-10 seconds), sound design notes (optional)].\nFormat: A detailed video scene prompt. Describe the visual elements, action, camera work, and atmosphere. Optionally, include notes for sound.`,
+                example: `<strong>Persona:</strong> You are an AI assistant helping a user craft a detailed prompt for a video generation model like Veo.<br><br><strong>Task:</strong> Develop a descriptive prompt for a short video scene based on the user's concept: "A robot exploring an alien jungle."\n<strong>Context:</strong> The robot should look slightly weathered but advanced. The jungle should be bioluminescent and full of strange plants. The mood is one of wonder and slight trepidation. Duration: ~8 seconds.\n<strong>Format:</strong> A detailed video scene prompt specifying robot actions, jungle details, camera movement (e.g., "tracking shot following the robot"), and lighting (e.g., "bioluminescent glow from flora, casting dynamic shadows").`
+            },
+            { 
+                category: 'creative', title: 'Story Plot Twist Ideas', icon: 'shuffle', 
+                template: `Persona: You are a creative writing assistant specializing in narrative twists and surprises.\nTask: Generate [Number] unexpected plot twist ideas for a story with the following premise: "[Briefly describe the story's current setup, main characters, and genre, e.g., A detective investigating a seemingly simple robbery in a noir setting]".\nContext: The twists should be surprising yet ideally foreshadowed or plausible within the established story world. Consider twists related to character identity, motivations, past events, or the nature of the central conflict.\nFormat: A numbered list of plot twist ideas, each with a brief (1-2 sentence) explanation of the twist.`,
+                example: `<strong>Persona:</strong> You are a creative writing assistant specializing in crafting compelling narrative twists.\n<strong>Task:</strong> Generate 3 unexpected plot twist ideas for a fantasy story where a young farmhand discovers they are the chosen one destined to defeat an ancient evil.\n<strong>Context:</strong> The farmhand is reluctant, the ancient evil is a powerful dark lord, and there's a wise old mentor figure. The twists should challenge common tropes.\n<strong>Format:</strong> A numbered list of plot twist ideas, each with a brief explanation.`
+            },
+            { 
+                category: 'creative', title: 'Poem Generation (Specific Style)', icon: 'edit', 
+                template: `Persona: You are a versatile poet AI, capable of writing in various styles.\nTask: Write a [Number]-line poem about [Subject/Theme, e.g., "the changing seasons", "the feeling of nostalgia"] in the style of [Specific Poet or Poetic Style, e.g., "a Shakespearean sonnet", "a haiku", "free verse with an emphasis on imagery", "a limerick"].\nContext: [Optional: Mention any specific imagery, emotions, or keywords you'd like to see incorporated].\nFormat: The poem, formatted according to the requested style (e.g., line breaks, stanza structure if applicable).`,
+                example: `<strong>Persona:</strong> You are a versatile poet AI.\n<strong>Task:</strong> Write an 8-line poem about "a quiet library at dusk" in a style emphasizing sensory details and a contemplative mood (free verse).\n<strong>Context:</strong> Focus on sounds, smells, and the quality of light.\n<strong>Format:</strong> The 8-line poem.`
+            },
+            { 
+                category: 'creative', title: 'Song Lyric Brainstorming', icon: 'music_note', 
+                template: `Persona: You are a creative songwriter's assistant.\nTask: Brainstorm ideas for [Song Part, e.g., a verse, a chorus, a bridge] for a song about [Theme/Subject, e.g., "overcoming adversity", "a bittersweet memory", "the excitement of a new city"].\nContext: The song's genre is [Genre, e.g., pop, folk, rock, blues]. The desired mood is [Mood, e.g., uplifting, melancholic, energetic]. [Optional: Provide a few keywords or existing lyric snippets to build upon].\nFormat: A list of [Number] lyric ideas or short phrases (2-4 lines each) suitable for the specified song part, theme, genre, and mood.`,
+                example: `<strong>Persona:</strong> You are a creative songwriter's assistant.\n<strong>Task:</strong> Brainstorm ideas for a chorus for a pop song about "the feeling of freedom after a breakup."\n<strong>Context:</strong> The song should be upbeat and empowering.\n<strong>Format:</strong> 3-4 chorus ideas, each 2-4 lines long.`
+            },
+            { 
+                category: 'creative', title: 'Fictional Dialogue Snippet', icon: 'chat_bubble', 
+                template: `Persona: You are a scriptwriter AI specializing in natural and engaging dialogue.\nTask: Write a short dialogue snippet (approx. [Number] lines of dialogue) between two characters: [Character A description, e.g., "a cynical old detective"] and [Character B description, e.g., "an optimistic rookie cop"].\nContext: The characters are currently [Situation/Setting, e.g., "at a crime scene", "having coffee", "arguing about a case"]. The dialogue should reveal something about their personalities or their relationship, or advance a minor plot point.\nFormat: The dialogue, formatted with character names followed by their lines.`,
+                example: `<strong>Persona:</strong> You are a scriptwriter AI.\n<strong>Task:</strong> Write a short dialogue snippet (approx. 6-8 lines) between a cautious spaceship captain and an overly enthusiastic alien diplomat.\n<strong>Context:</strong> They are making first contact on the bridge of the spaceship. The diplomat is trying to offer a "welcome gift" that looks suspicious.\n<strong>Format:</strong> Dialogue with character names.`
+            },
+            { 
+                category: 'creative', title: 'World-Building Detail', icon: 'public', 
+                template: `Persona: You are a fantasy/sci-fi world-builder.\nTask: Generate [Number] unique details for a [Type of World Element, e.g., "cultural custom for a desert-dwelling race", "piece of unique technology in a cyberpunk city", "magical creature native to an enchanted forest"].\nContext: The world is [Briefly describe world genre/setting, e.g., "a high fantasy world with elemental magic", "a gritty cyberpunk future"]. The detail should be imaginative and consistent with the established tone.\nFormat: A numbered list of details, each with a 1-2 sentence description.`,
+                example: `<strong>Persona:</strong> You are a fantasy world-builder.\n<strong>Task:</strong> Generate 3 unique details for a magical plant found only in a hidden, moonlit grove.\n<strong>Context:</strong> The world is high fantasy, and the plant is rumored to have healing properties tied to lunar cycles.\n<strong>Format:</strong> A numbered list of details, each with a 1-2 sentence description of the plant's appearance, properties, or lore.`
+            },
+            { 
+                category: 'creative', title: 'Character Mannerism Suggestion', icon: 'accessibility_new', 
+                template: `Persona: You are a character development assistant for writers.\nTask: Suggest [Number] distinct mannerisms or quirks for a character with the following core personality trait: "[Core Trait, e.g., nervous, arrogant, absent-minded, overly meticulous]".\nContext: The character is [Briefly describe character type/role, e.g., "a young wizard's apprentice", "a seasoned space pirate", "a quirky librarian"]. The mannerisms should be subtle or overt ways this trait manifests physically or verbally.\nFormat: A numbered list of mannerisms, each with a brief description.`,
+                example: `<strong>Persona:</strong> You are a character development assistant.\n<strong>Task:</strong> Suggest 3 distinct mannerisms for a character who is secretly a shapeshifter trying to blend in as a human.\n<strong>Context:</strong> The character is generally trying to appear normal but might occasionally slip or overcompensate due to their true nature. The core trait is "anxious about being discovered."\n<strong>Format:</strong> A numbered list of mannerisms.`
+            },
+
+            // --- EVERYDAY ---
+            { 
+                category: 'everyday', title: 'Email Tone Adjustment', icon: 'forum', 
                 template: `Persona: You are an expert [Type of Communicator, e.g., corporate communicator, customer service professional] skilled in [Specific Communication Skill, e.g., diplomatic correspondence, de-escalation].\nTask: Rewrite the following email/text draft to sound more [Desired Tone, e.g., polite, collaborative, assertive, empathetic], while still effectively conveying [Key Message/Urgency].\nContext: Original Draft: "[Paste Original Text Here]". The goal is to [Specific Outcome, e.g., de-escalate potential tension, ensure a positive response, clearly state a requirement without causing offense].\nFormat: Provide the revised email/text. [Optional: Include a suggested subject line if it's an email].`,
                 example: `<strong>Persona:</strong> You are an exceptionally skilled corporate communications specialist with expertise in conflict resolution and maintaining positive professional relationships through written communication.<br><br><strong>Task:</strong> Rewrite the following email draft. The goal is to make it sound significantly more polite, collaborative, and understanding, while still clearly communicating the need for the information and the original deadline. The revised email should aim to de-escalate potential tension.<br><br><strong>Context:</strong> Original Draft: "Subject: URGENT: Financial Report OVERDUE!! Look, I've asked for this report three times now and it was due YESTERDAY. I absolutely need that financial report on my desk by 5 PM today, no more excuses. This is completely unacceptable and it's critical for the board meeting tomorrow morning. Any further delays will have serious consequences."<br><br><strong>Format:</strong> Provide the revised email text, including a suggested subject line. Ensure the revised email explains the impact of the delay without being accusatory.`
             },
             { 
-                category: 'everyday', 
-                title: 'Project Plan Outline', 
-                icon: 'checklist', 
-                description: 'Create structured outlines for projects, presentations, or reports.',
+                category: 'everyday', title: 'Project Plan Outline', icon: 'checklist', 
                 template: `Persona: You are a highly organized [Your Role/Expertise, e.g., project manager, event planner, researcher] adept at breaking down complex initiatives into clear, actionable steps.\nTask: Create a high-level project plan outline for [Project Description, e.g., launching a new company intranet portal, organizing a charity fundraiser, writing a research paper].\nContext: The project is expected to take [Timeframe, e.g., approximately 3 months]. Key phases/sections should include: [List Key Phases/Sections if known, otherwise ask Gemini to suggest them. E.g., Discovery, Design, Development, Testing, Launch]. [Optional: Mention key deliverables, stakeholders, or constraints].\nFormat: A [Hierarchical/Simple] bulleted list. Under each main phase/section, list [Number] key sub-tasks or deliverables. [Optional: For some sub-tasks, provide 1-2 example action items].`,
                 example: `<strong>Persona:</strong> You are a highly organized and PRINCE2 certified project manager, adept at breaking down complex software development initiatives into clear, actionable phases and tasks.<br><br><strong>Task:</strong> Create a detailed, high-level project plan outline for developing and launching a new customer relationship management (CRM) mobile application. The project is estimated to take 6 months.<br><br><strong>Context:</strong> Key deliverables include iOS and Android apps, a web-based admin panel, and integration with existing sales databases. The plan should cover typical software development lifecycle phases.<br><br><strong>Format:</strong> A hierarchical bulleted list. <br>Top level: Main Project Phases (e.g., Initiation, Planning, Design, Development, Testing, Deployment, Closure). <br>Second level: Key Deliverables or Sub-Phases within each main phase. <br>Third level (optional): 2-3 example key tasks for some sub-phases.`
             },
             { 
-                category: 'everyday', 
-                title: 'Explain a Complex Topic', 
-                icon: 'psychology_alt', 
-                description: 'Get clear and simple explanations of complex subjects.',
+                category: 'everyday', title: 'Explain a Complex Topic', icon: 'psychology_alt', 
                 template: `Persona: You are a gifted science communicator / expert educator, celebrated for your ability to explain profoundly complex [Field, e.g., scientific, philosophical, economic] topics to a general audience with no prior specialized knowledge.\nTask: Explain the concept of "[Complex Topic, e.g., Quantum Entanglement, Solipsism, Supply and Demand]" and [Optional: its main arguments, implications, or real-world examples].\nContext: The explanation should be clear, concise, and intellectually stimulating without being overly academic. Use simple language and [Optional: a relatable analogy or thought experiment] to clarify the core idea. The audience is [Describe Audience, e.g., high school students, curious adults].\nFormat: [Number] concise paragraphs. [Optional: Specify structure, e.g., Paragraph 1: Definition. Paragraph 2: Analogy. Paragraph 3: Implications.].`,
                 example: `<strong>Persona:</strong> You are a renowned science educator, celebrated for your ability to make profoundly complex scientific and philosophical topics accessible and engaging to a broad adult audience with no prior specialized knowledge.<br><br><strong>Task:</strong> Explain the philosophical concept of "Solipsism" and its main arguments. Then, briefly discuss one common counter-argument or critique of solipsism.<br><br><strong>Context:</strong> The explanation should be clear, concise, and intellectually stimulating without being overly academic. Use simple language and perhaps a relatable (though not trivializing) thought experiment if it helps clarify the core idea.<br><br><strong>Format:</strong> Three distinct paragraphs: <br>1. Explanation of Solipsism. <br>2. Main arguments for Solipsism. <br>3. A common counter-argument/critique.`
+            },
+            { 
+                category: 'everyday', title: 'Meeting Agenda Creation', icon: 'event_note', 
+                template: `Persona: You are an efficient administrative assistant or team lead.\nTask: Create a structured agenda for an upcoming [Meeting Type, e.g., weekly team sync, project kick-off, client review] meeting about [Meeting Topic].\nContext: The meeting is scheduled for [Date/Time] and will last [Duration, e.g., 1 hour]. Key attendees include [List key roles or names]. The main objectives of the meeting are [List 2-3 objectives].\nFormat: A structured agenda with: <br>- Meeting Title <br>- Date & Time <br>- Attendees (Optional) <br>- Objectives <br>- Agenda Items (with allocated time for each and assigned speaker/lead if applicable). <br>- [Optional: Pre-reading materials or action items from previous meeting].`,
+                example: `<strong>Persona:</strong> You are a project manager preparing for a weekly sprint review meeting.\n<strong>Task:</strong> Create a structured agenda for the upcoming sprint review.\n<strong>Context:</strong> The meeting is 1 hour long. Attendees include the development team, product owner, and a key stakeholder. Objectives: Demonstrate completed work, gather feedback, discuss impediments, and plan for the next sprint's focus.\n<strong>Format:</strong> Agenda with items like: Sprint Goal Recap, Demo of Completed User Stories, Feedback Session, Impediments Review, Next Sprint Outlook.`
+            },
+            { 
+                category: 'everyday', title: 'Learning New Skill - Outline', icon: 'school', 
+                template: `Persona: You are a structured learning advisor or an experienced self-learner.\nTask: Create a high-level learning outline or curriculum for acquiring a new skill: "[Skill to Learn, e.g., Basic Python Programming, Conversational Spanish, Digital Photography, Playing the Guitar]".\nContext: The target learner is a [Learner Level, e.g., complete beginner, has some basic knowledge]. The goal is to achieve [Learning Outcome, e.g., ability to write simple scripts, hold basic conversations, take well-composed photos, play simple chords and songs] within [Timeframe, e.g., 3 months, dedicating 5 hours a week].\nFormat: A phased or modular learning plan. For each phase/module: <br>- Key topics or concepts to cover. <br>- Suggested learning activities or resources (e.g., online courses, books, practice exercises, projects). <br>- [Optional: Milestones or checkpoints].`,
+                example: `<strong>Persona:</strong> You are an experienced language tutor.\n<strong>Task:</strong> Create a high-level learning outline for a complete beginner to learn basic conversational French over 6 months (approx. 3-4 hours/week).\n<strong>Context:</strong> Goal is to handle simple travel situations (greetings, ordering food, asking for directions, basic introductions).\n<strong>Format:</strong> A monthly or bi-monthly phased plan with key topics (e.g., Pronunciation & Alphabet, Basic Greetings & Nouns, Verbs & Simple Sentence Structure, Numbers & Time, Common Travel Phrases, etc.) and suggested activities (e.g., Duolingo, basic grammar exercises, watching simple French cartoons, practicing with a language partner).`
+            },
+            { 
+                category: 'everyday', title: 'Brainstorm Gift Ideas', icon: 'card_giftcard', 
+                template: `Persona: You are a thoughtful gift advisor.\nTask: Brainstorm [Number] unique and personalized gift ideas for [Recipient Description, e.g., "my tech-savvy brother who loves hiking", "my artistic friend who enjoys cooking", "my boss who is a coffee aficionado"].\nContext: The occasion is [Occasion, e.g., birthday, anniversary, holiday, thank you]. The budget is approximately [Budget Range, e.g., $20-$50, under $100, no specific budget]. Recipient's known interests/hobbies include [List interests]. Things to avoid: [Any known dislikes or items they already have].\nFormat: A numbered list of gift ideas. For each idea: <br>- Gift Name/Concept. <br>- Brief (1-sentence) rationale explaining why it might be suitable for the recipient.`,
+                example: `<strong>Persona:</strong> You are a thoughtful gift advisor.\n<strong>Task:</strong> Brainstorm 5 gift ideas for my mom's 60th birthday. Budget is around $100-$150.\n<strong>Context:</strong> She loves gardening, reading mystery novels, and spending time with her grandchildren. She already has many gardening tools. She appreciates sentimental gifts.\n<strong>Format:</strong> A numbered list of gift ideas, each with a brief rationale.`
+            },
+            { 
+                category: 'everyday', title: 'Weekly Meal Plan Ideas', icon: 'restaurant_menu', 
+                template: `Persona: You are a helpful meal planning assistant.\nTask: Generate a [Number]-day meal plan (e.g., 5-day, 7-day) focusing on [Dietary Style/Preference, e.g., quick & easy dinners, vegetarian, low-carb, kid-friendly].\nContext: Considerations: [List any specific dietary restrictions (e.g., gluten-free, dairy-free), preferences (e.g., likes spicy food, prefers chicken over fish), or constraints (e.g., meals should take under 30 minutes to prepare, uses common pantry staples)]. The plan is for [Number] people.\nFormat: For each day: <br>- Breakfast idea (optional). <br>- Lunch idea (optional). <br>- Dinner idea (main focus). <br>[Optional: Suggest a simple snack idea or a link to a recipe type if complex].`,
+                example: `<strong>Persona:</strong> You are a helpful meal planning assistant.\n<strong>Task:</strong> Generate a 5-day dinner plan for a busy working couple who prefer healthy, quick meals (under 45 minutes prep/cook time).\n<strong>Context:</strong> They enjoy variety and are open to different cuisines. One person is vegetarian. They have standard kitchen equipment.\n<strong>Format:</strong> For each of the 5 days: <br>- Dinner Meal Name (e.g., "One-Pan Lemon Herb Roasted Chicken and Veggies", "Quick Lentil Soup with Crusty Bread"). <br>- Brief note on main ingredients or prep style.`
+            },
+            { 
+                category: 'everyday', title: 'Polite Decline/Refusal Email', icon: 'do_not_disturb_on', 
+                template: `Persona: You are a tactful communicator.\nTask: Draft a polite email declining [Invitation/Request, e.g., "an invitation to a social event", "a request to take on an extra project", "a sales pitch"].\nContext: Reason for declining (can be vague or specific): [Briefly state reason, e.g., "prior commitment", "currently at full capacity", "not a good fit at this time"]. It's important to maintain a positive relationship with the sender, [Sender's Name/Role, e.g., "a colleague", "a client", "a friend"].\nFormat: A concise and polite email that: <br>1. Expresses gratitude for the invitation/request. <br>2. Clearly states the decline (without excessive apology). <br>3. Briefly gives a reason (optional, can be general). <br>4. [Optional: Suggests an alternative, expresses future interest, or wishes them well]. <br>5. Professional and friendly closing.`,
+                example: `<strong>Persona:</strong> You are a tactful professional.\n<strong>Task:</strong> Draft a polite email declining an invitation to speak at a local community event next month.\n<strong>Context:</strong> You appreciate the invitation but have a prior family commitment on that date. You want to maintain a good relationship with the event organizer, Sarah.\n<strong>Format:</strong> A concise and polite email.`
+            },
+            { 
+                category: 'everyday', title: 'Pros and Cons List for Decision', icon: 'rule', 
+                template: `Persona: You are a logical decision-making assistant.\nTask: Generate a balanced list of potential pros and cons for the decision: "[Decision to be made, e.g., 'Should I accept the new job offer?', 'Should we move to a new city?', 'Should I buy a new car or repair my old one?']".\nContext: Key factors to consider for pros: [List 2-3 potential benefits or positive aspects]. Key factors to consider for cons: [List 2-3 potential drawbacks or negative aspects]. [Optional: Mention any specific priorities or values of the decision-maker].\nFormat: Two distinct lists: <br>- **Pros:** (Bulleted list of potential advantages). <br>- **Cons:** (Bulleted list of potential disadvantages). Aim for 3-5 points in each list.`,
+                example: `<strong>Persona:</strong> You are a logical decision-making assistant.\n<strong>Task:</strong> Generate a balanced list of pros and cons for the decision: "Should I adopt a dog?"\n<strong>Context:</strong> The decision-maker lives in an apartment, works full-time, loves animals, and is looking for companionship but is also aware of the responsibilities.\n<strong>Format:</strong> Two lists: Pros and Cons, with 3-4 bullet points each.`
+            },
+            { 
+                category: 'everyday', title: 'Simple Language Translation Practice', icon: 'translate', 
+                template: `Persona: You are a friendly language tutor AI.\nTask: Help me practice basic [Target Language, e.g., Spanish, French, German] by having a simple conversation or by translating short phrases related to [Topic, e.g., "ordering food", "greetings and introductions", "asking for directions"].\nContext: My current level in [Target Language] is [Level, e.g., complete beginner, know a few words]. Please keep your responses simple and provide corrections or alternative phrasings if I make mistakes. Start by [How to start, e.g., "asking me how I am in Target Language", "giving me a simple phrase to translate from English to Target Language"].\nFormat: An interactive conversational exchange. Provide your part of the dialogue in [Target Language] and [Optional: its English translation in parentheses].`,
+                example: `<strong>Persona:</strong> You are a friendly Spanish language tutor AI.\n<strong>Task:</strong> Help me practice basic Spanish by having a simple conversation about ordering coffee.\n<strong>Context:</strong> I am a complete beginner. Please keep your responses simple and provide English translations. Start by greeting me and asking what I would like to order.\n<strong>Format:</strong> Interactive conversation.`
+            },
+            { 
+                category: 'everyday', title: 'Thank You Note Generation', icon: 'mail', 
+                template: `Persona: You are a thoughtful and articulate assistant.\nTask: Draft a heartfelt thank you note to [Recipient's Name/Group] for [Reason for thanks, e.g., "a lovely birthday gift", "their help with a recent project", "hosting a wonderful dinner party"].\nContext: Specific details to mention: [List 1-2 specific things you appreciated, e.g., "the beautiful scarf, it's my favorite color!", "your insightful feedback on the report", "the delicious lasagna and engaging conversation"]. The desired tone is [Tone, e.g., warm and personal, professional yet appreciative, sincere and grateful].\nFormat: A short thank you note (3-5 sentences) that is specific, sincere, and timely.`,
+                example: `<strong>Persona:</strong> You are a thoughtful assistant.\n<strong>Task:</strong> Draft a thank you note to my colleague, David, for staying late to help me finish an urgent presentation.\n<strong>Context:</strong> His help was crucial, and I want to express sincere appreciation for his teamwork and effort. The tone should be professional yet warm.\n<strong>Format:</strong> A short thank you note (3-4 sentences).`
             }
         ];
 
         // Data for advanced prompting techniques
         const advancedData = [
             { 
-                title: 'Meta-Prompting (Self-Correction)', 
-                icon: 'question_answer', 
+                title: 'Meta-Prompting (Self-Correction)', icon: 'question_answer', 
                 content: 'Meta-prompting involves instructing Gemini to critique and improve your own prompts. This is a powerful learning tool that leverages the AI\'s understanding of effective communication to refine your input.', 
                 use_cases: 'Ideal when your initial prompts yield unsatisfactory, vague, or off-target results. Useful for learning prompt engineering principles directly from the AI.',
                 example: '<strong>Initial (Weak) Prompt:</strong> <code>"Tell me about dogs."</code><br><br><strong>Meta-Prompt:</strong><br><code>"Critique the following prompt for effectiveness and suggest 3 specific ways to improve it to get a more detailed and focused response about the historical domestication of dogs and their impact on human society: \'Tell me about dogs.\'"</code><br><br><strong>Expected Gemini Output:</strong> Gemini would likely suggest adding specificity about the *aspect* of dogs (e.g., domestication, breeds, behavior), defining a *persona* for itself (e.g., historian, biologist), and requesting a specific *format* (e.g., essay, bullet points).',
@@ -581,8 +731,7 @@
                 considerations: 'The quality of meta-prompting feedback depends on the AI\'s current capabilities. It\'s a starting point for refinement, not always a perfect solution in one go.'
             },
             { 
-                title: 'Prompt Chaining (Sequential Refinement)', 
-                icon: 'link', 
+                title: 'Prompt Chaining (Sequential Refinement)', icon: 'link', 
                 content: 'This technique breaks down a complex task into a series of smaller, interconnected prompts. The output from one prompt becomes the input or context for the next, guiding the AI through a multi-step process.', 
                 use_cases: 'Excellent for complex content generation (e.g., writing a multi-chapter story, developing a detailed project plan), in-depth research involving multiple stages of inquiry, or any task requiring progressive refinement.',
                 example: '<strong>Task:</strong> Develop a new board game concept.<br><br><strong>Prompt 1 (Theme & Mechanic):</strong><br><code>"Generate 3 unique themes for a cooperative board game targeting families. For each theme, suggest one core game mechanic."</code><br><em>(User selects "Enchanted Forest Rescue" with "Resource Collection & Set Matching" mechanic)</em><br><br><strong>Prompt 2 (Characters & Goal):</strong><br><code>"For a cooperative board game themed \'Enchanted Forest Rescue\' using a \'Resource Collection & Set Matching\' mechanic, create 4 distinct player character roles with unique abilities. Define the overall game objective."</code><br><br><strong>Prompt 3 (Challenges & Win Conditions):</strong><br><code>"Continuing with the \'Enchanted Forest Rescue\' game, list 5 types of challenges or obstacles players might face and outline the win/loss conditions."</code>',
@@ -590,8 +739,7 @@
                 considerations: 'Requires careful planning of the prompt sequence. Context can sometimes get lost or diluted in very long chains if not carefully managed or re-stated.'
             },
             { 
-                title: 'Few-Shot Prompting (Learning by Example)', 
-                icon: 'format_list_numbered', 
+                title: 'Few-Shot Prompting (Learning by Example)', icon: 'format_list_numbered', 
                 content: 'Few-shot prompting involves providing Gemini with 2-5 examples of input/output pairs directly within the prompt. These examples demonstrate the desired format, style, tone, or specific task execution.', 
                 use_cases: 'Highly effective for tasks requiring specific formatting (e.g., JSON, specific text styles), nuanced classification, style transfer, or when you need the AI to follow a very particular pattern of response.',
                 example: '<strong>Task:</strong> Extract product name and price from text snippets.<br><br><strong>Prompt:</strong><br><code>Extract the product name and price from the following text snippets, formatting the output as JSON. Follow these examples:\n\nSnippet 1: "The new Chronos X1 watch is available for $299.99 and features a sapphire crystal display."\nOutput 1: { "product_name": "Chronos X1 watch", "price": "$299.99" }\n\nSnippet 2: "Get your AeroGlide Drone today for just $750! Limited stock."\nOutput 2: { "product_name": "AeroGlide Drone", "price": "$750" }\n\nYour turn:\nSnippet 3: "Introducing the Stellaris Telescope, now only $499. Perfect for stargazing."\nOutput 3:</code>',
@@ -599,8 +747,7 @@
                 considerations: 'Crafting good examples can be time-consuming. The number of examples is limited by context window size. Examples must be highly consistent with the desired output.'
             },
             {
-                title: 'Role-Play & Perspective Shifting',
-                icon: 'theater_comedy',
+                title: 'Role-Play & Perspective Shifting', icon: 'theater_comedy',
                 content: 'This technique involves assigning Gemini a specific, often unconventional, persona or asking it to analyze a situation from multiple, diverse perspectives. This can uncover unique insights and creative solutions.',
                 use_cases: 'Excellent for brainstorming, creative writing, UX research (e.g., "critique this design as if you were a user with low vision"), problem-solving by exploring different viewpoints, and generating more empathetic or nuanced content.',
                 example: '<strong>Task:</strong> Generate ideas to improve employee morale.<br><br><strong>Prompt:</strong><br><code>"Imagine you are three different employees at a mid-sized tech company:\n1. A new junior developer, overwhelmed but ambitious.\n2. A senior project manager, stressed by deadlines.\n3. A remote customer support agent, feeling isolated.\n\nFor each of these personas, suggest one specific, actionable idea that the company could implement to genuinely improve their morale and job satisfaction. Explain the reasoning from their perspective."</code>',
@@ -613,7 +760,6 @@
         function stripHtml(html) {
             let tmp = document.createElement("DIV");
             tmp.innerHTML = html;
-            // Replace <br> tags with newlines for better plain text formatting
             tmp.querySelectorAll('br, BR').forEach(br => br.parentNode.replaceChild(document.createTextNode('\n'), br));
             return tmp.textContent || tmp.innerText || "";
         }
@@ -623,8 +769,8 @@
             const plainTextPrompt = stripHtml(promptContent);
             const textarea = document.createElement('textarea');
             textarea.value = plainTextPrompt.trim(); 
-            textarea.style.position = 'fixed'; // Prevent scrolling to bottom of page
-            textarea.style.opacity = '0'; // Make it invisible
+            textarea.style.position = 'fixed'; 
+            textarea.style.opacity = '0'; 
             document.body.appendChild(textarea);
             textarea.select();
             try {
@@ -645,31 +791,57 @@
             document.body.removeChild(textarea);
         }
 
-        // Function to render use case cards based on the selected filter
+        let currentFilter = 'all'; 
+
         function renderUseCases(filter = 'all') {
+            currentFilter = filter; 
             const grid = document.getElementById('use-cases-grid');
             grid.innerHTML = ''; 
-            const filtered = filter === 'all' ? useCasesData : useCasesData.filter(uc => uc.category === filter);
+            const filteredData = filter === 'all' ? useCasesData : useCasesData.filter(uc => uc.category === filter);
             
-            filtered.forEach((uc) => {
+            filteredData.forEach((uc) => {
                 const card = document.createElement('div');
-                card.className = 'material-card flex flex-col'; // Ensures card itself is a flex column
+                card.className = 'material-card'; 
 
                 const header = document.createElement('div');
-                header.className = 'p-6 cursor-pointer flex items-center justify-between';
-                header.innerHTML = `
-                    <div class="flex items-center">
-                        ${uc.icon ? `<span class="material-icons-outlined accent-green mr-3 text-2xl">${uc.icon}</span>` : ''}
-                        <h4 class="font-bold text-lg text-gray-700">${uc.title}</h4>
-                    </div>
-                    <p class="text-sm text-subtle ml-4 expand-indicator flex items-center">Details <span class="arrow down align-middle material-icons-outlined text-xl ml-1">expand_more</span></p>
+                header.className = 'card-header'; 
+
+                const headerMainContent = document.createElement('div');
+                headerMainContent.className = 'card-header-main-content';
+                headerMainContent.innerHTML = `
+                    ${uc.icon ? `<span class="material-icons-outlined accent-green mr-3 text-2xl">${uc.icon}</span>` : ''}
+                    <h4 class="font-bold text-lg text-gray-700">${uc.title}</h4>
                 `;
+
+                const headerFooter = document.createElement('div');
+                headerFooter.className = 'card-header-footer';
+
+                const tagContainer = document.createElement('div'); 
+                if (filter === 'all') {
+                    const tag = document.createElement('span');
+                    tag.className = `category-tag tag-${uc.category}`;
+                    tag.textContent = uc.category.charAt(0).toUpperCase() + uc.category.slice(1);
+                    tagContainer.appendChild(tag);
+                }
+                headerFooter.appendChild(tagContainer); 
+
+                const detailsToggle = document.createElement('p');
+                detailsToggle.className = 'details-arrow-container'; 
+                detailsToggle.innerHTML = `Details <span class="arrow down align-middle material-icons-outlined text-xl ml-1">expand_more</span>`;
+                headerFooter.appendChild(detailsToggle);
+                
+                header.appendChild(headerMainContent);
+                header.appendChild(headerFooter);
+                
+                if (filter !== 'all') {
+                    card.classList.add(`card-border-${uc.category}`);
+                }
                 
                 const detailsContainer = document.createElement('div');
                 detailsContainer.className = 'details-section relative'; 
 
                 const detailsContentWrapper = document.createElement('div');
-                detailsContentWrapper.className = 'p-6 border-t border-gray-200'; 
+                detailsContentWrapper.className = 'details-content-wrapper';
                 
                 const templateBlock = document.createElement('div');
                 templateBlock.className = 'template-block';
@@ -739,7 +911,6 @@
             });
         }
         
-        // Function to render advanced prompting technique cards
         function renderAdvanced() {
             const grid = document.getElementById('advanced-grid');
             grid.innerHTML = ''; 
@@ -748,20 +919,35 @@
                 card.className = 'material-card flex flex-col'; 
 
                 const header = document.createElement('div');
-                header.className = 'p-6 cursor-pointer flex items-center justify-between';
-                header.innerHTML = `
-                    <div class="flex items-center">
-                        ${ad.icon ? `<span class="material-icons-outlined accent-green mr-3 text-3xl">${ad.icon}</span>` : ''}
-                        <h4 class="font-bold text-xl text-gray-700">${ad.title}</h4>
-                    </div>
-                    <p class="text-sm text-subtle ml-4 expand-indicator flex items-center">Details <span class="arrow down align-middle material-icons-outlined text-xl ml-1">expand_more</span></p>
+                header.className = 'card-header'; 
+                
+                const headerMainContent = document.createElement('div');
+                headerMainContent.className = 'card-header-main-content';
+                headerMainContent.innerHTML = `
+                    ${ad.icon ? `<span class="material-icons-outlined accent-green mr-3 text-3xl">${ad.icon}</span>` : ''}
+                    <h4 class="font-bold text-xl text-gray-700">${ad.title}</h4>
                 `;
+
+                const headerFooter = document.createElement('div');
+                headerFooter.className = 'card-header-footer';
+                
+                const tagContainer = document.createElement('div'); 
+                headerFooter.appendChild(tagContainer);
+
+                const detailsToggle = document.createElement('p');
+                detailsToggle.className = 'details-arrow-container text-sm text-subtle ml-auto';
+                detailsToggle.innerHTML = `Details <span class="arrow down align-middle material-icons-outlined text-xl ml-1">expand_more</span>`;
+                headerFooter.appendChild(detailsToggle);
+
+                header.appendChild(headerMainContent);
+                header.appendChild(headerFooter);
+
 
                 const detailsContainer = document.createElement('div');
                 detailsContainer.className = 'details-section relative'; 
 
                 const detailsContent = document.createElement('div');
-                detailsContent.className = 'p-6 pt-4 border-t border-gray-200'; 
+                detailsContent.className = 'details-content-wrapper';
                 
                 let exampleHtml = ad.example.replace(/<code>/g, '<pre class="bg-gray-800 text-white p-3 rounded-md mt-2 text-sm overflow-x-auto"><code>').replace(/<\/code>/g, '</code></pre>');
 
@@ -809,76 +995,98 @@
             });
         }
 
-        // Function to filter use cases by category
         function filterUseCases(category, buttonElement) {
             document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
             buttonElement.classList.add('active');
             renderUseCases(category); 
         }
         
-
-        // Event listener for when the DOM is fully loaded
         document.addEventListener('DOMContentLoaded', () => {
-            const ctx = document.getElementById('modelComparisonChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: ['Reasoning Depth', 'Coding Prowess', 'Response Speed', 'Complex Tasks', 'Everyday Help'],
-                    datasets: [{
-                        label: 'Gemini 2.5 Pro',
-                        data: [9, 9, 6, 9, 7], 
-                        backgroundColor: 'rgba(40, 167, 69, 0.2)', 
-                        borderColor: 'rgba(40, 167, 69, 1)',
-                        pointBackgroundColor: 'rgba(40, 167, 69, 1)',
-                        borderWidth: 2.5,
-                        pointRadius: 4,
-                        pointHoverRadius: 6
-                    }, {
-                        label: 'Gemini 2.5 Flash',
-                        data: [7, 7, 9, 6, 9], 
-                        backgroundColor: 'rgba(108, 117, 125, 0.2)', 
-                        borderColor: 'rgba(108, 117, 125, 1)',
-                        pointBackgroundColor: 'rgba(108, 117, 125, 1)',
-                        borderWidth: 2.5,
-                        pointRadius: 4,
-                        pointHoverRadius: 6
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false, 
-                    scales: {
-                        r: { 
-                            angleLines: { color: '#e0e0e0' },
-                            grid: { color: '#e0e0e0' },
-                            pointLabels: { font: { size: 13, weight: '500', family: 'Roboto' }, color: '#495057' }, 
-                            ticks: { backdropColor: '#f8f9fa', color: '#6c757d', stepSize: 1, font: {size: 10, family: 'Roboto'}}, 
-                            suggestedMin: 0,
-                            suggestedMax: 10
-                        }
+            const chartCanvas = document.getElementById('modelComparisonChart');
+            if (chartCanvas) { 
+                new Chart(chartCanvas.getContext('2d'), {
+                    type: 'radar',
+                    data: {
+                        labels: ['Reasoning Depth', 'Coding Prowess', 'Response Speed', 'Complex Tasks', 'Everyday Help'],
+                        datasets: [{
+                            label: 'Gemini 2.5 Pro',
+                            data: [9, 9, 6, 9, 7], 
+                            backgroundColor: 'rgba(92, 184, 92, 0.2)', 
+                            borderColor: 'rgba(92, 184, 92, 1)', 
+                            pointBackgroundColor: 'rgba(92, 184, 92, 1)', 
+                            borderWidth: 2.5, pointRadius: 4, pointHoverRadius: 6
+                        }, {
+                            label: 'Gemini 2.5 Flash',
+                            data: [7, 7, 9, 6, 9], 
+                            backgroundColor: 'rgba(108, 117, 125, 0.2)', 
+                            borderColor: 'rgba(108, 117, 125, 1)',
+                            pointBackgroundColor: 'rgba(108, 117, 125, 1)',
+                            borderWidth: 2.5, pointRadius: 4, pointHoverRadius: 6
+                        }]
                     },
-                    plugins: { 
-                        legend: { 
-                            position: 'bottom', 
-                            labels: { font: { size: 14, family: 'Roboto' }, color: '#212529', padding: 20}
-                        }
-                    } 
-                }
-            });
+                    options: {
+                        maintainAspectRatio: false, 
+                        scales: { r: { 
+                            angleLines: { color: '#e0e0e0' }, grid: { color: '#e0e0e0' },
+                            pointLabels: { font: { size: 13, weight: '500', family: 'Roboto'}, color: '#495057' }, 
+                            ticks: { backdropColor: '#f8f9fa', color: '#6c757d', stepSize: 1, font: {size: 10, family: 'Roboto'}}, 
+                            suggestedMin: 0, suggestedMax: 10
+                        }},
+                        plugins: { legend: { position: 'bottom', labels: { font: { size: 14, family: 'Roboto' }, color: '#212529', padding: 20}}} 
+                    }
+                });
+            }
             
             updatePTCFOutput(); 
             renderUseCases(); 
             renderAdvanced(); 
 
+            const ptcfExplanationHeader = document.getElementById('ptcf-explanation-header');
+            const ptcfExplanationDetails = document.getElementById('ptcf-explanation-details');
+            const ptcfArrow = ptcfExplanationHeader ? ptcfExplanationHeader.querySelector('.arrow') : null;
+
+            if (ptcfExplanationHeader && ptcfExplanationDetails && ptcfArrow) {
+                 // Make PTCF explanation initially collapsed
+                ptcfExplanationDetails.classList.remove('expanded');
+                ptcfArrow.textContent = 'expand_more';
+
+                ptcfExplanationHeader.onclick = function() {
+                    ptcfExplanationDetails.classList.toggle('expanded');
+                    ptcfArrow.textContent = ptcfExplanationDetails.classList.contains('expanded') ? 'expand_less' : 'expand_more';
+                };
+            }
+
+            const comparisonHeader = document.getElementById('comparison-header');
+            const comparisonDetails = document.getElementById('comparison-details');
+            const comparisonArrow = comparisonHeader ? comparisonHeader.querySelector('.arrow') : null;
+
+            if (comparisonHeader && comparisonDetails && comparisonArrow) {
+                comparisonDetails.classList.remove('expanded');
+                comparisonArrow.textContent = 'expand_more';
+
+                comparisonHeader.onclick = function() {
+                    comparisonDetails.classList.toggle('expanded');
+                    comparisonArrow.textContent = comparisonDetails.classList.contains('expanded') ? 'expand_less' : 'expand_more';
+                };
+            }
+
             const navLinks = document.querySelectorAll('.nav-link');
-            const sections = document.querySelectorAll('main section');
+            const sections = document.querySelectorAll('main section'); 
             const navbarHeight = document.getElementById('navbar').offsetHeight;
             
             window.addEventListener('scroll', () => {
                 let currentSectionId = '';
                 sections.forEach(section => {
                     const sectionTop = section.offsetTop;
+                    let idToMatch = section.id;
+                    // Special handling for sections that are cards themselves (Foundations, Comparison)
+                    if (section.querySelector('.material-card') && (section.id === 'foundations' || section.id === 'comparison')) {
+                         // Use the section's ID directly
+                    }
+
+
                     if (window.pageYOffset >= sectionTop - navbarHeight - 25) { 
-                        currentSectionId = section.getAttribute('id'); 
+                        currentSectionId = idToMatch; 
                     } 
                 });
 
@@ -898,11 +1106,14 @@
                     const targetId = link.getAttribute('href');
                     const targetElement = document.querySelector(targetId);
                     if (targetElement) {
-                        const offsetTop = targetElement.offsetTop - navbarHeight - 20; 
-                        window.scrollTo({ 
-                            top: offsetTop, 
-                            behavior: 'smooth' 
-                        });
+                        let elementToScrollTo = targetElement;
+                        // If targeting a section that contains a material-card as its main content block, scroll to that card.
+                        if ((targetId === '#foundations' || targetId === '#comparison')) {
+                            const mainCard = targetElement.querySelector('.material-card');
+                            if (mainCard) elementToScrollTo = mainCard;
+                        }
+                        const offsetTop = elementToScrollTo.offsetTop - navbarHeight - 20; 
+                        window.scrollTo({ top: offsetTop, behavior: 'smooth' });
                     }
                 });
             });
