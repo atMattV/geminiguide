@@ -157,8 +157,6 @@
             max-height: 5500px; 
             min-height: 0; 
             visibility: visible; /* Visible when expanded */
-            /* Restore padding/margin for expanded state if needed by the .details-content-wrapper */
-            /* The .details-content-wrapper will handle its own padding. */
             transition: max-height 0.6s ease-in-out, 
                         min-height 0.6s ease-in-out,
                         padding-top 0.6s ease-in-out, 
@@ -206,15 +204,46 @@
         .template-block h5 { margin-bottom: 0.5rem; }
         .details-content-wrapper { padding: 1.5rem; border-top: 1px solid #e5e7eb; }
         
-        /* Remove top border for the first details-content-wrapper in a card if it's the model comparison one */
         #model-comparison-detailed-content > .details-content-wrapper {
             border-top: none;
-            padding-top: 1.5rem; /* Restore padding top for content when expanded */
+            padding-top: 1.5rem; 
         }
-        /* When details-section is collapsed, its direct child .details-content-wrapper should also have no padding */
         .details-section:not(.expanded) > .details-content-wrapper {
             padding: 0 !important; 
-            border-top: none !important; /* Ensure border is also gone */
+            border-top: none !important; 
+        }
+
+        /* Gemini API Response Area */
+        #ptcf-gemini-response-area {
+            margin-top: 1.5rem; /* Tailwind's mt-6 */
+            padding: 1.5rem; /* Tailwind's p-6 */
+            background-color: #e9f5e9; /* Light green background */
+            border: 1px solid var(--soft-green);
+            border-radius: 8px; /* Tailwind's rounded-lg */
+            min-height: 100px;
+            white-space: pre-wrap; /* To respect newlines from API */
+            font-family: monospace;
+            font-size: 0.9em;
+            color: #333;
+        }
+        .loading-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--soft-green);
+            font-style: italic;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: var(--soft-green);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
 
@@ -439,6 +468,20 @@
                     <div id="ptcf-output" class="bg-gray-100 p-6 rounded-lg min-h-[200px] transition-all duration-300 border border-gray-300 shadow-inner">
                         <p class="text-subtle italic">Click "New Example Set" then P, T, C, F buttons above to see parts of an example prompt.</p>
                     </div>
+                    <div class="text-center mt-6">
+                        <button id="generateWithGeminiBtn" onclick="generatePTCFWithGemini()" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md transition duration-150 ease-in-out flex items-center mx-auto">
+                            <span class="material-icons-outlined mr-2">auto_awesome</span>
+                            ✨ Generate Example with Gemini
+                        </button>
+                    </div>
+                    <div id="ptcf-gemini-response-area" class="hidden mt-6">
+                        <h4 class="text-lg font-semibold text-gray-700 mb-2">Gemini's Response:</h4>
+                        <div id="ptcf-gemini-response-content" class="bg-gray-100 p-4 rounded-lg border border-gray-300 min-h-[100px] whitespace-pre-wrap font-mono text-sm"></div>
+                    </div>
+                     <div id="ptcf-gemini-loading" class="loading-indicator hidden mt-4">
+                        <div class="loading-spinner"></div>
+                        Generating response from Gemini...
+                    </div>
                 </div>
             </section>
             
@@ -576,7 +619,6 @@
                 context: `<span class="font-semibold accent-green">Context:</span> AuraClean products are eco-friendly, non-toxic, safe for pets and children, and packaged in recycled materials. The brand voice is fresh, trustworthy, and slightly premium. Target audience: Health-conscious families and environmentally aware consumers.`,
                 format: `<span class="font-semibold accent-green">Format:</span> A numbered list of slogans. Each slogan should be concise (ideally 5-8 words) and highlight a key benefit or the brand's ethos.`
             },
-            // ... (Keep all other PTCF examples as they were)
              {
                 themeName: "Historical Event Analysis",
                 persona: `<span class="font-semibold accent-green">Persona:</span> You are a distinguished historian specializing in 20th-century European history, with a focus on socio-political transformations.`,
@@ -804,11 +846,10 @@
             },
 
             // --- CREATIVE ---
-            // (Ensure example.Format parts are updated if they list items)
             { 
                 category: 'creative', title: 'Marketing Campaign Slogans', icon: 'campaign', 
                 template: `Persona: You are a witty, trend-aware [Type of Copywriter, e.g., social media copywriter, B2B marketing specialist] specializing in campaigns for [Industry/Product Type, e.g., sustainable fashion brands, tech gadgets].\nTask: Generate [Number] short, catchy, and shareable slogans for an upcoming [Platform, e.g., Instagram and TikTok] campaign promoting [Product/Service Name/Description, e.g., our new line of sneakers made from recycled ocean plastics].\nContext: Target audience: [Describe Target Audience, e.g., Environmentally conscious millennials and Gen Z]. Brand voice: [Describe Brand Voice, e.g., Playful, optimistic, authentic]. Key benefits/features to highlight: [List 2-3 key benefits/features]. [Optional: Campaign theme or hashtag].\nFormat: A numbered list of slogans. [Optional: For each slogan, also suggest relevant hashtags or a brief rationale].`,
-                example: `<strong>Persona:</strong> You are a highly creative and strategic marketing copywriter specializing in launching tech gadgets to a millennial and Gen Z audience. You are known for your edgy, memorable, and shareable copy.<br><br><strong>Task:</strong> Generate 7 distinct slogans for an upcoming social media campaign promoting "NovaBuds," a new line of wireless earbuds featuring AI-powered noise cancellation and a 30-hour battery life. The slogans should be short (max 10 words), impactful, and highlight at least one key feature.<br><br><strong>Context:</strong> Target audience: Tech-savvy individuals aged 18-35, value high-quality audio, long battery life, and cutting-edge technology. Brand voice: Innovative, bold, slightly futuristic, and confident. Campaign Hashtag: #NovaSound.<br><br><strong>Format:</strong> A numbered list of slogans. For each slogan, briefly note which key feature it emphasizes (AI Noise Cancellation or Battery Life).` // This describes a list, but doesn't list items in the Format string itself.
+                example: `<strong>Persona:</strong> You are a highly creative and strategic marketing copywriter specializing in launching tech gadgets to a millennial and Gen Z audience. You are known for your edgy, memorable, and shareable copy.<br><br><strong>Task:</strong> Generate 7 distinct slogans for an upcoming social media campaign promoting "NovaBuds," a new line of wireless earbuds featuring AI-powered noise cancellation and a 30-hour battery life. The slogans should be short (max 10 words), impactful, and highlight at least one key feature.<br><br><strong>Context:</strong> Target audience: Tech-savvy individuals aged 18-35, value high-quality audio, long battery life, and cutting-edge technology. Brand voice: Innovative, bold, slightly futuristic, and confident. Campaign Hashtag: #NovaSound.<br><br><strong>Format:</strong> A numbered list of slogans. For each slogan, briefly note which key feature it emphasizes (AI Noise Cancellation or Battery Life).`
             },
             { 
                 category: 'creative', title: 'Blog Post Ideation', icon: 'lightbulb', 
@@ -857,7 +898,6 @@
             },
 
             // --- EVERYDAY ---
-            // (Ensure example.Format parts are updated if they list items)
             { 
                 category: 'everyday', title: 'Email Tone Adjustment', icon: 'forum', 
                 template: `Persona: You are an expert [Type of Communicator, e.g., corporate communicator, customer service professional] skilled in [Specific Communication Skill, e.g., diplomatic correspondence, de-escalation].\nTask: Rewrite the following email/text draft to sound more [Desired Tone, e.g., polite, collaborative, assertive, empathetic], while still effectively conveying [Key Message/Urgency].\nContext: Original Draft: "[Paste Original Text Here]". The goal is to [Specific Outcome, e.g., de-escalate potential tension, ensure a positive response, clearly state a requirement without causing offense].\nFormat: Provide the revised email/text. [Optional: Include a suggested subject line if it's an email].`,
@@ -1236,31 +1276,106 @@
             const scenarioButtons = document.querySelectorAll('.model-scenario-btn');
             const recommendation = modelRecommendations[scenarioKey];
 
-            // Deselect all buttons first
             scenarioButtons.forEach(btn => btn.classList.remove('selected'));
-            // Select the clicked button
-            if (clickedButton) { // Ensure a button was actually clicked
+            if (clickedButton) { 
                  clickedButton.classList.add('selected');
             }
             
-            if (recommendation && clickedButton) { // Check if a button was clicked to show recommendation
+            if (recommendation && clickedButton) { 
                 recommendationDiv.innerHTML = `
                     <h4 class="text-xl font-semibold mb-2 ${recommendation.model === 'Pro' ? 'accent-green' : 'text-gray-700'}">Recommended: Gemini ${recommendation.model}</h4>
                     <p class="text-subtle">${recommendation.reason}</p>
                 `;
-            } else { // If no button is selected (e.g., clicked outside)
+            } else { 
                 recommendationDiv.innerHTML = initialRecommendationHTML;
             }
         }
 
-        // Listener for clicks outside scenario buttons
         document.addEventListener('click', function(event) {
             const interactiveArea = document.getElementById('model-selector-interactive-area');
             if (interactiveArea && !interactiveArea.contains(event.target)) {
-                // Click was outside the interactive area (buttons + recommendation box)
-                showModelRecommendation(null, null); // Pass null to reset
+                showModelRecommendation(null, null); 
             }
         });
+
+        // Gemini API Call for PTCF
+        async function generatePTCFWithGemini() {
+            const ptcfOutputDiv = document.getElementById('ptcf-output');
+            const geminiResponseArea = document.getElementById('ptcf-gemini-response-area');
+            const geminiResponseContent = document.getElementById('ptcf-gemini-response-content');
+            const loadingIndicator = document.getElementById('ptcf-gemini-loading');
+            const generateButton = document.getElementById('generateWithGeminiBtn');
+
+            // Construct the prompt from the PTCF output
+            let promptText = "";
+            if (currentPTCFExampleSet && selectedPTCFComponents.length > 0) {
+                const orderedSelection = ['persona', 'task', 'context', 'format'].filter(key => selectedPTCFComponents.includes(key));
+                promptText = orderedSelection.map(key => {
+                    // Strip HTML from individual components for the API prompt
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = currentPTCFExampleSet[key];
+                    return tempDiv.textContent || tempDiv.innerText || "";
+                }).join('\n\n'); // Join components with double newlines for clarity
+            } else {
+                 // If no components are selected, or no example set, use the placeholder or an alert
+                if (ptcfOutputDiv.textContent.includes('Click "New Example Set"')) {
+                    geminiResponseArea.classList.remove('hidden');
+                    geminiResponseContent.textContent = 'Please select PTCF components first by clicking "New Example Set" and then the P, T, C, F buttons.';
+                    return;
+                }
+                // Fallback to visible text if needed, though the above condition should catch most cases
+                promptText = stripHtml(ptcfOutputDiv.innerHTML);
+            }
+
+
+            if (!promptText || promptText.includes('Click P, T, C, F buttons above')) {
+                geminiResponseArea.classList.remove('hidden');
+                geminiResponseContent.textContent = 'Please construct a prompt using the PTCF builder first.';
+                return;
+            }
+
+            loadingIndicator.classList.remove('hidden');
+            geminiResponseArea.classList.remove('hidden'); 
+            geminiResponseContent.textContent = ''; // Clear previous response
+            generateButton.disabled = true;
+
+
+            let chatHistory = [{ role: "user", parts: [{ text: promptText }] }];
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // Intentionally empty, Canvas will handle it
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`API Error (${response.status}): ${errorData.error?.message || 'Unknown error'}`);
+                }
+
+                const result = await response.json();
+
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    geminiResponseContent.textContent = text;
+                } else {
+                    geminiResponseContent.textContent = 'No content received from Gemini, or unexpected response structure.';
+                     console.error("Unexpected Gemini API response structure:", result);
+                }
+            } catch (error) {
+                console.error('Error calling Gemini API:', error);
+                geminiResponseContent.textContent = `Error: ${error.message}`;
+            } finally {
+                loadingIndicator.classList.add('hidden');
+                generateButton.disabled = false;
+            }
+        }
 
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -1299,7 +1414,6 @@
                 });
             }
             
-            // Initialize recommendation box to placeholder
             document.getElementById('model-recommendation').innerHTML = initialRecommendationHTML;
 
             updatePTCFOutput(); 
@@ -1320,7 +1434,7 @@
                         if(detailsWrapper) {
                             detailsWrapper.style.paddingTop = '1.5rem'; 
                             detailsWrapper.style.paddingBottom = '1.5rem';
-                            detailsWrapper.style.borderTop = '1px solid #e5e7eb'; // Restore border if it was removed
+                            detailsWrapper.style.borderTop = '1px solid #e5e7eb'; 
                         }
                         ptcfArrow.textContent = 'expand_less';
                     } else {
@@ -1329,22 +1443,20 @@
                 };
             }
 
-            // Collapsible detailed comparison section
             const comparisonDetailedHeader = document.getElementById('model-comparison-detailed-header');
             const comparisonDetailedContent = document.getElementById('model-comparison-detailed-content');
             const comparisonDetailedArrow = comparisonDetailedHeader ? comparisonDetailedHeader.querySelector('.arrow') : null;
 
             if (comparisonDetailedHeader && comparisonDetailedContent && comparisonDetailedArrow) {
-                comparisonDetailedContent.classList.remove('expanded'); // Start collapsed
+                comparisonDetailedContent.classList.remove('expanded'); 
                 comparisonDetailedArrow.textContent = 'expand_more';
 
                 comparisonDetailedHeader.onclick = function() {
                     const detailsWrapper = comparisonDetailedContent.querySelector('.details-content-wrapper');
                     comparisonDetailedContent.classList.toggle('expanded');
                      if (comparisonDetailedContent.classList.contains('expanded')) {
-                        if(detailsWrapper) { // Ensure wrapper exists
-                            detailsWrapper.style.paddingTop = '1.5rem'; // Restore padding
-                            // No border-top needed for this specific wrapper as per CSS
+                        if(detailsWrapper) { 
+                            detailsWrapper.style.paddingTop = '1.5rem'; 
                         }
                         comparisonDetailedArrow.textContent = 'expand_less';
                     } else {
