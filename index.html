@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini & Prompt Engineering</title>
+    <title>How Do I Use This</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,7 +12,12 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
     <style>
         /* General body and typography styles */
-        body { font-family: 'Roboto', sans-serif; background-color: #f8f9fa; }
+        body { 
+            font-family: 'Roboto', sans-serif; 
+            background-color: #f8f9fa; /* Light mode default background */
+            color: #212529; /* Light mode default text */
+            transition: background-color 0.3s, color 0.3s;
+        }
         .text-main { color: #212529; }
         .text-subtle { color: #6c757d; }
         
@@ -23,8 +28,66 @@
             --creative-red: #EC7063; 
             --everyday-purple: #A569BD; 
             --gemini-blue-dark: #1A73E8; 
-            --gemini-blue-light: #669DF6; /* Lighter shade for Gemini logo */
+            --gemini-blue-light: #669DF6;
+
+            /* Light Mode Defaults (can be overridden by dark mode) */
+            --page-bg: #f8f9fa;
+            --text-primary: #212529;
+            --text-secondary: #495057;
+            --text-subtle: #6c757d;
+            --card-bg: white;
+            --card-shadow: rgba(0,0,0,0.08);
+            --card-hover-shadow: rgba(0,0,0,0.12);
+            --border-color: #e5e7eb;
+            --input-bg: white;
+            --input-border: #CBD5E0;
+            --button-primary-bg: #3B82F6; /* Example blue */
+            --button-primary-hover-bg: #2563EB;
+            --code-block-bg: #2d3748;
+            --code-block-text: #e2e8f0;
+            --inline-code-bg: #f1f1f1;
+            --inline-code-text: #212529;
+            --chart-grid-color: '#e0e0e0';
+            --chart-label-color: '#495057';
+            --chart-tick-color: '#6c757d';
+            --chart-legend-color: '#212529';
         }
+
+        /* Dark Mode Variables */
+        body.dark-mode {
+            --page-bg: #1a202c; /* Dark gray/blue */
+            --text-primary: #edf2f7; /* Light gray */
+            --text-secondary: #a0aec0; /* Medium gray */
+            --text-subtle: #718096; /* Softer gray */
+            --card-bg: #2d3748; /* Darker card background */
+            --card-shadow: rgba(0,0,0,0.2);
+            --card-hover-shadow: rgba(0,0,0,0.3);
+            --border-color: #4a5568; /* Darker border */
+            --input-bg: #2d3748;
+            --input-border: #4a5568;
+            --button-primary-bg: #2563EB; /* Keep blue, or adjust if needed */
+            --button-primary-hover-bg: #1D4ED8;
+            --code-block-bg: #1a202c; /* Even darker for code blocks */
+            --code-block-text: #cbd5e0;
+            --inline-code-bg: #2d3748;
+            --inline-code-text: #cbd5e0;
+            --chart-grid-color: '#4a5568';
+            --chart-label-color: '#a0aec0';
+            --chart-tick-color: '#718096';
+            --chart-legend-color: '#edf2f7';
+        }
+
+        /* Applying variables */
+        body { 
+            background-color: var(--page-bg);
+            color: var(--text-primary);
+        }
+        .text-main { color: var(--text-primary); }
+        .text-subtle { color: var(--text-subtle); }
+        h1, h2, h3, h4, h5, h6 { color: var(--text-primary); }
+        p { color: var(--text-secondary); }
+        body.dark-mode p { color: var(--text-secondary); } /* Ensure p tag color updates */
+
 
         .accent-green { color: var(--soft-green); }
         .accent-green-bg { background-color: var(--soft-green); }
@@ -42,60 +105,62 @@
         .card-border-everyday { border-left: 4px solid var(--everyday-purple); }
         
         /* Navigation link styles */
-        .nav-link { transition: color 0.3s, border-color 0.3s; }
+        .nav-link { transition: color 0.3s, border-color 0.3s; color: var(--text-subtle); }
         .nav-link.active { color: var(--soft-green); border-bottom-color: var(--soft-green); }
+        body.dark-mode .nav-link:not(.active) { color: var(--text-secondary); }
+
 
         /* Card style for content sections */
         .material-card { 
-            background-color: white; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.08); 
-            transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out; 
-            display: flex; 
-            flex-direction: column;
+            background-color: var(--card-bg); 
+            box-shadow: 0 4px 8px var(--card-shadow); 
         }
-        .material-card:hover { box-shadow: 0 8px 16px rgba(0,0,0,0.12); transform: translateY(-4px); }
+        .material-card:hover { 
+            box-shadow: 0 8px 16px var(--card-hover-shadow); 
+            transform: translateY(-4px); 
+        }
+        body.dark-mode .material-card h2, body.dark-mode .material-card h3, body.dark-mode .material-card h4 {
+             color: var(--text-primary);
+        }
+        body.dark-mode .material-card p, body.dark-mode .material-card li {
+            color: var(--text-secondary);
+        }
         
         /* Fixed dimensions for use case cards */
         #use-cases-grid .material-card {
-            width: 100%; /* Full width on smaller screens, grid handles sizing */
-            max-width: 350px; /* Max width for larger screens */
-            height: 200px; /* Fixed height for the card header area */
+            width: 100%; 
+            max-width: 350px; 
+            height: 200px; 
             margin-left: auto;
             margin-right: auto;
-        }
-         @media (min-width: 768px) {
-            #use-cases-grid .material-card {
-                 /* width: 320px; Keep it responsive with grid, but set a base */
-            }
         }
 
 
         .card-header {
-            padding: 1.5rem; /* p-6 */
+            padding: 1.5rem; 
             cursor: pointer;
             display: flex; 
             flex-direction: column; 
             justify-content: space-between; 
-            min-height: 110px; /* Adjusted min-height for better spacing */
+            min-height: 110px; 
             flex-grow: 1; 
         }
         .card-header-main-content { 
             display: flex;
-            align-items: flex-start; /* Align items to the start of the cross axis */
+            align-items: flex-start; 
             margin-bottom: 0.75rem; 
             width: 100%;
         }
-        .card-header-main-content .material-icons-outlined { /* Icon */
-            margin-right: 0.75rem; /* Tailwind mr-3 */
-            flex-shrink: 0; /* Prevent icon from shrinking */
-            margin-top: 0.125rem; /* Slight top margin to align better with first line of text */
+        .card-header-main-content .material-icons-outlined { 
+            margin-right: 0.75rem; 
+            flex-shrink: 0; 
+            margin-top: 0.125rem; 
         }
-         .card-header-main-content h4 { /* Title */
+         .card-header-main-content h4 { 
             word-break: break-word; 
             flex-grow: 1; 
-            min-width: 0; /* Allows text to wrap correctly in a flex container */
-            line-height: 1.4; /* Improve readability of wrapped title */
+            min-width: 0; 
+            line-height: 1.4; 
         }
         .card-header-footer { 
             display: flex;
@@ -115,20 +180,43 @@
         .details-arrow-container {
             display: flex;
             align-items: center;
-            font-size: 0.875rem; /* text-sm */
-            color: var(--text-subtle); /* Using a defined variable */
+            font-size: 0.875rem; 
+            color: var(--text-subtle); 
             white-space: nowrap;
-            cursor: pointer; /* Make it clear it's clickable */
+            cursor: pointer; 
         }
         .details-arrow-container:hover {
-            color: var(--soft-green); /* Highlight on hover */
+            color: var(--soft-green); 
         }
 
 
         /* Filter button styles for use cases */
-        .filter-btn { transition: background-color 0.3s, color 0.3s; border: 1px solid transparent; }
-        .filter-btn.active { background-color: var(--soft-green); color: white; border-color: var(--soft-green);}
-        .filter-btn:not(.active):hover { background-color: #e9ecef; border-color: #ced4da;}
+        .filter-btn { 
+            transition: background-color 0.3s, color 0.3s; 
+            border: 1px solid transparent; 
+            color: var(--text-secondary);
+        }
+        .filter-btn.active { 
+            background-color: var(--soft-green); 
+            color: white; 
+            border-color: var(--soft-green);
+        }
+        .filter-btn:not(.active):hover { 
+            background-color: var(--card-bg); /* Use card-bg for hover */
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+        body.dark-mode .filter-btn {
+            color: var(--text-secondary);
+            border-color: var(--border-color);
+        }
+        body.dark-mode .filter-btn.active {
+             color: white; /* Ensure active text is white in dark mode */
+        }
+         body.dark-mode .filter-btn:not(.active):hover {
+            background-color: #4a5568; /* Slightly lighter dark for hover */
+        }
+
 
         /* Chart container styles */
         .chart-container { position: relative; width: 100%; max-width: 550px; margin-left: auto; margin-right: auto; height: 350px; max-height: 450px; }
@@ -139,7 +227,7 @@
             max-height: 0; 
             min-height: 0; 
             overflow: hidden; 
-            visibility: hidden; /* Hidden when collapsed */
+            visibility: hidden; 
             padding-top: 0;
             padding-bottom: 0;
             margin-top: 0;
@@ -151,25 +239,26 @@
                         padding-bottom 0.6s ease-in-out,
                         margin-top 0.6s ease-in-out,
                         margin-bottom 0.6s ease-in-out,
-                        visibility 0s linear 0.6s; /* Delay visibility change until after transition */
+                        visibility 0s linear 0.6s; 
         } 
         .details-section.expanded { 
             max-height: 5500px; 
             min-height: 0; 
-            visibility: visible; /* Visible when expanded */
+            visibility: visible; 
             transition: max-height 0.6s ease-in-out, 
                         min-height 0.6s ease-in-out,
                         padding-top 0.6s ease-in-out, 
                         padding-bottom 0.6s ease-in-out,
                         margin-top 0.6s ease-in-out,
                         margin-bottom 0.6s ease-in-out,
-                        visibility 0s linear 0s; /* Make visible immediately */
+                        visibility 0s linear 0s; 
         }
 
 
         /* Icon button styles (e.g., copy button) */
         .icon-btn { display: inline-flex; align-items: center; justify-content: center; padding: 8px; border-radius: 50%; transition: background-color 0.2s; }
         .icon-btn:hover { background-color: rgba(0,0,0,0.08); }
+        body.dark-mode .icon-btn:hover { background-color: rgba(255,255,255,0.1); }
         .icon-btn .material-icons-outlined { font-size: 20px; }
 
         /* Section header styles & Icon Colors */
@@ -179,7 +268,6 @@
         #foundations .section-header-main .material-icons-outlined,
         #foundations #ptcf-explanation-header .material-icons-outlined { color: var(--soft-green); }
         
-        /* Comparison section specific icon color */
         #comparison .section-header-main .material-icons-outlined,
         #comparison #model-comparison-detailed-header .material-icons-outlined { color: var(--tech-blue); }
 
@@ -187,9 +275,24 @@
         #advanced .section-header-main .material-icons-outlined { color: var(--creative-red); }
         
         /* PTCF component button styles */
-        .ptcf-component { border: 1px solid #dee2e6; transition: border-color 0.3s, transform 0.2s, background-color 0.3s; }
+        .ptcf-component { 
+            border: 1px solid var(--border-color); 
+            transition: border-color 0.3s, transform 0.2s, background-color 0.3s; 
+            background-color: var(--card-bg); /* Use card-bg for consistency */
+        }
         .ptcf-component:hover { border-color: var(--soft-green); transform: translateY(-3px); } 
-        .ptcf-component.selected { border-color: var(--soft-green); background-color: #eaf6ea; box-shadow: 0 0 0 2px var(--soft-green) inset; } 
+        .ptcf-component.selected { 
+            border-color: var(--soft-green); 
+            background-color: var(--soft-green); /* Solid green when selected */
+            box-shadow: 0 0 0 2px var(--soft-green) inset; 
+        }
+        .ptcf-component.selected h4, .ptcf-component.selected p {
+            color: white; /* Text color for selected PTCF button */
+        }
+        body.dark-mode .ptcf-component:not(.selected) h4, body.dark-mode .ptcf-component:not(.selected) p {
+            color: var(--text-secondary);
+        }
+
 
         /* Copy button container and feedback styles */
         .copy-button-container { display: flex; align-items: center; margin-bottom: 8px; }
@@ -197,12 +300,20 @@
         
         /* Prose styles for formatted text content (like in examples) */
         .prose strong { color: #2c5282; } 
-        .prose code { background-color: #f1f1f1; padding: 0.2em 0.4em; margin: 0; font-size: 85%; border-radius: 3px; white-space: pre-wrap; word-break: break-all; }
-        .prose pre, .template-block pre { background-color: #2d3748; color: #e2e8f0; padding: 1em; border-radius: 6px; overflow-x: auto; font-size: 0.9em; line-height: 1.4; white-space: pre-wrap; word-break: break-word; }
+        body.dark-mode .prose strong { color: var(--tech-blue); }
+
+        .prose code { background-color: var(--inline-code-bg); color: var(--inline-code-text); padding: 0.2em 0.4em; margin: 0; font-size: 85%; border-radius: 3px; white-space: pre-wrap; word-break: break-all; }
+        .prose pre, .template-block pre { background-color: var(--code-block-bg); color: var(--code-block-text); padding: 1em; border-radius: 6px; overflow-x: auto; font-size: 0.9em; line-height: 1.4; white-space: pre-wrap; word-break: break-word; }
         .prose pre code, .template-block pre code { background-color: transparent; padding: 0; margin: 0; font-size: inherit; border-radius: 0; white-space: pre-wrap; word-break: break-word;}
+        
+        body.dark-mode .prose { color: var(--text-secondary); }
+        body.dark-mode .prose h5 { color: var(--text-primary); }
+        body.dark-mode .prose .bg-gray-50 { background-color: #2d3748; border-color: #4a5568;} /* Dark mode for example prompt bg */
+
+
         .template-block { margin-bottom: 1.5rem; }
         .template-block h5 { margin-bottom: 0.5rem; }
-        .details-content-wrapper { padding: 1.5rem; border-top: 1px solid #e5e7eb; }
+        .details-content-wrapper { padding: 1.5rem; border-top: 1px solid var(--border-color); }
         
         #model-comparison-detailed-content > .details-content-wrapper {
             border-top: none;
@@ -212,23 +323,39 @@
             padding: 0 !important; 
             border-top: none !important; 
         }
+        body.dark-mode #ptcf-output, body.dark-mode #model-recommendation {
+            background-color: #2d3748; /* Darker bg for these info boxes */
+            border-color: #4a5568;
+        }
+        body.dark-mode #ptcf-output p, body.dark-mode #model-recommendation p {
+            color: var(--text-secondary);
+        }
+
 
         /* Gemini API Response Area */
         #ptcf-gemini-response-content, 
         #use-case-gemini-output-content,
-        .advanced-gemini-output-content { /* Added class for advanced section */
+        .advanced-gemini-output-content { 
             margin-top: 1rem; 
             padding: 1.5rem; 
-            background-color: #e9f5e9; 
+            background-color: var(--soft-green); /* Light green background */
             border: 1px solid var(--soft-green);
             border-radius: 8px; 
             min-height: 100px;
             white-space: pre-line; 
             font-family: 'Roboto', sans-serif; 
             font-size: 0.95em; 
-            color: #333;
+            color: white; /* White text on green background */
             line-height: 1.6;
         }
+        body.dark-mode #ptcf-gemini-response-content, 
+        body.dark-mode #use-case-gemini-output-content,
+        body.dark-mode .advanced-gemini-output-content {
+            background-color: #2f4c2f; /* Darker green for dark mode */
+            border-color: var(--soft-green);
+            color: #c8e6c9; /* Lighter green text */
+        }
+
         .loading-indicator {
             display: flex;
             align-items: center;
@@ -256,15 +383,17 @@
         }
         /* Placeholder input styling */
         .placeholder-input-group { margin-bottom: 0.75rem; }
-        .placeholder-input-group label { display: block; margin-bottom: 0.25rem; font-weight: 500; color: #4A5568; font-size: 0.875rem;}
+        .placeholder-input-group label { display: block; margin-bottom: 0.25rem; font-weight: 500; color: var(--text-secondary); font-size: 0.875rem;}
         .placeholder-input-group input[type="text"],
-        .advanced-prompt-textarea { /* Style for advanced textarea */
+        .advanced-prompt-textarea { 
             width: 100%;
             padding: 0.5rem 0.75rem;
-            border: 1px solid #CBD5E0;
+            border: 1px solid var(--input-border);
+            background-color: var(--input-bg);
+            color: var(--text-primary);
             border-radius: 0.375rem;
             font-size: 0.875rem;
-            font-family: 'Roboto', sans-serif; /* Ensure Roboto for textarea too */
+            font-family: 'Roboto', sans-serif; 
             line-height: 1.5;
         }
         .placeholder-input-group input[type="text"]:focus,
@@ -274,7 +403,7 @@
             box-shadow: 0 0 0 2px rgba(92, 184, 92, 0.2);
         }
         .advanced-prompt-textarea {
-            min-height: 150px; /* Good height for editing prompts */
+            min-height: 150px; 
         }
 
 
@@ -283,8 +412,8 @@
             width: 70px; 
             height: 70px;
             position: relative;
-            margin-top: 2rem; /* Increased margin */
-            margin-bottom: 1rem; /* Added bottom margin */
+            margin-top: 2rem; 
+            margin-bottom: 1rem; 
         }
         .gemini-logo-star {
             position: absolute;
@@ -297,9 +426,9 @@
             position: absolute;
             left: 50%;
             top: 50%;
-            width: 20%;  /* Thinner arms */
-            height: 90%; /* Adjusted height */
-            border-radius: 3px; /* Sharper ends */
+            width: 20%;  
+            height: 90%; 
+            border-radius: 3px; 
             transform-origin: center center;
         }
         .gemini-logo-star.base::before {
@@ -313,7 +442,7 @@
         .gemini-logo-star.offset::before {
             background-color: var(--gemini-blue-light);
             transform: translate(-50%, -50%) rotate(45deg);
-            width: 19%; /* Slightly different for layering effect */
+            width: 19%; 
             height: 88%;
         }
         .gemini-logo-star.offset::after {
@@ -329,9 +458,9 @@
             vertical-align: middle;
             margin: 0 2px;
         }
-         .footer-paw-icon { /* Specific style for Bud's paw */
+         .footer-paw-icon { 
             font-size: 1em; 
-            vertical-align: -0.125em; /* Adjust vertical alignment */
+            vertical-align: -0.125em; 
             margin: 0 2px;
         }
 
@@ -343,7 +472,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6); /* Darken background */
+            background-color: rgba(0, 0, 0, 0.6); 
             display: flex;
             justify-content: center;
             align-items: center;
@@ -357,17 +486,20 @@
             visibility: visible;
         }
         .modal-content {
-            background-color: white;
+            background-color: var(--card-bg); 
             padding: 2rem;
             border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2); /* Drop shadow */
+            box-shadow: 0 10px 25px var(--card-hover-shadow); 
             width: 90%;
-            max-width: 700px; /* Max width for the modal */
-            max-height: 85vh; /* Max height */
-            overflow-y: auto; /* Scroll for long content */
+            max-width: 700px; 
+            max-height: 85vh; 
+            overflow-y: auto; 
             position: relative;
             transform: scale(0.95);
             transition: transform 0.3s ease;
+        }
+        body.dark-mode .modal-content h3, body.dark-mode .modal-content h5 {
+             color: var(--text-primary);
         }
         .modal-overlay.active .modal-content {
             transform: scale(1);
@@ -379,24 +511,25 @@
             background: none;
             border: none;
             font-size: 1.8rem;
-            color: #888;
+            color: var(--text-subtle);
             cursor: pointer;
             padding: 0.5rem;
             line-height: 1;
         }
         .modal-close-btn:hover {
-            color: #333;
+            color: var(--text-primary);
         }
 
         /* Interactive Model Comparison Styles */
         .model-scenario-btn {
             transition: background-color 0.3s, color 0.3s, border-color 0.3s, transform 0.2s;
-            border: 1px solid #dee2e6;
+            border: 1px solid var(--input-border);
+            color: var(--text-secondary);
         }
         .model-scenario-btn:hover {
             border-color: var(--soft-green);
             transform: translateY(-2px);
-            background-color: #f8f9fa;
+            background-color: var(--page-bg); /* Use page-bg for hover consistency */
         }
         .model-scenario-btn.selected {
             background-color: var(--soft-green);
@@ -405,25 +538,66 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         #model-recommendation {
-            border: 1px solid #e0e0e0;
-            background-color: #f9f9f9;
-            min-height: 100px; /* Ensure it doesn't collapse too much when empty */
-            display: flex; /* For centering placeholder */
-            align-items: center; /* For centering placeholder */
-            justify-content: center; /* For centering placeholder */
+            border: 1px solid var(--border-color);
+            background-color: var(--page-bg); /* Consistent with other info boxes */
+            min-height: 100px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
         }
         #model-comparison-detailed-header {
             cursor: pointer;
         }
+        
+        /* Dark Mode Toggle Button */
+        #darkModeToggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--card-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1001; /* Above navbar */
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }
+        #darkModeToggle:hover {
+            background-color: var(--page-bg);
+        }
+        #darkModeToggle .material-icons-outlined {
+            font-size: 20px;
+        }
+        body.dark-mode #navbar {
+            background-color: rgba(45, 55, 72, 0.95); /* Corresponds to bg-gray-800 with opacity */
+            border-bottom-color: #4a5568; /* Corresponds to gray-700 */
+        }
+        body.dark-mode footer {
+            border-top-color: #4a5568;
+        }
+        body.dark-mode footer p.text-gray-400 {
+            color: var(--text-subtle);
+        }
+
 
     </style>
 </head>
-<body class="text-main">
+<body class="">
+
+    <button id="darkModeToggle" title="Toggle Dark Mode">
+        <span class="material-icons-outlined">dark_mode</span>
+    </button>
 
     <div id="app" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <header class="text-center py-16">
-            <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-gray-800">Maximizing Gemini 2.5</h1>
+            <h1 id="main-title" class="text-4xl md:text-5xl font-bold tracking-tight">How Do I Use This</h1>
             <p class="mt-4 text-lg md:text-xl text-subtle max-w-3xl mx-auto">An interactive guide to prompt Engineering for Gemini</p>
             <div class="gemini-logo-container mx-auto">
                 <div class="gemini-logo-star base"></div>
@@ -446,7 +620,7 @@
                     <div id="ptcf-explanation-header" class="cursor-pointer flex items-center justify-between pb-4 border-b border-gray-200 mb-6">
                         <div class="flex items-center">
                             <span class="material-icons-outlined mr-3 text-3xl">foundation</span>
-                            <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Prompting Foundations: The PTCF Framework</h2>
+                            <h2 class="text-2xl md:text-3xl font-bold">Prompting Foundations: The PTCF Framework</h2>
                         </div>
                         <p class="text-sm text-subtle ml-4 expand-indicator flex items-center">Learn More <span class="arrow down align-middle material-icons-outlined text-xl ml-1">expand_more</span></p>
                     </div>
@@ -454,7 +628,7 @@
                         <div class="details-content-wrapper"> 
                             <div class="pb-6">
                                 <p class="mt-3 mb-6 text-lg text-subtle max-w-2xl mx-auto text-center">This section introduces the PTCF framework, a strategic approach to ensure your instructions are clear, contextual, and get the results you want.</p>
-                                <h3 class="text-xl font-semibold text-center mb-6 text-gray-700">Understanding the PTCF Framework</h3>
+                                <h3 class="text-xl font-semibold text-center mb-6">Understanding the PTCF Framework</h3>
                                 <div class="space-y-6 mb-10 text-subtle">
                                     <p>The PTCF (Persona, Task, Context, Format) framework is a powerful mental model for constructing comprehensive and effective prompts. While not every component is mandatory for every prompt, consciously considering each can dramatically improve the quality and relevance of Gemini's responses.</p>
                                     <div>
@@ -477,7 +651,7 @@
                             </div>
                         </div>
                     </div>
-                    <h3 class="text-2xl font-semibold text-center mb-8 text-gray-700 mt-6">The PTCF Framework Builder</h3>
+                    <h3 class="text-2xl font-semibold text-center mb-8 mt-6">The PTCF Framework Builder</h3>
                     <div class="text-center mb-6">
                         <button onclick="handleNewPTCFExampleSetClick()" class="accent-green-bg hover:bg-green-700 text-white font-semibold py-2 px-5 rounded-lg shadow-md transition duration-150 ease-in-out flex items-center mx-auto">
                             <span class="material-icons-outlined mr-2">refresh</span>
@@ -513,7 +687,7 @@
                          <p class="text-xs text-gray-500 mt-2"><em>Live examples are generated using Gemini 2.0 Flash to demonstrate prompt principles.</em></p>
                     </div>
                     <div id="ptcf-gemini-response-container" class="hidden mt-6"> 
-                        <h4 class="text-lg font-semibold text-gray-700 mb-2">Gemini's Response:</h4>
+                        <h4 class="text-lg font-semibold mb-2">Gemini's Response:</h4>
                         <div id="ptcf-gemini-response-content" class="p-4 rounded-lg border min-h-[100px]"></div> 
                     </div>
                      <div id="ptcf-gemini-loading" class="loading-indicator hidden mt-4">
@@ -527,7 +701,7 @@
                 <div class="material-card p-6 md:p-10">
                     <div class="section-header-main">
                         <span class="material-icons-outlined mr-3 text-3xl">compare_arrows</span>
-                        <h2 class="text-2xl md:text-3xl font-bold text-gray-800">Choose Your Model: Pro vs. Flash</h2>
+                        <h2 class="text-2xl md:text-3xl font-bold">Choose Your Model: Pro vs. Flash</h2>
                     </div>
                     <p class="mt-3 text-lg text-subtle max-w-3xl mx-auto mb-8 text-center">Select a scenario to see which Gemini model might be a better fit, or explore the detailed comparison below.</p>
 
@@ -545,10 +719,10 @@
                     </div>
                     
                     <!-- Collapsible Detailed Comparison -->
-                    <div id="model-comparison-detailed-header" class="cursor-pointer flex items-center justify-between py-4 border-t border-gray-200 mt-8">
+                    <div id="model-comparison-detailed-header" class="cursor-pointer flex items-center justify-between py-4 border-t mt-8">
                         <div class="flex items-center">
                             <span class="material-icons-outlined mr-3 text-2xl">visibility</span> 
-                            <h3 class="text-xl font-semibold text-gray-700">View Detailed Comparison</h3>
+                            <h3 class="text-xl font-semibold">View Detailed Comparison</h3>
                         </div>
                         <p class="text-sm text-subtle ml-4 expand-indicator flex items-center">Details <span class="arrow down align-middle material-icons-outlined text-xl ml-1">expand_more</span></p>
                     </div>
@@ -597,7 +771,7 @@
                 <div class="text-center mb-12">
                     <div class="section-header-main">
                         <span class="material-icons-outlined">cases</span>
-                        <h2 class="text-3xl font-bold text-gray-800">Explore the Use Cases</h2>
+                        <h2 class="text-3xl font-bold">Explore the Use Cases</h2>
                     </div>
                 </div>
                 <div class="flex justify-center space-x-3 mb-10">
@@ -615,7 +789,7 @@
                 <div class="text-center mb-12">
                     <div class="section-header-main">
                         <span class="material-icons-outlined">auto_awesome</span>
-                        <h2 class="text-3xl font-bold text-gray-800">Advanced Prompting Techniques</h2>
+                        <h2 class="text-3xl font-bold">Advanced Prompting Techniques</h2>
                     </div>
                 </div>
                 <div id="advanced-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
@@ -624,7 +798,7 @@
             </section>
         </main>
 
-        <footer class="text-center py-16 mt-10 border-t border-gray-200">
+        <footer class="text-center py-16 mt-10 border-t">
             <p class="text-subtle">Made by Gemini & Mattia <span class="material-icons-outlined footer-icon">pets</span> for Gemini.</p>
             <p class="text-sm text-gray-500 mt-1">(With the barking support of Bud the Beagle <span class="material-icons-outlined footer-paw-icon">pets</span>)</p>
             <p class="text-sm text-gray-400 mt-2">Designed with Material-inspired aesthetics, Tailwind CSS, and Chart.js</p>
@@ -1632,9 +1806,58 @@
 
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Dark Mode Toggle
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const body = document.body;
+            const mainTitle = document.getElementById('main-title'); // Get the h1 title element
+
+            // Function to apply theme and update icon
+            function applyTheme(theme) {
+                if (theme === 'dark') {
+                    body.classList.add('dark-mode');
+                    darkModeToggle.innerHTML = `<span class="material-icons-outlined">light_mode</span>`;
+                } else {
+                    body.classList.remove('dark-mode');
+                    darkModeToggle.innerHTML = `<span class="material-icons-outlined">dark_mode</span>`;
+                }
+                // Update chart for dark/light mode
+                if (window.modelComparisonChartInstance) {
+                    const chartOptions = window.modelComparisonChartInstance.options;
+                    const gridColor = getComputedStyle(document.documentElement).getPropertyValue(theme === 'dark' ? '--chart-grid-color' : '--chart-grid-color').trim().replace(/'/g, '');
+                    const labelColor = getComputedStyle(document.documentElement).getPropertyValue(theme === 'dark' ? '--chart-label-color' : '--chart-label-color').trim().replace(/'/g, '');
+                    const tickColor = getComputedStyle(document.documentElement).getPropertyValue(theme === 'dark' ? '--chart-tick-color' : '--chart-tick-color').trim().replace(/'/g, '');
+                    const legendColor = getComputedStyle(document.documentElement).getPropertyValue(theme === 'dark' ? '--chart-legend-color' : '--chart-legend-color').trim().replace(/'/g, '');
+
+                    chartOptions.scales.r.angleLines.color = gridColor;
+                    chartOptions.scales.r.grid.color = gridColor;
+                    chartOptions.scales.r.pointLabels.color = labelColor;
+                    chartOptions.scales.r.ticks.color = tickColor;
+                    chartOptions.scales.r.ticks.backdropColor = getComputedStyle(document.documentElement).getPropertyValue('--page-bg').trim();
+                    chartOptions.plugins.legend.labels.color = legendColor;
+                    window.modelComparisonChartInstance.update();
+                }
+            }
+
+            // Check for saved theme preference
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                applyTheme(savedTheme);
+            } else { // Default to light mode if no preference
+                applyTheme('light');
+            }
+
+            darkModeToggle.addEventListener('click', () => {
+                const currentTheme = body.classList.contains('dark-mode') ? 'dark' : 'light';
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                applyTheme(newTheme);
+                localStorage.setItem('theme', newTheme);
+            });
+
+
             const chartCanvas = document.getElementById('modelComparisonChart');
             if (chartCanvas) { 
-                new Chart(chartCanvas.getContext('2d'), {
+                // Store chart instance globally to update it later
+                window.modelComparisonChartInstance = new Chart(chartCanvas.getContext('2d'), {
                     type: 'radar',
                     data: {
                         labels: ['Reasoning Depth', 'Coding Prowess', 'Response Speed', 'Complex Tasks', 'Everyday Help'],
@@ -1654,17 +1877,20 @@
                             borderWidth: 2.5, pointRadius: 4, pointHoverRadius: 6
                         }]
                     },
-                    options: {
+                    options: { // Initial options will be updated by applyTheme
                         maintainAspectRatio: false, 
                         scales: { r: { 
-                            angleLines: { color: '#e0e0e0' }, grid: { color: '#e0e0e0' },
-                            pointLabels: { font: { size: 13, weight: '500', family: 'Roboto'}, color: '#495057' }, 
-                            ticks: { backdropColor: '#f8f9fa', color: '#6c757d', stepSize: 1, font: {size: 10, family: 'Roboto'}}, 
+                            angleLines: { color: getComputedStyle(document.documentElement).getPropertyValue('--chart-grid-color').trim().replace(/'/g, '') }, 
+                            grid: { color: getComputedStyle(document.documentElement).getPropertyValue('--chart-grid-color').trim().replace(/'/g, '') },
+                            pointLabels: { font: { size: 13, weight: '500', family: 'Roboto'}, color: getComputedStyle(document.documentElement).getPropertyValue('--chart-label-color').trim().replace(/'/g, '') }, 
+                            ticks: { backdropColor: getComputedStyle(document.documentElement).getPropertyValue('--page-bg').trim(), color: getComputedStyle(document.documentElement).getPropertyValue('--chart-tick-color').trim().replace(/'/g, ''), stepSize: 1, font: {size: 10, family: 'Roboto'}}, 
                             suggestedMin: 0, suggestedMax: 10
                         }},
-                        plugins: { legend: { position: 'bottom', labels: { font: { size: 14, family: 'Roboto' }, color: '#212529', padding: 20}}} 
+                        plugins: { legend: { position: 'bottom', labels: { font: { size: 14, family: 'Roboto' }, color: getComputedStyle(document.documentElement).getPropertyValue('--chart-legend-color').trim().replace(/'/g, ''), padding: 20}}} 
                     }
                 });
+                // Apply initial theme to chart after it's created
+                 applyTheme(localStorage.getItem('theme') || 'light');
             }
             
             document.getElementById('model-recommendation').innerHTML = initialRecommendationHTML;
@@ -1687,7 +1913,7 @@
                         if(detailsWrapper) {
                             detailsWrapper.style.paddingTop = '1.5rem'; 
                             detailsWrapper.style.paddingBottom = '1.5rem';
-                            detailsWrapper.style.borderTop = '1px solid #e5e7eb'; 
+                            detailsWrapper.style.borderTop = '1px solid var(--border-color)'; 
                         }
                         ptcfArrow.textContent = 'expand_less';
                     } else {
