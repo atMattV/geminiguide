@@ -6,6 +6,7 @@
     <title>How Do I Use This</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script> 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
@@ -17,6 +18,7 @@
             background-color: #f8f9fa; /* Light mode default background */
             color: #212529; /* Light mode default text */
             transition: background-color 0.3s, color 0.3s;
+            padding-top: 60px; /* Space for the fixed music player */
         }
         .text-main { color: #212529; }
         .text-subtle { color: #6c757d; }
@@ -30,7 +32,7 @@
             --gemini-blue-dark: #1A73E8; 
             --gemini-blue-light: #669DF6;
 
-            /* Light Mode Defaults (can be overridden by dark mode) */
+            /* Light Mode Defaults */
             --page-bg: #f8f9fa;
             --text-primary: #212529;
             --text-secondary: #495057;
@@ -41,7 +43,7 @@
             --border-color: #e5e7eb;
             --input-bg: white;
             --input-border: #CBD5E0;
-            --button-primary-bg: #3B82F6; /* Example blue */
+            --button-primary-bg: #3B82F6; 
             --button-primary-hover-bg: #2563EB;
             --code-block-bg: #2d3748;
             --code-block-text: #e2e8f0;
@@ -51,23 +53,27 @@
             --chart-label-color: '#495057';
             --chart-tick-color: '#6c757d';
             --chart-legend-color: '#212529';
+            --player-bg: #ffffff;
+            --player-border: #e5e7eb;
+            --player-icon-color: #4a5568;
+            --player-icon-hover-bg: rgba(0,0,0,0.05);
         }
 
         /* Dark Mode Variables */
         body.dark-mode {
-            --page-bg: #1a202c; /* Dark gray/blue */
-            --text-primary: #edf2f7; /* Light gray */
-            --text-secondary: #a0aec0; /* Medium gray */
-            --text-subtle: #718096; /* Softer gray */
-            --card-bg: #2d3748; /* Darker card background */
+            --page-bg: #1a202c; 
+            --text-primary: #edf2f7; 
+            --text-secondary: #a0aec0; 
+            --text-subtle: #718096; 
+            --card-bg: #2d3748; 
             --card-shadow: rgba(0,0,0,0.2);
             --card-hover-shadow: rgba(0,0,0,0.3);
-            --border-color: #4a5568; /* Darker border */
+            --border-color: #4a5568; 
             --input-bg: #2d3748;
             --input-border: #4a5568;
-            --button-primary-bg: #2563EB; /* Keep blue, or adjust if needed */
+            --button-primary-bg: #2563EB; 
             --button-primary-hover-bg: #1D4ED8;
-            --code-block-bg: #1a202c; /* Even darker for code blocks */
+            --code-block-bg: #1a202c; 
             --code-block-text: #cbd5e0;
             --inline-code-bg: #2d3748;
             --inline-code-text: #cbd5e0;
@@ -75,6 +81,10 @@
             --chart-label-color: '#a0aec0';
             --chart-tick-color: '#718096';
             --chart-legend-color: '#edf2f7';
+            --player-bg: #2d3748;
+            --player-border: #4a5568;
+            --player-icon-color: #a0aec0;
+            --player-icon-hover-bg: rgba(255,255,255,0.1);
         }
 
         /* Applying variables */
@@ -86,7 +96,7 @@
         .text-subtle { color: var(--text-subtle); }
         h1, h2, h3, h4, h5, h6 { color: var(--text-primary); }
         p { color: var(--text-secondary); }
-        body.dark-mode p { color: var(--text-secondary); } /* Ensure p tag color updates */
+        body.dark-mode p { color: var(--text-secondary); } 
 
 
         .accent-green { color: var(--soft-green); }
@@ -104,13 +114,11 @@
         .card-border-creative { border-left: 4px solid var(--creative-red); }
         .card-border-everyday { border-left: 4px solid var(--everyday-purple); }
         
-        /* Navigation link styles */
         .nav-link { transition: color 0.3s, border-color 0.3s; color: var(--text-subtle); }
         .nav-link.active { color: var(--soft-green); border-bottom-color: var(--soft-green); }
         body.dark-mode .nav-link:not(.active) { color: var(--text-secondary); }
 
 
-        /* Card style for content sections */
         .material-card { 
             background-color: var(--card-bg); 
             box-shadow: 0 4px 8px var(--card-shadow); 
@@ -126,7 +134,6 @@
             color: var(--text-secondary);
         }
         
-        /* Fixed dimensions for use case cards */
         #use-cases-grid .material-card {
             width: 100%; 
             max-width: 350px; 
@@ -190,7 +197,6 @@
         }
 
 
-        /* Filter button styles for use cases */
         .filter-btn { 
             transition: background-color 0.3s, color 0.3s; 
             border: 1px solid transparent; 
@@ -202,7 +208,7 @@
             border-color: var(--soft-green);
         }
         .filter-btn:not(.active):hover { 
-            background-color: var(--card-bg); /* Use card-bg for hover */
+            background-color: var(--card-bg); 
             border-color: var(--border-color);
             color: var(--text-primary);
         }
@@ -211,18 +217,16 @@
             border-color: var(--border-color);
         }
         body.dark-mode .filter-btn.active {
-             color: white; /* Ensure active text is white in dark mode */
+             color: white; 
         }
          body.dark-mode .filter-btn:not(.active):hover {
-            background-color: #4a5568; /* Slightly lighter dark for hover */
+            background-color: #4a5568; 
         }
 
 
-        /* Chart container styles */
         .chart-container { position: relative; width: 100%; max-width: 550px; margin-left: auto; margin-right: auto; height: 350px; max-height: 450px; }
         @media (min-width: 768px) { .chart-container { height: 400px; } }
         
-        /* Styles for expandable details sections (used in Foundations, Advanced, Comparison) */
         .details-section { 
             max-height: 0; 
             min-height: 0; 
@@ -255,13 +259,11 @@
         }
 
 
-        /* Icon button styles (e.g., copy button) */
         .icon-btn { display: inline-flex; align-items: center; justify-content: center; padding: 8px; border-radius: 50%; transition: background-color 0.2s; }
         .icon-btn:hover { background-color: rgba(0,0,0,0.08); }
         body.dark-mode .icon-btn:hover { background-color: rgba(255,255,255,0.1); }
         .icon-btn .material-icons-outlined { font-size: 20px; }
 
-        /* Section header styles & Icon Colors */
         .section-header-main { display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; }
         .section-header-main .material-icons-outlined { font-size: 40px; margin-right: 0.85rem; } 
         
@@ -274,31 +276,28 @@
         #use-cases .section-header-main .material-icons-outlined { color: var(--soft-green); }
         #advanced .section-header-main .material-icons-outlined { color: var(--creative-red); }
         
-        /* PTCF component button styles */
         .ptcf-component { 
             border: 1px solid var(--border-color); 
             transition: border-color 0.3s, transform 0.2s, background-color 0.3s; 
-            background-color: var(--card-bg); /* Use card-bg for consistency */
+            background-color: var(--card-bg); 
         }
         .ptcf-component:hover { border-color: var(--soft-green); transform: translateY(-3px); } 
         .ptcf-component.selected { 
             border-color: var(--soft-green); 
-            background-color: var(--soft-green); /* Solid green when selected */
+            background-color: var(--soft-green); 
             box-shadow: 0 0 0 2px var(--soft-green) inset; 
         }
         .ptcf-component.selected h4, .ptcf-component.selected p {
-            color: white; /* Text color for selected PTCF button */
+            color: white; 
         }
         body.dark-mode .ptcf-component:not(.selected) h4, body.dark-mode .ptcf-component:not(.selected) p {
             color: var(--text-secondary);
         }
 
 
-        /* Copy button container and feedback styles */
         .copy-button-container { display: flex; align-items: center; margin-bottom: 8px; }
         .copied-feedback { font-size: 0.75rem; color: var(--soft-green); margin-left: 8px; display: none; font-weight: 500; } 
         
-        /* Prose styles for formatted text content (like in examples) */
         .prose strong { color: #2c5282; } 
         body.dark-mode .prose strong { color: var(--tech-blue); }
 
@@ -308,7 +307,7 @@
         
         body.dark-mode .prose { color: var(--text-secondary); }
         body.dark-mode .prose h5 { color: var(--text-primary); }
-        body.dark-mode .prose .bg-gray-50 { background-color: #2d3748; border-color: #4a5568;} /* Dark mode for example prompt bg */
+        body.dark-mode .prose .bg-gray-50 { background-color: #2d3748; border-color: #4a5568;} 
 
 
         .template-block { margin-bottom: 1.5rem; }
@@ -324,7 +323,7 @@
             border-top: none !important; 
         }
         body.dark-mode #ptcf-output, body.dark-mode #model-recommendation {
-            background-color: #2d3748; /* Darker bg for these info boxes */
+            background-color: #2d3748; 
             border-color: #4a5568;
         }
         body.dark-mode #ptcf-output p, body.dark-mode #model-recommendation p {
@@ -332,28 +331,27 @@
         }
 
 
-        /* Gemini API Response Area */
         #ptcf-gemini-response-content, 
         #use-case-gemini-output-content,
         .advanced-gemini-output-content { 
             margin-top: 1rem; 
             padding: 1.5rem; 
-            background-color: var(--soft-green); /* Light green background */
+            background-color: var(--soft-green); 
             border: 1px solid var(--soft-green);
             border-radius: 8px; 
             min-height: 100px;
             white-space: pre-line; 
             font-family: 'Roboto', sans-serif; 
             font-size: 0.95em; 
-            color: white; /* White text on green background */
+            color: white; 
             line-height: 1.6;
         }
         body.dark-mode #ptcf-gemini-response-content, 
         body.dark-mode #use-case-gemini-output-content,
         body.dark-mode .advanced-gemini-output-content {
-            background-color: #2f4c2f; /* Darker green for dark mode */
+            background-color: #2f4c2f; 
             border-color: var(--soft-green);
-            color: #c8e6c9; /* Lighter green text */
+            color: #c8e6c9; 
         }
 
         .loading-indicator {
@@ -376,12 +374,10 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
-        /* Disabled button style */
         button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
         }
-        /* Placeholder input styling */
         .placeholder-input-group { margin-bottom: 0.75rem; }
         .placeholder-input-group label { display: block; margin-bottom: 0.25rem; font-weight: 500; color: var(--text-secondary); font-size: 0.875rem;}
         .placeholder-input-group input[type="text"],
@@ -407,7 +403,6 @@
         }
 
 
-        /* CSS Gemini Logo Styles - Refined */
         .gemini-logo-container {
             width: 70px; 
             height: 70px;
@@ -452,7 +447,6 @@
             height: 88%;
         }
 
-        /* Footer icon style */
         .footer-icon {
             font-size: 1.1em; 
             vertical-align: middle;
@@ -465,7 +459,6 @@
         }
 
 
-        /* Modal Styles */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -520,7 +513,6 @@
             color: var(--text-primary);
         }
 
-        /* Interactive Model Comparison Styles */
         .model-scenario-btn {
             transition: background-color 0.3s, color 0.3s, border-color 0.3s, transform 0.2s;
             border: 1px solid var(--input-border);
@@ -529,7 +521,7 @@
         .model-scenario-btn:hover {
             border-color: var(--soft-green);
             transform: translateY(-2px);
-            background-color: var(--page-bg); /* Use page-bg for hover consistency */
+            background-color: var(--page-bg); 
         }
         .model-scenario-btn.selected {
             background-color: var(--soft-green);
@@ -539,7 +531,7 @@
         }
         #model-recommendation {
             border: 1px solid var(--border-color);
-            background-color: var(--page-bg); /* Consistent with other info boxes */
+            background-color: var(--page-bg); 
             min-height: 100px; 
             display: flex; 
             align-items: center; 
@@ -549,10 +541,9 @@
             cursor: pointer;
         }
         
-        /* Dark Mode Toggle Button */
         #darkModeToggle {
             position: fixed;
-            top: 20px;
+            top: 75px; /* Adjusted to be below the music player */
             right: 20px;
             background-color: var(--card-bg);
             color: var(--text-primary);
@@ -565,7 +556,7 @@
             justify-content: center;
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            z-index: 1001; /* Above navbar */
+            z-index: 1001; 
             transition: background-color 0.3s, color 0.3s, border-color 0.3s;
         }
         #darkModeToggle:hover {
@@ -575,8 +566,8 @@
             font-size: 20px;
         }
         body.dark-mode #navbar {
-            background-color: rgba(45, 55, 72, 0.95); /* Corresponds to bg-gray-800 with opacity */
-            border-bottom-color: #4a5568; /* Corresponds to gray-700 */
+            background-color: rgba(45, 55, 72, 0.95); 
+            border-bottom-color: #4a5568; 
         }
         body.dark-mode footer {
             border-top-color: #4a5568;
@@ -585,14 +576,105 @@
             color: var(--text-subtle);
         }
 
+        /* Music Player Styles */
+        #musicPlayer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--player-bg);
+            border-bottom: 1px solid var(--player-border);
+            padding: 0.5rem 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1002; /* Highest z-index */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            height: 60px; /* Fixed height */
+        }
+        #musicPlayer .player-controls button {
+            background: none;
+            border: none;
+            color: var(--player-icon-color);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            margin: 0 0.25rem;
+        }
+        #musicPlayer .player-controls button:hover {
+            background-color: var(--player-icon-hover-bg);
+        }
+        #musicPlayer .player-controls button .material-icons-outlined {
+            font-size: 22px; 
+            vertical-align: middle;
+        }
+        #musicPlayer .track-info {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: center;
+            flex-grow: 1;
+            margin: 0 1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #musicPlayer .volume-control {
+            display: flex;
+            align-items: center;
+        }
+        #musicPlayer .volume-control .material-icons-outlined {
+            font-size: 20px;
+            color: var(--player-icon-color);
+            margin-right: 0.25rem;
+        }
+        #musicPlayer input[type="range"] {
+            width: 80px;
+            height: 5px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: var(--input-border);
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #musicPlayer input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            background: var(--soft-green);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        #musicPlayer input[type="range"]::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            background: var(--soft-green);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
 
     </style>
 </head>
-<body class="">
+<body>
 
     <button id="darkModeToggle" title="Toggle Dark Mode">
         <span class="material-icons-outlined">dark_mode</span>
     </button>
+
+    <div id="musicPlayer">
+        <div class="player-controls">
+            <button id="prevTrackBtn" title="Previous Track"><span class="material-icons-outlined">skip_previous</span></button>
+            <button id="playPauseBtn" title="Play/Pause"><span class="material-icons-outlined">play_arrow</span></button>
+            <button id="nextTrackBtn" title="Next Track"><span class="material-icons-outlined">skip_next</span></button>
+        </div>
+        <div id="trackInfo" class="track-info">Lo-fi Chill 1</div>
+        <div class="volume-control">
+            <span class="material-icons-outlined">volume_up</span>
+            <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5">
+        </div>
+    </div>
 
     <div id="app" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
@@ -605,7 +687,7 @@
             </div>
         </header>
 
-        <nav id="navbar" class="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-200 mb-16 shadow-md">
+        <nav id="navbar" class="sticky top-0 z-50 bg-white/95 backdrop-blur-lg border-b border-gray-200 mb-16 shadow-md" style="top: 60px;"> 
             <div class="flex justify-center space-x-4 sm:space-x-8 py-4">
                 <a href="#foundations" class="nav-link text-subtle hover:accent-green font-medium border-b-2 border-transparent pb-1">Foundations</a>
                 <a href="#comparison" class="nav-link text-subtle hover:accent-green font-medium border-b-2 border-transparent pb-1">Model Comparison</a>
@@ -1253,9 +1335,7 @@
         function openUseCaseModal(useCase) {
             currentUseCaseForGemini = useCase; 
             
-            // Prepare the template content for display by replacing newlines with <br> tags.
             const templateCodeContent = useCase.template.replace(/\n/g, '<br>');
-
 
             modalBodyContent.innerHTML = `
                 <h3 class="text-2xl font-bold text-gray-800 mb-4 flex items-center">
@@ -1806,10 +1886,8 @@
 
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Dark Mode Toggle
-            const darkModeToggle = document.getElementById('darkModeToggle');
-            const body = document.body;
-            const mainTitle = document.getElementById('main-title'); // Get the h1 title element
+            const body = document.body; // Declare body once
+            const darkModeToggle = document.getElementById('darkModeToggle'); // Declare darkModeToggle once
 
             // Function to apply theme and update icon
             function applyTheme(theme) {
@@ -1856,7 +1934,6 @@
 
             const chartCanvas = document.getElementById('modelComparisonChart');
             if (chartCanvas) { 
-                // Store chart instance globally to update it later
                 window.modelComparisonChartInstance = new Chart(chartCanvas.getContext('2d'), {
                     type: 'radar',
                     data: {
@@ -1877,7 +1954,7 @@
                             borderWidth: 2.5, pointRadius: 4, pointHoverRadius: 6
                         }]
                     },
-                    options: { // Initial options will be updated by applyTheme
+                    options: { 
                         maintainAspectRatio: false, 
                         scales: { r: { 
                             angleLines: { color: getComputedStyle(document.documentElement).getPropertyValue('--chart-grid-color').trim().replace(/'/g, '') }, 
@@ -1889,7 +1966,6 @@
                         plugins: { legend: { position: 'bottom', labels: { font: { size: 14, family: 'Roboto' }, color: getComputedStyle(document.documentElement).getPropertyValue('--chart-legend-color').trim().replace(/'/g, ''), padding: 20}}} 
                     }
                 });
-                // Apply initial theme to chart after it's created
                  applyTheme(localStorage.getItem('theme') || 'light');
             }
             
@@ -1982,6 +2058,153 @@
                     }
                 });
             });
+
+            // Music Player Logic
+            const playPauseBtn = document.getElementById('playPauseBtn');
+            const prevTrackBtn = document.getElementById('prevTrackBtn');
+            const nextTrackBtn = document.getElementById('nextTrackBtn');
+            const trackInfo = document.getElementById('trackInfo');
+            const volumeSlider = document.getElementById('volumeSlider');
+            let currentTrackIndex = 0;
+            let isPlaying = false;
+            let toneStarted = false;
+            let currentTrackComponents = null; 
+
+            const tracks = [
+                { name: "Lo-fi Chill 1", create: () => {
+                    const synth = new Tone.PolySynth(Tone.Synth, {
+                        oscillator: { type: "fatsawtooth", count: 3, spread: 30 },
+                        envelope: { attack: 0.01, decay: 0.1, sustain: 0.5, release: 0.4, attackCurve: "exponential" }
+                    }).toDestination();
+                    const kick = new Tone.MembraneSynth({ pitchDecay: 0.02, octaves: 6, oscillator: { type: "sine" }, envelope: { attack: 0.001, decay: 0.3, sustain: 0.01, release: 0.2 } }).toDestination();
+                    const hihat = new Tone.NoiseSynth({ noise: { type: "white" }, envelope: { attack: 0.001, decay: 0.05, sustain: 0, release: 0.03 } }).toDestination();
+                    
+                    const melodySeq = new Tone.Sequence((time, note) => {
+                        synth.triggerAttackRelease(note, "8n", time);
+                    }, ["C4", ["E4", "G4"], "A3", null, "C4", "E4", "G3", null], "4n").start(0);
+                    melodySeq.loop = true;
+
+                    const kickLoop = new Tone.Loop(time => kick.triggerAttackRelease("C1", "8n", time), "2n").start(0);
+                    const hihatLoop = new Tone.Loop(time => hihat.triggerAttackRelease("16n", time), "8n").start("8n");
+                    
+                    return { name: "Lo-fi Chill 1", elements: [synth, kick, hihat, melodySeq, kickLoop, hihatLoop] };
+                }},
+                { name: "Sunset Groove", create: () => {
+                    const synth = new Tone.FMSynth({ harmonicity: 3.01, modulationIndex: 14, detune: 0, oscillator: { type: "sine" }, envelope: { attack: 0.01, decay: 0.1, sustain: 0.01, release: 0.5 }, modulation: { type: "square" }, modulationEnvelope: { attack: 0.01, decay: 0.2, sustain: 0.3, release: 0.5 } }).toDestination();
+                    const kick = new Tone.MembraneSynth({ pitchDecay: 0.03, octaves: 7, envelope: { attack: 0.001, decay: 0.2, sustain: 0.01, release: 0.1 } }).toDestination();
+                    
+                    const patternSeq = new Tone.Sequence((time, note) => {
+                        synth.triggerAttackRelease(note, "4n", time);
+                    }, ["F3", "A#3", "C4", "D#4"], "2n").start(0);
+                    patternSeq.loop = true;
+                    const kickLoop = new Tone.Loop(time => kick.triggerAttackRelease("C1", "8n", time), "1n").start(0);
+
+                    return { name: "Sunset Groove", elements: [synth, kick, patternSeq, kickLoop] };
+                }},
+                { name: "Rainy Day Vibe", create: () => {
+                    const synth = new Tone.AMSynth({ harmonicity: 2.5, detune: 0, oscillator: { type: "sawtooth" }, envelope: { attack: 0.01, decay: 0.1, sustain: 0.2, release: 0.9 }, modulation: { type: "square" }, modulationEnvelope: { attack: 0.02, decay: 0.3, sustain: 0.5, release: 0.1 } }).toDestination();
+                     const snare = new Tone.NoiseSynth({ noise: { type: "pink" }, envelope: { attack: 0.001, decay: 0.08, sustain: 0, release: 0.05 } }).toDestination();
+                    
+                    const melodySeq = new Tone.Sequence((time, note) => {
+                        synth.triggerAttackRelease(note, "2n", time);
+                    }, [["D3", "F3"], "A#2", "C3", "D2"], "1n").start(0);
+                    melodySeq.loop = true;
+                    const snareLoop = new Tone.Loop(time => snare.triggerAttackRelease("8n", time), "2n").start("4n");
+                    return { name: "Rainy Day Vibe", elements: [synth, snare, melodySeq, snareLoop] };
+                }},
+                { name: "Midnight Study", create: () => {
+                    const synth = new Tone.MonoSynth({ oscillator: { type: "pulse", width: 0.6 }, envelope: { attack: 0.01, decay: 0.05, sustain: 0.4, release: 0.7 }, filterEnvelope: { attack: 0.005, decay: 0.02, sustain: 0.1, release: 0.8, baseFrequency: 300, octaves: 4 } }).toDestination();
+                    const bass = new Tone.MonoSynth({ oscillator: { type: "fmsine", modulationType: "triangle", modulationIndex: 2, harmonicity: 1.01 }, envelope: { attack: 0.01, decay: 0.1, sustain: 0.2, release: 0.3 } }).toDestination();
+                    
+                    const melodySeq = new Tone.Sequence((time, note) => {
+                        synth.triggerAttackRelease(note, "8n", time);
+                    }, ["G2", "A#2", "D3", "F3", "G3", null, "F3", "D3"], "2n").start(0);
+                    melodySeq.loop = true;
+                    const bassLine = new Tone.Sequence((time, note) => {
+                        bass.triggerAttackRelease(note, "4n", time);
+                    }, ["G1", "C2", "D2", "A#1"], "1n").start(0);
+                    bassLine.loop = true;
+                    return { name: "Midnight Study", elements: [synth, bass, melodySeq, bassLine] };
+                }}
+            ];
+
+            function stopAndDisposeTrack() {
+                if (currentTrackComponents && currentTrackComponents.elements) {
+                    currentTrackComponents.elements.forEach(el => {
+                        if (el instanceof Tone.Sequence || el instanceof Tone.Loop) {
+                            el.stop(0).dispose();
+                        } else if (el.dispose) { 
+                            el.dispose();
+                        }
+                    });
+                }
+                currentTrackComponents = null;
+            }
+
+            function playTrack(index) {
+                stopAndDisposeTrack(); 
+
+                currentTrackIndex = index;
+                currentTrackComponents = tracks[currentTrackIndex].create();
+                trackInfo.textContent = currentTrackComponents.name;
+                
+                Tone.Transport.bpm.value = 90; 
+                Tone.Transport.start();
+                playPauseBtn.innerHTML = `<span class="material-icons-outlined">pause</span>`;
+                isPlaying = true;
+            }
+
+            function togglePlayPause() {
+                if (!toneStarted) {
+                    Tone.start().then(() => {
+                        console.log("AudioContext started by user gesture.");
+                        toneStarted = true;
+                        if (!currentTrackComponents) {
+                            playTrack(currentTrackIndex);
+                        } else { 
+                            Tone.Transport.start();
+                            playPauseBtn.innerHTML = `<span class="material-icons-outlined">pause</span>`;
+                            isPlaying = true;
+                        }
+                    }).catch(e => console.error("Tone.start() failed:", e));
+                    return; 
+                }
+
+                if (isPlaying) {
+                    Tone.Transport.pause();
+                    playPauseBtn.innerHTML = `<span class="material-icons-outlined">play_arrow</span>`;
+                } else {
+                    if (!currentTrackComponents) {
+                        playTrack(currentTrackIndex); 
+                    } else {
+                        Tone.Transport.start(); 
+                         playPauseBtn.innerHTML = `<span class="material-icons-outlined">pause</span>`;
+                    }
+                }
+                isPlaying = !isPlaying;
+            }
+
+            playPauseBtn.addEventListener('click', togglePlayPause);
+
+            nextTrackBtn.addEventListener('click', () => {
+                if (!toneStarted) { Tone.start().then(() => { toneStarted = true; playTrack((currentTrackIndex + 1) % tracks.length); }); }
+                else { playTrack((currentTrackIndex + 1) % tracks.length); }
+            });
+
+            prevTrackBtn.addEventListener('click', () => {
+                 if (!toneStarted) { Tone.start().then(() => { toneStarted = true; playTrack((currentTrackIndex - 1 + tracks.length) % tracks.length); }); }
+                 else { playTrack((currentTrackIndex - 1 + tracks.length) % tracks.length); }
+            });
+
+            volumeSlider.addEventListener('input', (e) => {
+                let volumeValue = parseFloat(e.target.value);
+                if (volumeValue === 0) {
+                    Tone.Destination.volume.value = -Infinity;
+                } else {
+                    Tone.Destination.volume.value = Tone.gainToDb(volumeValue); 
+                }
+            });
+            Tone.Destination.volume.value = Tone.gainToDb(parseFloat(volumeSlider.value));
         });
     </script>
 </body>
